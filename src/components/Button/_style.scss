@@ -24,9 +24,14 @@
             pointer-events: none;
         }
     }
+}
 
-    &.round {
-        border-radius: $btn-padding-y * 4;
+.mo-button.disabled,
+.mo-button.loading {
+
+    &::before,
+    &::after {
+        display: none;
     }
 }
 
@@ -64,29 +69,116 @@
 }
 
 .mo-button--default {
-    @include button-style($white, $gray-700, $body-color, $white, $primary, $primary)
+    @include button-style($white, $gray-700, $body-color, $white, $primary, $primary);
 }
 
-.mo-button--link {
-    font-weight: $font-weight-normal;
-    color: $btn-link-color;
-    text-decoration: $link-decoration;
-    box-shadow: none;
+.mo-button--border-1 {
+    @include button-border-style($primary, $primary);
+
+    &::before,
+    &::after {
+        border: 1px solid transparent;
+        width: 0;
+        height: 0;
+    }
+
+    &::before {
+        top: 0;
+        left: 0;
+    }
+
+    &::after {
+        bottom: 0;
+        right: 0;
+    }
 
     &:hover {
-        color: $btn-link-hover-color;
-        text-decoration: $link-hover-decoration;
+        border: 1px solid $primary;
     }
 
-    &:focus,
-    &.focus {
-        text-decoration: $link-hover-decoration;
-        box-shadow: none;
+    &:hover::before,
+    &:hover::after {
+        width: 100%;
+        height: 100%;
     }
 
-    &:disabled,
-    &.disabled {
-        color: $btn-link-disabled-color;
-        pointer-events: none;
+    &:hover::before {
+        border-top-color: $primary;
+        border-right-color: $primary;
+        -webkit-transition: width 0.25s ease-out, height 0.25s ease-out 0.25s;
+        transition: width 0.25s ease-out, height 0.25s ease-out 0.25s;
+    }
+
+    &:hover::after {
+        border-bottom-color: $primary;
+        border-left-color: $primary;
+        -webkit-transition: border-color 0s ease-out 0.5s, width 0.25s ease-out 0.5s, height 0.25s ease-out 0.75s;
+        transition: border-color 0s ease-out 0.5s, width 0.25s ease-out 0.5s, height 0.25s ease-out 0.75s;
+    }
+}
+
+.mo-button--border-2 {
+    @extend .mo-button--border-1;
+
+    &:hover {
+        color: $primary;
+    }
+
+    &::after {
+        top: 0;
+        left: 0;
+    }
+
+    &:hover::before {
+        border-top-color: $primary;
+        border-right-color: $primary;
+    }
+
+    &:hover::after {
+        border-bottom-color: $primary;
+        border-left-color: $primary;
+        -webkit-transition: height 0.25s ease-out, width 0.25s ease-out 0.25s;
+        transition: height 0.25s ease-out, width 0.25s ease-out 0.25s;
+    }
+}
+
+.mo-button--border-3 {
+    @include button-border-style($primary, $primary);
+
+    &:hover {
+        color: $primary;
+    }
+
+    &::before,
+    &::after {
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        -webkit-transform-origin: center;
+        -ms-transform-origin: center;
+        transform-origin: center;
+    }
+
+    &::before {
+        border-top: 1px solid $primary;
+        border-bottom: 2px solid $primary;
+        -webkit-transform: scale3d(0, 1, 1);
+        transform: scale3d(0, 1, 1);
+    }
+
+    &::after {
+        border-left: 1px solid $primary;
+        border-right: 1px solid $primary;
+        -webkit-transform: scale3d(1, 0, 1);
+        transform: scale3d(1, 0, 1);
+    }
+
+    &:hover::before,
+    &:hover::after {
+        -webkit-transform: scale3d(1, 1, 1);
+        transform: scale3d(1, 1, 1);
+        -webkit-transition: -webkit-transform 0.5s;
+        transition: transform 0.5s;
     }
 }

@@ -35,3 +35,22 @@
         border-color: $border;
     }
 }
+
+@mixin button-border-style($border-color, $color) {
+    -webkit-transition: color 0.25s;
+    transition: color 0.25s;
+    box-shadow: none;
+    background: none;
+    border: 1px solid $border-color;
+    color: $color;
+    border-radius: 0px;
+
+    &::before,
+    &::after {
+        box-sizing: border-box;
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+    }
+}

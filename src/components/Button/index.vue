@@ -5,7 +5,8 @@
       type ? 'mo-button--' + type : '',
       buttonSize ? 'mo-button--' + buttonSize : '',
       {
-        'disabled': buttonDisabled
+        'disabled': buttonDisabled,
+        'loading': loading
       }
     ]"
     :disabled="buttonDisabled || loading"
@@ -22,19 +23,19 @@ import { computed, defineComponent } from 'vue'
 
 import type { PropType } from 'vue'
 
-type IButtonType = PropType<'primary' | 'success' | 'warning' | 'danger' | 'default'>
+type IButtonType = PropType<'primary' | 'success' | 'warning' | 'danger' | 'default' | 'border-1'>
 type IButtonSize = PropType<'hg'|'lg'|'sm'|'mini'>
 type IButtonNativeType = PropType<'button' | 'submit' | 'reset'>
 type EmitFn = (evt: Event) => void
 
-interface ButtonProps {
-  type: string;
-  size: string;
-  nativeType: string;
-  loading: boolean;
-  disabled: boolean;
-  autofocus: boolean;
-}
+// interface ButtonProps {
+//   type: string;
+//   size: string;
+//   nativeType: string;
+//   loading: boolean;
+//   disabled: boolean;
+//   autofocus: boolean;
+// }
 export default defineComponent({
   name: 'MoButton',
   props: {
@@ -42,7 +43,7 @@ export default defineComponent({
       type: String as IButtonType,
       default: 'default',
       validator: (val: string) => {
-        return ['default', 'primary', 'success', 'warning', 'danger'].includes(val)
+        return ['default', 'primary', 'success', 'warning', 'danger', 'border-1'].includes(val)
       }
     },
     size: {
@@ -65,11 +66,16 @@ export default defineComponent({
     const buttonSize = computed(() => {
       return props.size
     })
+
+    const buttonDisabled = computed(() => {
+      return props.disabled
+    })
+
     // methods
     const handleClick = (evt: any) => {
       ctx.emit('click', evt)
     }
-    return { buttonSize, handleClick }
+    return { buttonSize, buttonDisabled, handleClick }
   }
 })
 </script>
