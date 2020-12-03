@@ -72,7 +72,7 @@
     @include button-style($white, $gray-700, $body-color, $white, $primary, $primary);
 }
 
-.mo-button--border-1 {
+.mo-button--line {
     @include button-border-style($primary, $primary);
 
     &::before,
@@ -117,8 +117,8 @@
     }
 }
 
-.mo-button--border-2 {
-    @extend .mo-button--border-1;
+.mo-button--line-right-dwon {
+    @extend .mo-button--line;
 
     &:hover {
         color: $primary;
@@ -142,7 +142,7 @@
     }
 }
 
-.mo-button--border-3 {
+.mo-button--line-around {
     @include button-border-style($primary, $primary);
 
     &:hover {

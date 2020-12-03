@@ -14,36 +14,30 @@
     :type="nativeType"
     @click="handleClick"
   >
-    <span v-if="$slots.default"><slot></slot></span>
+    <span v-if="!loading&&$slots.default"><slot></slot></span>
+    <font-awesome-icon v-else icon="spinner" spin />
   </button>
 </template>
 
 <script lang='ts'>
 import { computed, defineComponent } from 'vue'
-
 import type { PropType } from 'vue'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-type IButtonType = PropType<'primary' | 'success' | 'warning' | 'danger' | 'default' | 'border-1'>
+type IButtonType = PropType<'primary' | 'success' | 'warning' | 'danger' | 'default' | 'line' | 'line-right-dwon' | 'line-around'>
 type IButtonSize = PropType<'hg'|'lg'|'sm'|'mini'>
 type IButtonNativeType = PropType<'button' | 'submit' | 'reset'>
 type EmitFn = (evt: Event) => void
 
-// interface ButtonProps {
-//   type: string;
-//   size: string;
-//   nativeType: string;
-//   loading: boolean;
-//   disabled: boolean;
-//   autofocus: boolean;
-// }
 export default defineComponent({
   name: 'MoButton',
+  components: { FontAwesomeIcon },
   props: {
     type: {
       type: String as IButtonType,
       default: 'default',
       validator: (val: string) => {
-        return ['default', 'primary', 'success', 'warning', 'danger', 'border-1'].includes(val)
+        return ['default', 'primary', 'success', 'warning', 'danger', 'line', 'line-right-dwon', 'line-around'].includes(val)
       }
     },
     size: {
