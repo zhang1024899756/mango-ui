@@ -25,6 +25,8 @@
       <mo-icon icon="user-secret" size="3x" theme="success"  />
       <mo-icon icon="spinner" size="3x" spin />
     </div>
+    <h4>输入框/文本域</h4>
+    <mo-input type="textarea"></mo-input>
   </div>
 </template>
 
@@ -32,10 +34,11 @@
 import { Options, Vue } from 'vue-class-component'
 import MoButton from './components/Button/index.vue'
 import MoIcon from './components/Icon/index.vue'
+import MoInput from './components/Input/index.vue'
 
 @Options({
   components: {
-    MoButton, MoIcon
+    MoButton, MoIcon, MoInput
   }
 })
 export default class App extends Vue {}
