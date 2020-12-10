@@ -1,24 +1,12 @@
 # mango-ui
 
-## Project setup
-```
-yarn install
-```
+This is a UI component library designed to provide a quick view interface for front-end engineers,written using the latest VuE3 and Typescript
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
+## Under development
 
-### Compiles and minifies for production
-```
-yarn build
-```
+Current completed component
 
-### Lints and fixes files
-```
-yarn lint
-```
+* Button
+* Icon
+* Input
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
