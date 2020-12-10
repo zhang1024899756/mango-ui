@@ -1,6 +1,5 @@
-import {
-  join
-} from 'path'
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { join } = require('path')
 
 function resolve (dir) {
   return join(__dirname, dir)

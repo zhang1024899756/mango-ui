@@ -2,7 +2,7 @@
 <font-awesome-icon :class="[
   'mo-icon',
   theme? 'mo-icon-' + theme : ''
-]" :icon="icon" :spin="spin" :size="size" />
+]" :icon="icon" :spin="spin" :size="size" v-bind="attrs" />
 </template>
 
 <script lang="ts">

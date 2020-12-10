@@ -26,7 +26,14 @@
       <mo-icon icon="spinner" size="3x" spin />
     </div>
     <h4>输入框/文本域</h4>
-    <mo-input type="textarea"></mo-input>
+    <div class="demo-p">
+      <mo-input type="text" placeholder="请输入信息"></mo-input>
+      <mo-input type="text" placeholder="请输入信息" size="large"></mo-input>
+      <mo-input type="text" placeholder="请输入信息" size="small"></mo-input>
+    </div>
+    <div class="demo-p">
+      <mo-input type="textarea" placeholder="请输入信息"></mo-input>
+    </div>
   </div>
 </template>
 

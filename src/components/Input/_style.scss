@@ -1,0 +1,70 @@
+.mo-textarea,
+.mo-input{
+  display: inline-block;
+}
+.mo-textarea__inner,
+.mo-input__inner {
+  width: 100%;
+  padding: $input-padding-y $input-padding-x;
+  font-family: $input-font-family;
+  font-size: $input-font-size;
+  font-weight: $input-font-weight;
+  // line-height: $input-line-height;
+  background-color: $input-bg;
+  color: $input-color;
+  border-color: $input-border-color;
+  border-style: solid;
+  border-width: $input-border-width;
+  // box-shadow: $input-box-shadow;
+  border-radius: $input-border-radius;
+  transition: $input-transition;
+
+  &[disabled] {
+    background-color: $input-disabled-bg;
+    border-color: $input-disabled-border-color;
+  }
+  &:focus{
+    background-color: $input-focus-bg;
+    border-color: $input-focus-border-color;
+    color: $input-focus-color;
+    // box-shadow: $input-focus-box-shadow;
+    outline: none;
+  }
+  &::placeholder {
+    color: $input-placeholder-color;
+  }
+}
+
+.mo-textarea__inner{
+  min-height: 2.5rem;
+  overflow-y: auto;
+  &::-webkit-scrollbar {
+    width: 8px;
+    height: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: #ffffff;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: #ececec;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: #bfbfbf;
+  }
+
+  &::-webkit-scrollbar-corner {
+    background: #ffffff;
+  }
+}
+
+.mo-input--large .mo-input__inner {
+  padding: $input-padding-y-lg $input-padding-x-lg;
+  font-size: $input-font-size-lg;
+}
+.mo-input--small .mo-input__inner {
+  padding: $input-padding-y-sm $input-padding-x-sm;
+  font-size: $input-font-size-sm;
+}
