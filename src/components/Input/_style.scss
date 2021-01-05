@@ -1,6 +1,7 @@
 .mo-textarea,
 .mo-input{
   display: inline-block;
+  position: relative;
 }
 .mo-textarea__inner,
 .mo-input__inner {
@@ -67,4 +68,25 @@
 .mo-input--small .mo-input__inner {
   padding: $input-padding-y-sm $input-padding-x-sm;
   font-size: $input-font-size-sm;
+}
+
+.mo-input--suffix .mo-input__inner{
+  padding-right: 30px;
+}
+.mo-input__suffix{
+  position: absolute;
+  height: 100%;
+  right: 10px;
+  top: 0;
+  text-align: center;
+  transition: all .3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .mo-input__icon{
+    color: $input-border-color;
+  }
+  .mo-input__clear{
+    cursor: pointer;
+  }
 }

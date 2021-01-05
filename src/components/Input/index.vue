@@ -4,7 +4,7 @@
     inputSize ? 'mo-input--' + inputSize : '',
     {
       'is-disabled': inputDisabled,
-      'mo-input--suffix':  showPassword
+      'mo-input--suffix': $slots.suffix || suffixIcon || clearable || showPassword
     },
     $attrs.class
   ]"
@@ -35,6 +35,16 @@
         @blur="handleBlur"
         @change="handleChange"
         @keydown="handleKeydown">
+        <!-- 后置内容 -->
+      <span v-if="getSuffixVisible()" class="mo-input__suffix">
+        <span class="mo-input__suffix-inner">
+          <template v-if="!showClear || !showPwdVisible || !isWordLimitVisible">
+            <slot name="suffix"></slot>
+            <font-awesome-icon v-if="suffixIcon" class="mo-input__icon" :icon="suffixIcon" :spin="suffixIcon === 'spinner'" />
+          </template>
+          <font-awesome-icon v-if="showClear" class="mo-input__icon mo-input__clear" icon="times-circle" @mousedown.prevent @click="clear" />
+        </span>
+      </span>
       <!-- 后置元素slot -->
       <div v-if="$slots.append" class="mo-input-group__append">
         <slot name="append"></slot>
@@ -62,6 +72,7 @@
 </template>
 
 <script lang='ts'>
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import {
   defineComponent,
   // inject,
@@ -78,6 +89,7 @@ import type { PropType } from 'vue'
 import useAttrs from '@/hooks/use-attrs'
 export default defineComponent({
   name: 'MoInput',
+  components: { FontAwesomeIcon },
   inheritAttrs: false,
   props: {
     modelValue: {
@@ -120,6 +132,18 @@ export default defineComponent({
     showPassword: {
       type: Boolean,
       default: false
+    },
+    suffixIcon: {
+      type: String,
+      default: ''
+    },
+    clearable: {
+      type: Boolean,
+      default: false
+    },
+    showWordLimit: {
+      type: Boolean,
+      default: false
     }
   },
   emits: ['update:modelValue', 'input', 'change', 'focus', 'blur', 'clear',
@@ -127,20 +151,20 @@ export default defineComponent({
   setup (props, ctx) {
     // 注册响应式
     const hovering = ref(false)
-    const input = ref({ value: '' })
-    const textarea = ref({ value: '' })
+    const input = ref(null)
+    const textarea = ref(null)
     const focused = ref(false)
 
     const attrs = useAttrs(true)
 
     const inputOrTextarea = computed(() => input.value || textarea.value)
 
-    const onMouseEnter = (e: unknown) => {
+    const onMouseEnter = e => {
       hovering.value = true
       ctx.emit('mouseenter', e)
     }
 
-    const onMouseLeave = (e: unknown) => {
+    const onMouseLeave = e => {
       hovering.value = false
       ctx.emit('mouseleave', e)
     }
@@ -149,7 +173,9 @@ export default defineComponent({
 
     const inputSize = computed(() => props.size)
 
-    const nativeInputValue = computed(() => (props.modelValue === null || props.modelValue === undefined) ? '' : String(props.modelValue))
+    const nativeInputValue = computed(() => {
+      return (props.modelValue === null || props.modelValue === undefined) ? '' : String(props.modelValue)
+    })
 
     const _textareaCalcStyle = shallowRef({})
 
@@ -166,7 +192,7 @@ export default defineComponent({
 
     const isComposing = ref(false)
 
-    const handleInput = (event: any) => {
+    const handleInput = event => {
       const { value } = event.target
 
       // should not emit input during composition
@@ -181,16 +207,16 @@ export default defineComponent({
       nextTick(setNativeInputValue)
     }
 
-    const handleChange = (event: any) => {
+    const handleChange = event => {
       ctx.emit('change', event.target.value)
     }
 
-    const handleFocus = (event: any) => {
+    const handleFocus = event => {
       focused.value = true
       ctx.emit('focus', event)
     }
 
-    const handleBlur = (event: any) => {
+    const handleBlur = event => {
       focused.value = false
       ctx.emit('blur', event)
       if (props.validateEvent) {
@@ -198,7 +224,7 @@ export default defineComponent({
       }
     }
 
-    const handleKeydown = (e: any) => {
+    const handleKeydown = e => {
       ctx.emit('keydown', e)
     }
 
@@ -206,20 +232,81 @@ export default defineComponent({
       isComposing.value = true
     }
 
-    const handleCompositionUpdate = (event: any) => {
+    const handleCompositionUpdate = event => {
       // const text = event.target.value
       // const lastCharacter = text[text.length - 1] || ''
       // isComposing.value = !isKorean(lastCharacter)
     }
 
-    const handleCompositionEnd = (event: any) => {
+    const handleCompositionEnd = event => {
       if (isComposing.value) {
         isComposing.value = false
         handleInput(event)
       }
     }
 
-    return { onMouseEnter, onMouseLeave, attrs, inputDisabled, inputSize, textareaStyle, handleInput, handleChange, handleFocus, handleBlur, handleKeydown, handleCompositionStart, handleCompositionUpdate, handleCompositionEnd }
+    const clear = () => {
+      ctx.emit('update:modelValue', '')
+      ctx.emit('change', '')
+      ctx.emit('clear')
+    }
+
+    const showPwdVisible = computed(() => {
+      return props.showPassword &&
+        !inputDisabled.value &&
+        !props.readonly &&
+        (!!nativeInputValue.value || focused.value)
+    })
+
+    const isWordLimitVisible = computed(() => {
+      return props.showWordLimit &&
+        ctx.attrs.maxlength &&
+        (props.type === 'text' || props.type === 'textarea') &&
+        !inputDisabled.value &&
+        !props.readonly &&
+        !props.showPassword
+    })
+
+    const showClear = computed(() => {
+      return props.clearable &&
+        !inputDisabled.value &&
+        !props.readonly &&
+        nativeInputValue.value &&
+        (focused.value || hovering.value)
+    })
+
+    const getSuffixVisible = () => {
+      return ctx.slots.suffix ||
+        props.suffixIcon ||
+        showClear.value ||
+        props.showPassword ||
+        isWordLimitVisible.value
+        // || (validateState.value && needStatusIcon.value)
+    }
+
+    return {
+      input,
+      textarea,
+      clear,
+      showClear,
+      showPwdVisible,
+      isWordLimitVisible,
+      getSuffixVisible,
+      onMouseEnter,
+      onMouseLeave,
+      attrs,
+      inputDisabled,
+      inputSize,
+      textareaStyle,
+      handleInput,
+      handleChange,
+      handleFocus,
+      handleBlur,
+      handleKeydown,
+      handleCompositionStart,
+      handleCompositionUpdate,
+      handleCompositionEnd
+    }
   }
 })
 </script>

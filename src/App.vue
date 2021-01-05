@@ -1,6 +1,6 @@
 <template>
   <div class="demo-wrap">
-    <h4>按钮组件</h4>
+    <!-- <h4>按钮组件</h4>
     <div class="demo-p">
       <mo-button>默认按钮</mo-button>
       <mo-button type='primary'>主题按钮</mo-button>
@@ -24,10 +24,12 @@
     <div class="demo-p">
       <mo-icon icon="user-secret" size="3x" theme="success"  />
       <mo-icon icon="spinner" size="3x" spin />
-    </div>
+    </div> -->
     <h4>输入框/文本域</h4>
     <div class="demo-p">
-      <mo-input type="text" placeholder="请输入信息"></mo-input>
+      <mo-input type="text" placeholder="请输入信息1" v-model="input" @clear="handleClear" clearable>
+        <!-- <template v-slot:suffix>dd</template> -->
+      </mo-input>
       <mo-input type="text" placeholder="请输入信息" size="large"></mo-input>
       <mo-input type="text" placeholder="请输入信息" size="small"></mo-input>
     </div>
@@ -46,6 +48,17 @@ import MoInput from './components/Input/index.vue'
 @Options({
   components: {
     MoButton, MoIcon, MoInput
+  },
+  data () {
+    return {
+      input: ''
+    }
+  },
+  methods: {
+    handleClear () {
+      console.log('handleClear')
+      this.input = ''
+    }
   }
 })
 export default class App extends Vue {}
