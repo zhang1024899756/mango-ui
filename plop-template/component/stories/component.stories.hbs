@@ -1,0 +1,15 @@
+import {{properCase name}} from '../src/{{name}}.vue'
+
+export default {
+  title: '{{properCase name}}',
+  component: {{properCase name}}
+}
+
+export const {{properCase name}} = _ => ({
+  components: { {{properCase name}} },
+  template: `
+    <div>
+      <{{name}}></{{name}}>
+    </div>
+  `
+})

@@ -1,0 +1,10 @@
+import { shallowMount } from '@vue/test-utils'
+import Element from '../src/{{name}}.vue'
+
+describe('{{properCase name}}', () => {
+    it('渲染{{properCase name}}组件', ()=> {
+        const wrapper = shallowMount(Element)
+
+        expect(wrapper).toBeDefined()
+    })
+})

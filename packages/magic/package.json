@@ -1,0 +1,15 @@
+{
+  "name": "magic",
+  "version": "1.0.0",
+  "description": "magic component",
+  "main": "dist/cjs/index.js",
+  "module": "dist/es/index.js",
+  "author": "zhang1024899756",
+  "license": "MIT",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+  },
+  "keywords": []
+}
