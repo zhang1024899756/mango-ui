@@ -7,6 +7,16 @@
  * Transform only: a float must not reflow the page it sits in. The three axes
  * share one distance variable, so `amplitude` moves y, x and the tilt together.
  *
+ * WHAT WAS WRONG BEFORE: the old motion was a straight line up and back at 8px
+ * over 4s — mathematically a float, visually a slow breath. Nobody reads that as
+ * "floating". So each axis is now a *composite* of three things driven off the
+ * same amplitude:
+ *   · the travel itself (y / x / tilt),
+ *   · a lateral drift that never repeats the travel's rhythm,
+ *   · a slow sway plus a sub-1% scale breath.
+ * The half-cycles are asymmetric (46%, 20%, 72% …) so it reads as an uncontrolled
+ * gust rather than a metronome, and the default amplitude went 8 → 16.
+ *
  * Caveat worth knowing: an animated transform makes the wrapper a containing
  * block for `position: fixed` descendants. Wrapping a portal host inside a
  * Flotage is the one layout it can disturb.
@@ -16,13 +26,19 @@
   /* Inline-block keeps a text node in the line box; block tags are restored below. */
   display: inline-block;
 
-  --myui-flotage-amplitude: 8;
+  --myui-flotage-amplitude: 16;
   --myui-flotage-duration: 4s;
   --myui-flotage-delay: 0s;
 
   /* px on the travel axes, deg on the rotate axis. */
   --myui-flotage-travel: calc(var(--myui-flotage-amplitude) * 1px);
   --myui-flotage-tilt: calc(var(--myui-flotage-amplitude) * 1deg);
+
+  /* Secondary motion, all derived from the same knob so amplitude still rules:
+   * 16px of travel gets ±0.8deg of sway, ±1% of scale and ~2px of cross drift. */
+  --myui-flotage-sway: calc(var(--myui-flotage-amplitude) * 0.05deg);
+  --myui-flotage-breath: calc(1 + var(--myui-flotage-amplitude) * 0.0006);
+  --myui-flotage-drift: calc(var(--myui-flotage-amplitude) * 0.12px);
 }
 
 /* A wrapper around a card must still be a card: restore block flow for the
@@ -50,36 +66,74 @@
     var(--myui-flotage-delay) infinite;
 }
 
+/* y — lift, hang, sink. The peak sits at 46%, not 50%, and the two shoulders
+ * carry opposite cross-drift, so the loop never lands on the same line twice. */
 @keyframes myui-flotage-y {
   0%,
   100% {
-    transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
   }
 
-  50% {
-    transform: translate3d(0, calc(var(--myui-flotage-travel) * -1), 0);
+  20% {
+    transform: translate3d(calc(var(--myui-flotage-drift) * -0.7), calc(var(--myui-flotage-travel) * -0.62), 0)
+      rotate(calc(var(--myui-flotage-sway) * 0.7)) scale(var(--myui-flotage-breath));
+  }
+
+  46% {
+    transform: translate3d(var(--myui-flotage-drift), calc(var(--myui-flotage-travel) * -1), 0)
+      rotate(calc(var(--myui-flotage-sway) * -0.9)) scale(1);
+  }
+
+  72% {
+    transform: translate3d(calc(var(--myui-flotage-drift) * -1.2), calc(var(--myui-flotage-travel) * -0.45), 0)
+      rotate(calc(var(--myui-flotage-sway) * 0.45)) scale(var(--myui-flotage-breath));
   }
 }
 
+/* x — same composite, laid on its side. */
 @keyframes myui-flotage-x {
   0%,
   100% {
-    transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
   }
 
-  50% {
-    transform: translate3d(var(--myui-flotage-travel), 0, 0);
+  24% {
+    transform: translate3d(calc(var(--myui-flotage-travel) * 0.68), calc(var(--myui-flotage-drift) * -1), 0)
+      rotate(calc(var(--myui-flotage-sway) * -0.7)) scale(var(--myui-flotage-breath));
+  }
+
+  54% {
+    transform: translate3d(var(--myui-flotage-travel), calc(var(--myui-flotage-drift) * 0.8), 0)
+      rotate(calc(var(--myui-flotage-sway) * 0.6)) scale(1);
+  }
+
+  78% {
+    transform: translate3d(calc(var(--myui-flotage-travel) * 0.4), calc(var(--myui-flotage-drift) * -0.6), 0)
+      rotate(calc(var(--myui-flotage-sway) * -0.35)) scale(var(--myui-flotage-breath));
   }
 }
 
+/* rotate — the tilt carries the motion, so it gets the full amplitude in degrees
+ * plus a small physical drift: a hanging sign, not a spinning one. */
 @keyframes myui-flotage-rotate {
   0%,
   100% {
-    transform: rotate(0deg);
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
   }
 
-  50% {
-    transform: rotate(calc(var(--myui-flotage-tilt) * -1));
+  26% {
+    transform: translate3d(calc(var(--myui-flotage-drift) * 0.8), calc(var(--myui-flotage-travel) * -0.14), 0)
+      rotate(calc(var(--myui-flotage-tilt) * -0.72)) scale(1);
+  }
+
+  58% {
+    transform: translate3d(calc(var(--myui-flotage-drift) * -2.2), calc(var(--myui-flotage-travel) * -0.3), 0)
+      rotate(calc(var(--myui-flotage-tilt) * -1)) scale(var(--myui-flotage-breath));
+  }
+
+  84% {
+    transform: translate3d(calc(var(--myui-flotage-drift) * 0.5), calc(var(--myui-flotage-travel) * -0.1), 0)
+      rotate(calc(var(--myui-flotage-tilt) * -0.35)) scale(1);
   }
 }
 
@@ -102,10 +156,22 @@
 }
 
 /* --- reduced motion: pin the content, keep it visible ---------------------- */
+/* `motionPreference="always"` opts out (`--force-motion`), which is what the docs
+ * site uses: on a machine whose OS has "animation effects" switched off, this
+ * component would otherwise be invisible — and the float *is* the content here. */
 @include myui-motion-safe {
-  .myui-flotage {
+  .myui-flotage:not(.myui-flotage--force-motion) {
     animation: none !important;
     transform: none !important;
     will-change: auto !important;
+  }
+
+  /* A host reset that clamps motion (`* { animation-duration: 0.01ms !important }`
+   * — VitePress ships exactly that) also clamps the opt-in. Restore the real
+   * timing for the forced case only, so `always` means always. */
+  .myui-flotage--force-motion {
+    animation-duration: var(--myui-flotage-duration) !important;
+    animation-delay: var(--myui-flotage-delay) !important;
+    animation-iteration-count: infinite !important;
   }
 }

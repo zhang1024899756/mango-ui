@@ -20,14 +20,15 @@ import { MyuiProgress } from './components/progress'
 import { MyuiSlider } from './components/slider'
 import { MyuiSwitch } from './components/switch'
 import { MyuiTag } from './components/tag'
+import { MyuiText } from './components/text'
 import { MyuiFlotage } from './effects/flotage'
-import { MyuiMagic } from './effects/magic'
+import { MyuiNeon } from './effects/neon'
 
-export const version = '2.0.0'
+export const version = '2.1.0'
 
 const components: Plugin[] = [
   // effects — wrap anything, add attitude
-  MyuiMagic,
+  MyuiNeon,
   MyuiFlotage,
   // elements
   MyuiButton,
@@ -35,6 +36,7 @@ const components: Plugin[] = [
   MyuiLink,
   MyuiImage,
   MyuiNumber,
+  MyuiText,
   MyuiTag,
   MyuiInput,
   MyuiSwitch,
@@ -63,8 +65,9 @@ export {
   MyuiSlider,
   MyuiSwitch,
   MyuiTag,
+  MyuiText,
   MyuiFlotage,
-  MyuiMagic,
+  MyuiNeon,
 }
 
 export { ICONS, ICON_NAMES } from './components/icon'
@@ -98,8 +101,25 @@ export type { SwitchProps, SwitchSize, SwitchValue } from './components/switch'
 
 export type { TagProps, TagTone, TagVariant, TagSize, TagShape } from './components/tag'
 
-export type { FlotageProps, FlotageAxis, FlotageTrigger } from './effects/flotage'
+export type {
+  TextProps,
+  TextVariant,
+  TextSize,
+  TextWeight,
+  TextTone,
+  TextLeading,
+  TextTracking,
+  TextAlign,
+  TextTransform,
+} from './components/text'
 
-export type { MagicProps, MagicMode, MagicSpeed } from './effects/magic'
+export type {
+  FlotageProps,
+  FlotageAxis,
+  FlotageTrigger,
+  FlotageMotionPreference,
+} from './effects/flotage'
+
+export type { NeonProps, NeonMode, NeonSpeed } from './effects/neon'
 
 export default MangoUI

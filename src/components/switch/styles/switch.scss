@@ -18,17 +18,49 @@
   color: var(--myui-color-text);
 }
 
-/* --- sizes ------------------------------------------------------------------ */
+/* --- geometry ---------------------------------------------------------------
+ * Track width/height and thumb diameter are component-owned: they are not on the
+ * token scale, so each size states them as its three primitives and everything
+ * else is derived from them.
+ *
+ * The thumb is absolutely positioned, so its offsets are measured from the
+ * track's *padding* box (the area inside the border), not from the track's
+ * outer edge — that is precisely the trap the old `top: var(--myui-border-width)`
+ * fell into. The leftover room inside that box is
+ *
+ *   track-h - 2 * border - thumb
+ *
+ * and centring means putting half of it on each side:
+ *
+ *   inset  = (track-h - 2 * border - thumb) / 2
+ *   travel =  track-w - 2 * border - thumb - 2 * inset        (md 28px, sm 20px)
+ *
+ * Both end stops therefore sit the same distance from the track edge: the thumb
+ * is equally far from the left edge when off and from the right edge when on.
+ * -------------------------------------------------------------------------- */
+@mixin myui-switch-geometry {
+  --myui-switch-inset: calc(
+    (var(--myui-switch-track-h) - 2 * var(--myui-border-width) - var(--myui-switch-thumb-size)) /
+      2
+  );
+  --myui-switch-travel: calc(
+    var(--myui-switch-track-w) - 2 * var(--myui-border-width) - var(--myui-switch-thumb-size) -
+      2 * var(--myui-switch-inset)
+  );
+}
+
 .myui-switch--sm {
   --myui-switch-track-w: 44px;
   --myui-switch-track-h: 24px;
   --myui-switch-thumb-size: 16px;
+  @include myui-switch-geometry;
 }
 
 .myui-switch--md {
   --myui-switch-track-w: 60px;
   --myui-switch-track-h: 32px;
   --myui-switch-thumb-size: 24px;
+  @include myui-switch-geometry;
 }
 
 /* --- track ------------------------------------------------------------------ */
@@ -48,11 +80,15 @@
   background-color: var(--myui-color-accent);
 }
 
-/* --- thumb ------------------------------------------------------------------ */
+/* --- thumb ------------------------------------------------------------------
+ * Offsets are padding-box relative, hence --myui-switch-inset rather than the
+ * border width: the border already eats into the box the offset is measured
+ * from, so adding it again would push the thumb off centre.
+ * -------------------------------------------------------------------------- */
 .myui-switch__thumb {
   position: absolute;
-  top: var(--myui-border-width);
-  left: var(--myui-border-width);
+  top: var(--myui-switch-inset);
+  left: var(--myui-switch-inset);
   display: block;
   width: var(--myui-switch-thumb-size);
   height: var(--myui-switch-thumb-size);
@@ -63,9 +99,7 @@
 }
 
 .myui-switch--checked .myui-switch__thumb {
-  transform: translateX(
-    calc(var(--myui-switch-track-w) - var(--myui-switch-thumb-size) - var(--myui-space-2))
-  );
+  transform: translateX(var(--myui-switch-travel));
 }
 
 /* --- label ------------------------------------------------------------------ */
@@ -93,12 +127,16 @@
   background-color: var(--myui-color-bg);
 }
 
-/* --- loading ---------------------------------------------------------------- */
+/* --- loading ----------------------------------------------------------------
+ * Sized off the thumb so it keeps the same clearance on both sizes instead of
+ * bursting out of the sm thumb; `inset: 0` + `margin: auto` centres it in the
+ * thumb's padding box.
+ * -------------------------------------------------------------------------- */
 .myui-switch__spinner {
   position: absolute;
   inset: 0;
-  width: var(--myui-space-3);
-  height: var(--myui-space-3);
+  width: calc(var(--myui-switch-thumb-size) / 2);
+  height: calc(var(--myui-switch-thumb-size) / 2);
   margin: auto;
   border: var(--myui-border-width) solid var(--myui-color-line-soft);
   border-top-color: var(--myui-color-text);

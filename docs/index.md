@@ -7,13 +7,13 @@ title: 赛博朋克 · 数字穿越的 Vue 3 组件库
   <div class="poster__kicker">MANGO UI / V2 — CYBERPUNK EDITION</div>
 
   <h1 class="poster__title">
-    组件库<br />
+    赛博芒果<br />
     穿越<em>未来</em>
   </h1>
 
   <p class="poster__lead">
-    两套装备：能<strong>包裹任何东西</strong>的特效组件——故障、漂浮、扫描；
-    和自带霓虹界面的元素组件。为赛博朋克门户、数字艺术站、
+    两套装备：能<strong>包裹任何东西</strong>的特效组件——霓虹灯管、失重漂浮、光带扫过；
+    和自带霓虹界面的元素组件，从排印到控件都是同一套深空语言。为赛博朋克门户、数字艺术站、
     未来科技产品而生，而不是后台管理系统。
   </p>
 
@@ -23,16 +23,16 @@ title: 赛博朋克 · 数字穿越的 Vue 3 组件库
   </div>
 
   <div class="poster__band">
-    <a class="poster__card" :href="withBase('/components/magic')">
+    <a class="poster__card" :href="withBase('/components/neon')">
       <div class="poster__card-title">特效组件</div>
       <div class="poster__card-desc">
-        <code>Magic</code> 故障撕裂、<code>Flotage</code> 失重漂浮。套在按钮、图片、整块卡片外面就能生效。
+        <code>Neon</code> 霓虹灯管、<code>Flotage</code> 失重漂浮。套在按钮、图片、整块卡片外面就能生效。
       </div>
     </a>
-    <a class="poster__card" :href="withBase('/components/button')">
+    <a class="poster__card" :href="withBase('/components/text')">
       <div class="poster__card-title">元素组件</div>
       <div class="poster__card-desc">
-        按钮、图标、链接、图片、数值、标签、输入框、开关、滑动条、对话框、进度条。
+        文字、按钮、图标、链接、图片、数值、标签、输入框、开关、滑动条、对话框、进度条。
       </div>
     </a>
     <a class="poster__card" :href="withBase('/guide/theming')">
@@ -53,18 +53,18 @@ title: 赛博朋克 · 数字穿越的 Vue 3 组件库
     <h2 class="poster__section-title">特效 · 实机</h2>
     <div class="poster__band">
       <div class="poster__card">
-        <div class="poster__card-title">Magic</div>
+        <div class="poster__card-title">Neon</div>
         <div class="poster__fx">
-          <MyuiMagic mode="glitch" :intensity="0.7">
-            <span class="poster__fx-word">GLITCH</span>
-          </MyuiMagic>
+          <MyuiNeon :intensity="0.7">
+            <span class="poster__fx-word">NEON</span>
+          </MyuiNeon>
         </div>
-        <div class="poster__card-desc">RGB 分离 + 扫描线。`glitch` / `scan` / `flicker`。</div>
+        <div class="poster__card-desc">灯管辉光 + 呼吸。`glow` / `flicker` / `scan`。</div>
       </div>
       <div class="poster__card">
         <div class="poster__card-title">Flotage</div>
         <div class="poster__fx">
-          <MyuiFlotage :amplitude="10" :duration="4">
+          <MyuiFlotage :amplitude="20" :duration="5" motion-preference="always">
             <MyuiTag variant="solid" tone="accent" size="md">SS26 LOOKBOOK</MyuiTag>
           </MyuiFlotage>
         </div>
@@ -73,10 +73,10 @@ title: 赛博朋克 · 数字穿越的 Vue 3 组件库
       <div class="poster__card">
         <div class="poster__card-title">组合</div>
         <div class="poster__fx">
-          <MyuiFlotage :amplitude="6" :duration="3.2">
-            <MyuiMagic mode="flicker" :intensity="0.55">
+          <MyuiFlotage :amplitude="12" :duration="3.2" motion-preference="always">
+            <MyuiNeon mode="flicker" :intensity="0.55">
               <MyuiButton size="lg">限量发售</MyuiButton>
-            </MyuiMagic>
+            </MyuiNeon>
           </MyuiFlotage>
         </div>
         <div class="poster__card-desc">特效可以互相嵌套，也可以包住别的组件。</div>
@@ -87,6 +87,12 @@ title: 赛博朋克 · 数字穿越的 Vue 3 组件库
   <div class="poster__section">
     <h2 class="poster__section-title">元素 · 实机</h2>
     <div class="poster__stage">
+      <div class="poster__stage-row">
+        <MyuiText variant="display" size="2xl" weight="black">CYBER</MyuiText>
+        <MyuiText variant="eyebrow" tone="accent">SS26 / NIGHT MARKET</MyuiText>
+        <MyuiText variant="mono" tone="soft">LOT 0042</MyuiText>
+        <MyuiText variant="display" size="lg" glow>穿越未来</MyuiText>
+      </div>
       <div class="poster__stage-row">
         <MyuiButton>立即抢购</MyuiButton>
         <MyuiButton variant="outline" tone="ink">
@@ -133,13 +139,14 @@ title: 赛博朋克 · 数字穿越的 Vue 3 组件库
   <div class="poster__section">
     <h2 class="poster__section-title">组件清单</h2>
     <div class="poster__grid">
-      <a :href="withBase('/components/magic')">Magic 魔法特效<span>effect</span></a>
+      <a :href="withBase('/components/neon')">Neon 霓虹特效<span>effect</span></a>
       <a :href="withBase('/components/flotage')">Flotage 漂浮特效<span>effect</span></a>
       <a :href="withBase('/components/button')">Button 按钮<span>element</span></a>
       <a :href="withBase('/components/icon')">Icon 图标<span>element</span></a>
       <a :href="withBase('/components/link')">Link 链接<span>element</span></a>
       <a :href="withBase('/components/image')">Image 图片<span>element</span></a>
       <a :href="withBase('/components/number')">Number 数值<span>element</span></a>
+      <a :href="withBase('/components/text')">Text 文字<span>element</span></a>
       <a :href="withBase('/components/tag')">Tag 标签<span>element</span></a>
       <a :href="withBase('/components/input')">Input 输入框<span>element</span></a>
       <a :href="withBase('/components/switch')">Switch 开关<span>element</span></a>
@@ -154,7 +161,8 @@ title: 赛博朋克 · 数字穿越的 Vue 3 组件库
     <p class="poster__lead">
       深空近黑打底、1px 霓虹发丝线、<strong>只有一个</strong>电光青作为行动色，
       品红只做信号。辉光即层级、圆角为零、动效短促不发弹。
-      所有数值都是 CSS 变量，所有动画都能被系统的「减弱动态效果」关掉。
+      所有数值都是 CSS 变量；系统开了「减弱动态效果」时动画会停下，
+      但霓虹的静态辉光留着 —— 特效不会变成一片普通内容。
     </p>
   </div>
 </div>

@@ -1,0 +1,266 @@
+@use '../../../styles/mixins.scss' as *;
+
+/* =============================================================================
+ * Neon — 霓虹. The wrapper that turns whatever you hand it into a lit tube.
+ * Classes: .myui-neon [+ --{mode} --{speed} --text, is-active]
+ *
+ * THE ONE RULE THIS FILE IS BUILT AROUND
+ *   The glow is a *plain rule*, not a keyframe. Switch every animation off —
+ *   reduced motion, a paused animation, a screenshot, print — and the element
+ *   still reads as neon, because the halo is painted by `filter: drop-shadow()`
+ *   in `.myui-neon.is-active`. Animations only ever modulate it: they scale
+ *   --myui-neon-breath, and 1 is the resting value, so an animation that never
+ *   advances (or is removed) looks exactly like no animation at all.
+ *
+ * Why `filter: drop-shadow()` and not a background or a border: a drop shadow
+ * follows the *painted silhouette*, so one rule lights a text node, a <button>,
+ * an <img> and a whole card without knowing which one it got. Because it is the
+ * silhouette and not a box, it also survives transparency.
+ *
+ * Trade-off worth knowing: `filter` makes the wrapper a containing block for
+ * `position: fixed` descendants and a new stacking context. A portal host does
+ * not belong inside a Neon.
+ * ========================================================================== */
+
+/* Registered so the multiplier interpolates. Unregistered, the animation still
+ * works — it just steps between values instead of easing. Either way the
+ * fallback is the resting glow, never "no glow". */
+@property --myui-neon-breath {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 1;
+}
+
+.myui-neon {
+  /* Inline-block keeps a text node in the line box; block tags are restored below. */
+  display: inline-block;
+
+  --myui-neon-intensity: 0.5;
+  --myui-neon-color-a: var(--myui-color-accent);
+  --myui-neon-color-b: var(--myui-color-info);
+
+  /* The animation multiplier. Every radius is derived from it, so the element is
+   * fully lit even while nothing is animating. */
+  --myui-neon-breath: 1;
+
+  /* Halo radii for wrapper mode: one spacing step per layer, scaled by intensity
+   * and breath. Wrapper mode blurs the silhouette, so it needs more distance than
+   * a text shadow to register. */
+  --myui-neon-halo-1: calc(
+    var(--myui-neon-intensity) * var(--myui-space-3) * var(--myui-neon-breath)
+  );
+  --myui-neon-halo-2: calc(
+    var(--myui-neon-intensity) * var(--myui-space-6) * var(--myui-neon-breath)
+  );
+  --myui-neon-halo-3: calc(
+    var(--myui-neon-intensity) * var(--myui-space-7) * var(--myui-neon-breath)
+  );
+
+  /* Tube shadows are tighter than the halo: a lit glyph, not a floodlight. */
+  --myui-neon-tube-1: calc(
+    var(--myui-neon-intensity) * var(--myui-space-2) * var(--myui-neon-breath)
+  );
+  --myui-neon-tube-2: calc(
+    var(--myui-neon-intensity) * var(--myui-space-4) * var(--myui-neon-breath)
+  );
+  --myui-neon-tube-3: calc(
+    var(--myui-neon-intensity) * var(--myui-space-6) * var(--myui-neon-breath)
+  );
+
+  --myui-neon-cycle: calc(var(--myui-duration-slow) * 9);
+}
+
+/* A wrapper around a card must still be a card: restore block flow for the
+ * block-level tags, at flat specificity so a consumer's own display wins. */
+.myui-neon:where(div, section, article, aside, header, footer, main, nav, figure, figcaption, p, ul, ol, li, blockquote, h1, h2, h3, h4, h5, h6, form, details, td, th) {
+  display: block;
+}
+
+/* --- speed: a multiple of the slow token, never a new unit ------------------ */
+.myui-neon--slow {
+  --myui-neon-cycle: calc(var(--myui-duration-slow) * 14);
+}
+
+.myui-neon--normal {
+  --myui-neon-cycle: calc(var(--myui-duration-slow) * 9);
+}
+
+.myui-neon--fast {
+  --myui-neon-cycle: calc(var(--myui-duration-slow) * 5);
+}
+
+/* =============================================================================
+ * THE RESTING GLOW — wrapper mode.
+ * Three stacked drop-shadows on the silhouette: a hot core in the tube colour,
+ * a mid bloom of the same colour, and a wide fog in the second colour. Alpha
+ * comes from color-mix against transparent, so no new colour is introduced.
+ * ========================================================================== */
+.myui-neon.is-active:not(.myui-neon--text) {
+  will-change: filter;
+  filter: drop-shadow(
+      0 0 var(--myui-neon-halo-1) color-mix(in srgb, var(--myui-neon-color-a) 92%, transparent)
+    )
+    drop-shadow(
+      0 0 var(--myui-neon-halo-2) color-mix(in srgb, var(--myui-neon-color-a) 54%, transparent)
+    )
+    drop-shadow(
+      0 0 var(--myui-neon-halo-3) color-mix(in srgb, var(--myui-neon-color-b) 36%, transparent)
+    );
+}
+
+/* --- text layer ------------------------------------------------------------ */
+.myui-neon__text {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+}
+
+/* THE RESTING GLOW — text mode. The glyph itself is the tube (painted in the
+ * tube colour), the shadows are the gas around it. No duplicated glyphs: the old
+ * glitch copies are gone with the glitch mode. */
+.myui-neon--text.is-active .myui-neon__text {
+  color: var(--myui-neon-color-a);
+  text-shadow:
+    0 0 var(--myui-neon-tube-1) color-mix(in srgb, var(--myui-neon-color-a) 95%, transparent),
+    0 0 var(--myui-neon-tube-2) color-mix(in srgb, var(--myui-neon-color-a) 62%, transparent),
+    0 0 var(--myui-neon-tube-3) color-mix(in srgb, var(--myui-neon-color-b) 48%, transparent);
+}
+
+/* =============================================================================
+ * glow — a healthy tube: the gas rises and falls, the tube never goes out.
+ * The 0% / 100% keyframe is breath 1, i.e. exactly the resting glow.
+ * ========================================================================== */
+.myui-neon--glow.is-active {
+  animation: myui-neon-breathe var(--myui-neon-cycle) ease-in-out infinite;
+}
+
+@keyframes myui-neon-breathe {
+  0%,
+  100% {
+    --myui-neon-breath: 1;
+  }
+
+  50% {
+    --myui-neon-breath: 1.55;
+  }
+}
+
+/* =============================================================================
+ * flicker — a tube with a bad contact. Stepped, so the dropouts are hard, and it
+ * never reaches 0: even mid-stutter the sign is still a sign.
+ * ========================================================================== */
+.myui-neon--flicker.is-active {
+  animation: myui-neon-flicker var(--myui-neon-cycle) steps(1, end) infinite;
+}
+
+@keyframes myui-neon-flicker {
+  0%,
+  100% {
+    --myui-neon-breath: 1;
+  }
+
+  6% {
+    --myui-neon-breath: 0.32;
+  }
+
+  7% {
+    --myui-neon-breath: 1;
+  }
+
+  8% {
+    --myui-neon-breath: 0.58;
+  }
+
+  9%,
+  43% {
+    --myui-neon-breath: 1;
+  }
+
+  44% {
+    --myui-neon-breath: 0.18;
+  }
+
+  45% {
+    --myui-neon-breath: 0.92;
+  }
+
+  46%,
+  71% {
+    --myui-neon-breath: 1;
+  }
+
+  72% {
+    --myui-neon-breath: 0.44;
+  }
+
+  73% {
+    --myui-neon-breath: 0.9;
+  }
+
+  74%,
+  100% {
+    --myui-neon-breath: 1;
+  }
+}
+
+/* =============================================================================
+ * scan — a light bar reading the tube. The beam is a real, empty, aria-hidden
+ * element (not a pseudo) so it can paint over arbitrary slot content and lets
+ * every click through to whatever it is wrapping. The tube keeps its resting
+ * glow underneath, which is why this mode still looks lit in a still frame.
+ * ========================================================================== */
+.myui-neon--scan.is-active {
+  position: relative;
+}
+
+.myui-neon__beam {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  opacity: var(--myui-neon-intensity);
+  /* A hard-edged bar with a short falloff — a reader head, not a blur. */
+  background-image: linear-gradient(
+    100deg,
+    transparent 46%,
+    var(--myui-neon-color-a) 49%,
+    var(--myui-neon-color-a) 51%,
+    transparent 54%
+  );
+  background-repeat: no-repeat;
+  background-size: 300% 100%;
+  animation: myui-neon-scan var(--myui-neon-cycle) linear infinite;
+}
+
+@keyframes myui-neon-scan {
+  from {
+    background-position: 100% 0;
+  }
+
+  to {
+    background-position: 0 0;
+  }
+}
+
+/* =============================================================================
+ * reduced motion — the movement stops, the light does not.
+ * This is the correction over the old effect: a still neon sign is still a neon
+ * sign, so killing the glow would leave nothing but plain content — which is
+ * exactly the bug this component was rebuilt to fix.
+ * ========================================================================== */
+@include myui-motion-safe {
+  .myui-neon,
+  .myui-neon__beam {
+    animation: none !important;
+  }
+
+  .myui-neon.is-active {
+    will-change: auto;
+  }
+
+  /* A frozen bar lying across the content reads as a rendering bug, not as a
+   * sweep — the one piece of decoration that has to go. */
+  .myui-neon__beam {
+    display: none;
+  }
+}

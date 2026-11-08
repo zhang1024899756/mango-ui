@@ -18,6 +18,13 @@ describe('MyuiFlotage', () => {
     expect(wrapper.text()).toBe('限量')
   })
 
+  it('floats at a visible amplitude out of the box', () => {
+    const wrapper = mount(Flotage, { slots: { default: '限量' } })
+
+    // 8px was a breath, not a float — the default has to be seen.
+    expect(styleOf(wrapper).getPropertyValue('--myui-flotage-amplitude')).toBe('16')
+  })
+
   it('maps every axis onto a modifier class and a data attribute', () => {
     const x = mount(Flotage, { props: { axis: 'x' } })
     const rotate = mount(Flotage, { props: { axis: 'rotate' } })
@@ -90,5 +97,19 @@ describe('MyuiFlotage', () => {
 
     expect(styleOf(wrapper).getPropertyValue('--myui-flotage-amplitude')).toBe('32')
     expect(styleOf(wrapper).getPropertyValue('--myui-flotage-duration')).toBe('2s')
+  })
+
+  it('respects the system motion preference by default', () => {
+    const wrapper = mount(Flotage)
+
+    expect(wrapper.attributes('data-motion-preference')).toBe('system')
+    expect(wrapper.classes()).not.toContain('myui-flotage--force-motion')
+  })
+
+  it('opts out of the reduced-motion pin when asked to always animate', () => {
+    const forced = mount(Flotage, { props: { motionPreference: 'always' } })
+
+    expect(forced.attributes('data-motion-preference')).toBe('always')
+    expect(forced.classes()).toContain('myui-flotage--force-motion')
   })
 })

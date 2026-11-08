@@ -60,18 +60,19 @@
 
 ## 特效组件的态度
 
-`Magic` 与 `Flotage` 是**包裹型**组件：不生产内容，只给已有内容加一层情绪。
+`Neon` 与 `Flotage` 是**包裹型**组件：不生产内容，只给已有内容加一层情绪。
 这是"数字穿越"的具象化——信号穿过界面。
 
 1. 不改变布局盒子尺寸策略（`inline-block` 包裹，内容自己决定宽高）；
 2. 关闭后与普通容器无异（`disabled` 不残留滤镜）；
-3. 尊重 `prefers-reduced-motion`，退化为静态；
+3. 尊重 `prefers-reduced-motion`：动画停下，但**霓虹的静态辉光保留**——
+   特效不因为"省动效"就退化成一片普通内容；
 4. 不劫持内部交互（点击、焦点、键盘照常穿透）。
 
 ```vue
-<MyuiMagic mode="glitch" :intensity="0.6">
+<MyuiNeon :intensity="0.6">
   <MyuiButton size="lg">接入中继站</MyuiButton>
-</MyuiMagic>
+</MyuiNeon>
 ```
 
 ## 命名与结构约定

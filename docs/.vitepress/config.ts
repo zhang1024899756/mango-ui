@@ -69,9 +69,9 @@ export default defineConfig({
     nav: [
       { text: '指南', link: '/guide/getting-started', activeMatch: '/guide/' },
       { text: '元素组件', link: '/components/button', activeMatch: '/components/' },
-      { text: '特效组件', link: '/components/magic', activeMatch: '/components/magic' },
+      { text: '特效组件', link: '/components/neon', activeMatch: '/components/(neon|flotage)' },
       {
-        text: 'v2.0.0',
+        text: 'v2.1.0',
         items: [
           {
             text: '更新日志',
@@ -101,6 +101,7 @@ export default defineConfig({
             { text: 'Link 链接', link: '/components/link' },
             { text: 'Image 图片', link: '/components/image' },
             { text: 'Number 数值', link: '/components/number' },
+            { text: 'Text 文字', link: '/components/text' },
             { text: 'Tag 标签', link: '/components/tag' },
             { text: 'Input 输入框', link: '/components/input' },
             { text: 'Switch 开关', link: '/components/switch' },
@@ -112,7 +113,7 @@ export default defineConfig({
         {
           text: '特效组件',
           items: [
-            { text: 'Magic 魔法特效', link: '/components/magic' },
+            { text: 'Neon 霓虹特效', link: '/components/neon' },
             { text: 'Flotage 漂浮特效', link: '/components/flotage' },
           ],
         },

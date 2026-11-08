@@ -1,6 +1,6 @@
 {
   "name": "mango-ui",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Mango UI — a cyberpunk, digital-time-travel flavoured Vue 3 component library. Neon effects that wrap, futuristic elements that glow.",
   "type": "module",
   "license": "MIT",
@@ -21,13 +21,7 @@
     "ui-kit",
     "typescript",
     "cyberpunk",
-    "effects",
-    "vue",
-    "vue3",
-    "component-library",
-    "design-system",
-    "ui-kit",
-    "typescript",
+    "neon",
     "effects"
   ],
   "main": "./dist/mango-ui.cjs",

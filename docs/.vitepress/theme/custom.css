@@ -327,7 +327,10 @@ body::after {
   border-width: 0 1px 1px 0;
 }
 
-.vp-doc .custom-block.demo > .demo-row,
+/* `.demo-row` is a flex row wherever it appears in a demo — including inside
+ * `.demo-stack`, which nests rows. Scoping it to direct children made those
+ * inner rows fall back to inline flow, so their items ran together with no gap. */
+.vp-doc .custom-block.demo .demo-row,
 .vp-doc .custom-block.demo > p {
   display: flex;
   flex-wrap: wrap;
@@ -341,6 +344,27 @@ body::after {
   flex-direction: column;
   gap: var(--myui-space-4);
   align-items: flex-start;
+}
+
+/* Inline opt-in control used inside docs callouts (e.g. the Flotage demo toggle). */
+.vp-doc .demo-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--myui-space-2);
+  margin-top: var(--myui-space-3);
+  padding: var(--myui-space-2) var(--myui-space-3);
+  border: 1px solid var(--myui-color-line-strong);
+  background-color: var(--myui-color-surface-deep);
+  font-family: var(--myui-font-mono);
+  font-size: var(--myui-text-xs);
+  letter-spacing: 0.04em;
+  color: var(--myui-color-text);
+  cursor: pointer;
+}
+
+.vp-doc .demo-toggle input {
+  accent-color: var(--myui-color-accent);
+  cursor: pointer;
 }
 
 /* The stage label — injected by the container renderer, positioned so it never

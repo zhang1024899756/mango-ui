@@ -1,0 +1,255 @@
+@use '../../../styles/mixins.scss' as *;
+
+/* =============================================================================
+ * Text — the typographic primitive.
+ * -----------------------------------------------------------------------------
+ * A voice is a complete setting of the type axis (family, size, weight,
+ * leading, tracking, case), not a colour and not an effect. The four voices
+ * live in one table in Text.vue; this file maps each axis onto a token.
+ *
+ * Every modifier is a single class with the same specificity as the base and
+ * sits after it, so the last one wins by source order — and because exactly one
+ * class per axis is emitted, an explicit prop always beats the variant default.
+ * No !important anywhere.
+ *
+ * Classes: .myui-text
+ *            [--{display|eyebrow|body|mono}]
+ *            [--size-{xs…3xl}] [--weight-{regular|medium|bold|black}]
+ *            [--tone-*] [--leading-*] [--tracking-*] [--align-*]
+ *            [--uppercase] [--truncate] [--clamp] [--glow]
+ * ========================================================================== */
+
+.myui-text {
+  /* A text primitive must not arrive with the browser's block margins: an <h2>
+   * here is a typographic decision, not a document stub. */
+  margin: 0;
+  font-family: var(--myui-font-body);
+  font-size: var(--myui-text-md);
+  font-weight: var(--myui-weight-regular);
+  line-height: var(--myui-leading-normal);
+  letter-spacing: var(--myui-tracking-normal);
+  text-transform: none;
+  color: var(--myui-color-text);
+}
+
+/* --- the four voices --------------------------------------------------------
+ * Only the family lives here. Size, weight, leading, tracking and case are
+ * resolved in Text.vue so that a prop can replace them cleanly. */
+
+.myui-text--display {
+  font-family: var(--myui-font-display);
+}
+
+/* The HUD voice is a terminal label: mono, tracked out, stamped in caps. */
+.myui-text--eyebrow {
+  font-family: var(--myui-font-mono);
+}
+
+.myui-text--body {
+  font-family: var(--myui-font-body);
+}
+
+.myui-text--mono {
+  font-family: var(--myui-font-mono);
+  /* Lining figures in a fixed grid — a changing number must not shuffle the
+   * characters around it. */
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- size ------------------------------------------------------------------- */
+.myui-text--size-xs {
+  font-size: var(--myui-text-xs);
+}
+
+.myui-text--size-sm {
+  font-size: var(--myui-text-sm);
+}
+
+.myui-text--size-md {
+  font-size: var(--myui-text-md);
+}
+
+.myui-text--size-lg {
+  font-size: var(--myui-text-lg);
+}
+
+.myui-text--size-xl {
+  font-size: var(--myui-text-xl);
+}
+
+.myui-text--size-2xl {
+  font-size: var(--myui-text-2xl);
+}
+
+.myui-text--size-3xl {
+  font-size: var(--myui-text-3xl);
+}
+
+/* --- weight ----------------------------------------------------------------- */
+.myui-text--weight-regular {
+  font-weight: var(--myui-weight-regular);
+}
+
+.myui-text--weight-medium {
+  font-weight: var(--myui-weight-medium);
+}
+
+.myui-text--weight-bold {
+  font-weight: var(--myui-weight-bold);
+}
+
+.myui-text--weight-black {
+  font-weight: var(--myui-weight-black);
+}
+
+/* --- tone -------------------------------------------------------------------
+ * `accent` and `signal` use their `-text` steps: the element colours are made
+ * for fills and do not clear AA as body text. Every tone below measures at
+ * least 5.2:1 against --myui-color-bg (17:1 at the top of the ramp). */
+.myui-text--tone-default {
+  color: var(--myui-color-text);
+}
+
+.myui-text--tone-soft {
+  color: var(--myui-color-text-soft);
+}
+
+.myui-text--tone-faint {
+  color: var(--myui-color-text-faint);
+}
+
+.myui-text--tone-accent {
+  color: var(--myui-color-accent-text);
+}
+
+.myui-text--tone-signal {
+  color: var(--myui-color-signal-text);
+}
+
+.myui-text--tone-success {
+  color: var(--myui-color-success);
+}
+
+.myui-text--tone-warning {
+  color: var(--myui-color-warning);
+}
+
+.myui-text--tone-danger {
+  color: var(--myui-color-danger);
+}
+
+.myui-text--tone-info {
+  color: var(--myui-color-info);
+}
+
+/* --- leading ----------------------------------------------------------------
+ * Display closes the line box (1.05) so a headline reads as one cut shape;
+ * body opens it (1.5) so a paragraph of Chinese and English stays breatheable. */
+.myui-text--leading-tight {
+  line-height: var(--myui-leading-tight);
+}
+
+.myui-text--leading-snug {
+  line-height: var(--myui-leading-snug);
+}
+
+.myui-text--leading-normal {
+  line-height: var(--myui-leading-normal);
+}
+
+.myui-text--leading-relaxed {
+  line-height: var(--myui-leading-relaxed);
+}
+
+/* --- tracking ---------------------------------------------------------------
+ * Display tightens (large type needs optical closing); the eyebrow opens to the
+ * HUD step so small caps read as a label instead of tiny prose. */
+.myui-text--tracking-tight {
+  letter-spacing: var(--myui-tracking-tight);
+}
+
+.myui-text--tracking-normal {
+  letter-spacing: var(--myui-tracking-normal);
+}
+
+.myui-text--tracking-wide {
+  letter-spacing: var(--myui-tracking-wide);
+}
+
+/* --- align ------------------------------------------------------------------ */
+.myui-text--align-start {
+  text-align: start;
+}
+
+.myui-text--align-center {
+  text-align: center;
+}
+
+.myui-text--align-end {
+  text-align: end;
+}
+
+/* --- case ------------------------------------------------------------------- */
+.myui-text--uppercase {
+  text-transform: uppercase;
+}
+
+/* --- truncation -------------------------------------------------------------
+ * Single line: nowrap + ellipsis, so an inline suffix stays on the line.
+ * Multiple lines: the clamp mixin, driven by the line count on the element. */
+.myui-text--truncate {
+  @include myui-truncate;
+}
+
+.myui-text--clamp {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--myui-text-clamp);
+}
+
+/* --- glow -------------------------------------------------------------------
+ * A neon tube, not an animation: a bright core, a coloured halo, then a wide
+ * fog that is barely there. Static, so `prefers-reduced-motion` has nothing to
+ * switch off. The em-based radii scale with the type step — the one thing a
+ * fixed shadow token cannot do. */
+.myui-text--glow {
+  text-shadow:
+    0 0 0.1em color-mix(in srgb, currentColor 88%, transparent),
+    0 0 0.38em color-mix(in srgb, currentColor 45%, transparent),
+    0 0 1.15em color-mix(in srgb, currentColor 18%, transparent),
+    0 0 2.2em var(--myui-color-signal-wash);
+}
+
+/* Ice-white type needs the cyan gas of the sign to read as a tube at all;
+ * a coloured tone already glows in its own colour, so only the neutral steps
+ * get the tinted halo. */
+.myui-text--glow.myui-text--tone-default,
+.myui-text--glow.myui-text--tone-soft {
+  text-shadow:
+    0 0 0.1em color-mix(in srgb, currentColor 90%, transparent),
+    0 0 0.45em color-mix(in srgb, var(--myui-color-accent) 42%, transparent),
+    0 0 1.2em color-mix(in srgb, var(--myui-color-accent) 20%, transparent),
+    0 0 2.4em var(--myui-color-signal-wash);
+}
+
+/* --- inline suffix ----------------------------------------------------------
+ * A unit mark, not a second sentence: it steps down to a token size so it can
+ * never become the loudest thing in the line. */
+.myui-text__part {
+  margin-inline-start: var(--myui-space-1);
+  font-size: var(--myui-text-xs);
+  font-weight: var(--myui-weight-medium);
+  letter-spacing: var(--myui-tracking-normal);
+  white-space: nowrap;
+}
+
+.myui-text--size-2xl > .myui-text__part,
+.myui-text--size-3xl > .myui-text__part {
+  font-size: var(--myui-text-sm);
+}
+
+/* Daylight lab: a neon over paper is just ink bleed, so only the tube survives. */
+[data-myui-theme='light'] .myui-text--glow {
+  text-shadow: 0 0 0.22em color-mix(in srgb, currentColor 30%, transparent);
+}

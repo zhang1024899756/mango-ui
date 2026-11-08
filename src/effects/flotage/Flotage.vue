@@ -9,11 +9,12 @@ defineOptions({
 
 const props = withDefaults(defineProps<FlotageProps>(), {
   axis: 'y',
-  amplitude: 8,
+  amplitude: 16,
   duration: 4,
   delay: 0,
   trigger: 'auto',
   disabled: false,
+  motionPreference: 'system',
   as: 'span',
 })
 
@@ -22,7 +23,7 @@ function finite(value: number, fallback: number): number {
   return Number.isFinite(value) ? value : fallback
 }
 
-const amplitude = computed(() => Math.max(0, finite(props.amplitude, 8)))
+const amplitude = computed(() => Math.max(0, finite(props.amplitude, 16)))
 const duration = computed(() => Math.max(0.1, finite(props.duration, 4)))
 const delay = computed(() => Math.max(0, finite(props.delay, 0)))
 
@@ -31,6 +32,9 @@ const classes = computed(() => [
   `myui-flotage--axis-${props.axis}`,
   {
     'myui-flotage--hover': props.trigger === 'hover',
+    // Opts out of the reduced-motion pin. The stylesheet keys the pin off the
+    // absence of this class, so the choice lives in one place.
+    'myui-flotage--force-motion': props.motionPreference === 'always',
     'is-disabled': props.disabled,
   },
 ])
@@ -50,6 +54,7 @@ const styleVars = computed<CSSProperties>(() => ({
     :data-axis="axis"
     :data-trigger="trigger"
     :data-disabled="disabled ? 'true' : 'false'"
+    :data-motion-preference="motionPreference"
   >
     <slot />
   </component>

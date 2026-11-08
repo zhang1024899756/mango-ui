@@ -20,9 +20,9 @@ const joined = ref(false)
 </script>
 
 <template>
-  <MyuiMagic mode="glitch">
+  <MyuiNeon :intensity="0.6">
     <MyuiButton size="lg" @click="joined = true">限量发售 · JOIN</MyuiButton>
-  </MyuiMagic>
+  </MyuiNeon>
 </template>
 ```
 
@@ -43,7 +43,7 @@ CSS 故障字特效组件。v2 是一次彻底重写：
 | 视觉方向 | 一个 CSS 故障字 | **赛博朋克 · 数字穿越 · 未来科技** |
 | 开发验收 | Storybook 6 | **Storybook 10** |
 | 官网 | 无 | **[VitePress 1.x 在线文档](https://zhang1024899756.github.io/mango-ui/)** |
-| 组件数 | 1 | **13**（2 特效 + 11 元素） |
+| 组件数 | 1 | **14**（2 特效 + 12 元素） |
 | 测试 | 1 个 `toBeDefined()` | Vitest，逐组件行为测试 |
 
 ---
@@ -55,27 +55,28 @@ CSS 故障字特效组件。v2 是一次彻底重写：
 特效组件不生产内容，只给已有内容加一层情绪。文本、按钮、图片、整块卡片都能套。
 
 ```vue
-<MyuiMagic mode="glitch" :intensity="0.6">
+<MyuiNeon :intensity="0.6">
   <MyuiButton size="lg">限量发售</MyuiButton>
-</MyuiMagic>
+</MyuiNeon>
 
-<MyuiFlotage :amplitude="10" :duration="5">
+<MyuiFlotage :amplitude="20" :duration="5">
   <MyuiImage src="/lookbook/01.jpg" ratio="3:4" caption="SS26 LOOKBOOK" />
 </MyuiFlotage>
 ```
 
-- **Magic 魔法特效** —— RGB 分离故障 + 扫描线，`glitch` / `scan` / `flicker` 三种模式
-- **Flotage 漂浮特效** —— 持续漂浮，可轴向、可 hover 触发、可关
+- **Neon 霓虹特效** —— 静态就有灯管辉光，再叠呼吸/闪断/扫光，`glow` / `scan` / `flicker` 三种模式
+- **Flotage 漂浮特效** —— 持续失重漂浮，可轴向、可 hover 触发、可关
 
 ### 元素组件：自带海报气质
 
 | 组件 | 标签 | 说明 |
 | --- | --- | --- |
-| Button | `<MyuiButton>` | 按钮 —— 硬偏移阴影，按下真的压进纸里 |
+| Button | `<MyuiButton>` | 按钮 —— 按下时辉光熄灭并压入界面，不是弹跳 |
 | Icon | `<MyuiIcon>` | 图标 —— 内置 24+ 手绘描边图标，无图标字体 |
 | Link | `<MyuiLink>` | 链接 —— 外链自动加 `rel`，禁用态拦截跳转 |
 | Image | `<MyuiImage>` | 图片 —— 固定比例占位、加载骨架、错误兜底 |
 | Number | `<MyuiNumber>` | 数值 —— 千分位、精度、趋势、滚动计数 |
+| Text | `<MyuiText>` | 文字 —— 展示体/HUD/正文/等宽四套嗓音，字距行高显式可控 |
 | Tag | `<MyuiTag>` | 标签 —— 大写字距的微标，可关闭、可筛选 |
 | Input | `<MyuiInput>` | 输入框 —— 真实 input、清除按钮、字数统计、错误态 |
 | Switch | `<MyuiSwitch>` | 开关 —— `role="switch"`，空格/回车切换 |
@@ -193,7 +194,7 @@ src/
 │       ├── styles/<name>.scss   只用令牌
 │       ├── <Name>.stories.ts    Storybook
 │       └── <Name>.test.ts       Vitest
-├── effects/             特效组件（magic/ flotage/），结构同上
+├── effects/             特效组件（neon/ flotage/），结构同上
 ├── styles/
 │   ├── tokens.scss      设计令牌（公开的主题 API）
 │   ├── mixins.scss      SCSS 编译期辅助
@@ -212,10 +213,13 @@ plop-template/           组件脚手架模板
 
 ## 从 v1 迁移
 
-1. **组件包路径没了**：`packages/magic` → 直接从 `mango-ui` 引入 `MyuiMagic`。
+1. **组件包路径没了**：`packages/magic` → 直接从 `mango-ui` 引入 `MyuiNeon`。
 2. **`magic` 的 API 变了**：原来是 `content` 字符串 prop，现在是包裹型组件，
    仍然支持 `text` prop，但推荐用默认插槽包住任意内容。
-3. **类名变了**：`.text-magic` → `.myui-magic`。
+3. **类名变了**：`.text-magic` → `.myui-neon`。
+4. **v2.1 起 `Magic` 更名为 `Neon`**，并按"霓虹灯管"重做：`glitch`（RGB 分离）
+   模式移除，改为 `glow`（默认，常亮+呼吸）/ `flicker` / `scan`；`MyuiMagic` →
+   `MyuiNeon`，`.myui-magic*` → `.myui-neon*`。同时新增元素组件 `Text`。
 4. **Vue 2 的 `Vue.use()` 插件协议**换成了标准的 Vue 3 `app.use()`；视觉方向也从单个 CSS 故障字扩展为整套赛博朋克设计系统。
 5. **Jest + `@vue/test-utils@1`** 换成了 Vitest + `@vue/test-utils@2`。
 

@@ -9,22 +9,28 @@ the reference implementation.
 
 ## 1. The one non-negotiable: design direction
 
-Mango UI is a **trend / culture / streetwear portal** library. Look at the hero
-of the docs site before you write CSS.
+Mango UI is a **cyberpunk / digital-time-travel portal** library — built for
+trend portals, digital-art sites and future-tech products. Look at the hero of the
+docs site before you write CSS.
 
-- Warm paper background, ink-black text, **one** hot vermilion accent
-  (`--myui-color-accent: #ff4d1a`).
-- Borders are **hard** (`--myui-border-width: 2px`, `--myui-color-line`).
-- Shadows are **hard offset, never blurred** (`--myui-shadow-glow`).
+- Deep-space near-black ground (`--myui-color-bg: #05070d`), cool light text.
+- **One** action colour: electric cyan (`--myui-color-accent: #19e0ff`). Hot
+  magenta (`--myui-color-signal: #ff2e88`) is a signal, never a second accent.
+- Borders are **1px neon hairlines** (`--myui-border-width: 1px`,
+  `--myui-color-line`), never 2px and never a soft 1px grey.
+- Depth comes from **glow** (`--myui-shadow-glow-sm/-glow/-glow-lg`), not from
+  offset drop shadows. A hard-offset shadow is the old paper look.
 - Radius is **0** by default; `--myui-radius-pill` only for pills (tags, switch,
   slider thumb, avatars).
-- Display type is heavy and tight (`--myui-font-display`, `--myui-leading-tight`,
-  `--myui-tracking-tight`).
+- Display type is Chakra Petch, tight tracking, tight leading
+  (`--myui-font-display`, `--myui-leading-tight`, `--myui-tracking-tight`).
+  Micro labels are the opposite voice: uppercase, wide tracking
+  (`--myui-tracking-wide`).
 
 **This is explicitly NOT an admin dashboard.** No soft 8px radii, no blurred
 `box-shadow`, no blue-grey `#f5f7fa` panels, no `0 2px 8px rgba(0,0,0,.06)`
-elevation, no 4-col stat cards with an icon in a rounded square. If it looks like
-an internal tool, it is wrong.
+elevation, no 4-col stat cards with an icon in a rounded square, and no invented
+purple/violet gradients. If it looks like an internal tool, it is wrong.
 
 Rules that follow from that:
 

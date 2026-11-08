@@ -11,8 +11,10 @@ const meta = {
       description: {
         component:
           'A wrapper that drifts, so a sticker, a badge, a button or a whole card never quite sits still. ' +
-          'Transform only — it never reflows the page around it. `trigger="hover"` keeps it pinned until ' +
-          'the pointer or keyboard focus arrives, and prefers-reduced-motion pins it for good.',
+          'The motion is composite — travel plus a slow sway and a sub-1% scale breath, off-axis half-cycles — ' +
+          'so it reads as a float rather than a straight line. Transform only: it never reflows the page around ' +
+          'it. `trigger="hover"` keeps it pinned until the pointer or keyboard focus arrives, and ' +
+          'prefers-reduced-motion pins it for good.',
       },
     },
   },
@@ -27,7 +29,7 @@ const meta = {
   },
   args: {
     axis: 'y',
-    amplitude: 8,
+    amplitude: 16,
     duration: 4,
     delay: 0,
     trigger: 'auto',
@@ -78,9 +80,9 @@ export const Amplitude: Story = {
     setup: () => ({ args }),
     template: `
       <div style="display:flex; gap:var(--myui-space-6); flex-wrap:wrap; align-items:center">
-        <myui-flotage v-bind="args" :amplitude="2">2px</myui-flotage>
-        <myui-flotage v-bind="args" :amplitude="8">8px</myui-flotage>
-        <myui-flotage v-bind="args" :amplitude="24">24px</myui-flotage>
+        <myui-flotage v-bind="args" :amplitude="4">4px</myui-flotage>
+        <myui-flotage v-bind="args" :amplitude="16">16px</myui-flotage>
+        <myui-flotage v-bind="args" :amplitude="32">32px</myui-flotage>
       </div>
     `,
   }),

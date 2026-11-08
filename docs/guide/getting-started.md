@@ -19,7 +19,7 @@ import App from './App.vue'
 createApp(App).use(MangoUI).mount('#app')
 ```
 
-`use(MangoUI)` 会注册全部组件，之后可以直接用 `<MyuiButton>`、`<MyuiMagic>` 等标签。
+`use(MangoUI)` 会注册全部组件，之后可以直接用 `<MyuiButton>`、`<MyuiNeon>`、`<MyuiText>` 等标签。
 
 ## 按需引入
 
