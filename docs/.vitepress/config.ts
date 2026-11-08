@@ -69,9 +69,9 @@ export default defineConfig({
     nav: [
       { text: '指南', link: '/guide/getting-started', activeMatch: '/guide/' },
       { text: '元素组件', link: '/components/button', activeMatch: '/components/' },
-      { text: '特效组件', link: '/components/neon', activeMatch: '/components/(neon|flotage)' },
+      { text: '特效组件', link: '/components/neon', activeMatch: '/components/(neon|flotage|glitch-ripple)' },
       {
-        text: 'v2.1.0',
+        text: 'v2.2.0',
         items: [
           {
             text: '更新日志',
@@ -115,6 +115,7 @@ export default defineConfig({
           items: [
             { text: 'Neon 霓虹特效', link: '/components/neon' },
             { text: 'Flotage 漂浮特效', link: '/components/flotage' },
+            { text: 'GlitchRipple 故障波纹', link: '/components/glitch-ripple' },
           ],
         },
       ],

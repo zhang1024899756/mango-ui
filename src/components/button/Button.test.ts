@@ -86,4 +86,30 @@ describe('MyuiButton', () => {
     expect(wrapper.find('.post').exists()).toBe(true)
     expect(wrapper.find('.myui-button__label').text()).toBe('Label')
   })
+
+  it('adds the skew form class without disturbing the other modifiers', () => {
+    const wrapper = mount(Button, { props: { skew: true, variant: 'outline', size: 'sm' } })
+    const classes = wrapper.classes()
+
+    expect(classes).toContain('myui-button--skew')
+    expect(classes).toContain('myui-button--outline')
+    expect(classes).toContain('myui-button--sm')
+    expect(mount(Button).classes()).not.toContain('myui-button--skew')
+  })
+
+  it('accepts spectrum as a tone and does not become the default', () => {
+    const spectrum = mount(Button, { props: { tone: 'spectrum' } })
+
+    expect(spectrum.classes()).toContain('myui-button--tone-spectrum')
+    expect(mount(Button).classes()).toContain('myui-button--tone-accent')
+  })
+
+  it('keeps the skew form on a disabled button', () => {
+    // Disabled drops the glow, never the shape: the placeholder must still read
+    // as the same control.
+    const wrapper = mount(Button, { props: { skew: true, disabled: true } })
+
+    expect(wrapper.classes()).toContain('myui-button--skew')
+    expect(wrapper.classes()).toContain('is-disabled')
+  })
 })

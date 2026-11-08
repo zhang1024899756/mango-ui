@@ -4,6 +4,6 @@ import { withInstall } from '../../utils/with-install'
 
 export const MyuiSwitch = withInstall(Switch, 'MyuiSwitch')
 
-export type { SwitchProps, SwitchSize, SwitchValue } from './types'
+export type { SwitchProps, SwitchSize, SwitchValue, SwitchTone } from './types'
 
 export default MyuiSwitch

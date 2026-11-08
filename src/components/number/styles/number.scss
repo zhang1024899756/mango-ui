@@ -6,6 +6,9 @@
  * ========================================================================== */
 
 .myui-number {
+  /* Always declared, so the transform below is valid when the figure is not
+   * skewed — the slot resolves to an identity skew. */
+  @include myui-shear-slot;
   display: inline-flex;
   align-items: baseline;
   gap: var(--myui-space-1);
@@ -17,6 +20,14 @@
   /* Tabular figures: every digit takes the same space, so a count-up never
      makes the line breathe. */
   font-variant-numeric: tabular-nums;
+  /* Digit glyphs are the payload; shearing the root takes the affixes and the
+   * trend arrow along with them, which is the point. */
+  transform: var(--myui-shear);
+}
+
+/* --- shear ------------------------------------------------------------------ */
+.myui-number--skew {
+  @include myui-shear-on;
 }
 
 .myui-number__digits {
@@ -86,4 +97,23 @@
 
 .myui-number[data-trend='down'] .myui-number__trend {
   color: var(--myui-color-danger);
+}
+
+/* --- tone: spectrum ---------------------------------------------------------
+ * The gradient belongs to the digits, not to the root: a prefix/suffix is
+ * secondary ink, and text-fill would inherit transparent into it and erase it.
+ * The arrow keeps its direction (and `data-trend`, so shape still carries the
+ * meaning) but drops the red/green semantic: a success colour next to six
+ * pigments reads as a bug. `currentColor` here is the ink this tone resolved,
+ * so the arrow stays visible against the gradient. */
+.myui-number--tone-spectrum {
+  color: var(--myui-color-neon-cyan-text);
+}
+
+.myui-number--tone-spectrum .myui-number__digits {
+  @include myui-spectrum-text;
+}
+
+.myui-number--tone-spectrum[data-trend] .myui-number__trend {
+  color: currentColor;
 }

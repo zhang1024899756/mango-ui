@@ -85,4 +85,50 @@ describe('MyuiLink', () => {
     expect(wrapper.find('.myui-link__label').text()).toBe('联名系列')
     expect(wrapper.find('.myui-link__suffix .count').text()).toBe('12')
   })
+
+  it('shears on demand, and only as a class', () => {
+    const straight = mount(Link, { props: { href: '/a' } })
+    const sheared = mount(Link, { props: { href: '/a', skew: true } })
+
+    expect(straight.classes()).not.toContain('myui-link--skew')
+    expect(sheared.classes()).toContain('myui-link--skew')
+  })
+
+  it('leaves the shear to the stylesheet instead of an inline transform', () => {
+    const wrapper = mount(Link, { props: { href: '/a', skew: true } })
+
+    // The angle rides in --myui-shear so hover/focus transforms still compose;
+    // an inline transform here would be the bug this test exists to catch.
+    expect(wrapper.attributes('style')).toBeUndefined()
+  })
+
+  it('keeps ink by default and paints no gradient for it', () => {
+    const wrapper = mount(Link, { props: { href: '/a' } })
+
+    expect(wrapper.classes()).toContain('myui-link--tone-ink')
+    expect(wrapper.attributes('data-spectrum')).toBeUndefined()
+  })
+
+  it('maps the spectrum tone onto its class and paints the glyphs', () => {
+    const wrapper = mount(Link, { props: { href: '/a', tone: 'spectrum' } })
+
+    expect(wrapper.classes()).toContain('myui-link--tone-spectrum')
+    expect(wrapper.attributes('data-spectrum')).toBe('true')
+  })
+
+  it('drops the gradient for an inert link, even in the spectrum tone', () => {
+    const wrapper = mount(Link, { props: { href: '/a', tone: 'spectrum', disabled: true } })
+
+    // The tone is still mapped, but the paint flag is gone: disabled wins.
+    expect(wrapper.classes()).toContain('myui-link--tone-spectrum')
+    expect(wrapper.attributes('data-spectrum')).toBeUndefined()
+    expect(wrapper.attributes('aria-disabled')).toBe('true')
+  })
+
+  it('never paints spectrum on the muted tone', () => {
+    const wrapper = mount(Link, { props: { href: '/a', tone: 'muted' } })
+
+    expect(wrapper.classes()).toContain('myui-link--tone-muted')
+    expect(wrapper.attributes('data-spectrum')).toBeUndefined()
+  })
 })

@@ -66,6 +66,76 @@
   --myui-color-info: #5aa9ff;
   --myui-color-info-wash: rgba(90, 169, 255, 0.13);
 
+  /* --- neon ramp ---------------------------------------------------------
+   * Six pigments. Cyberpunk is colourful; a disciplined cyberpunk is colourful
+   * in *one place at a time*, so this ramp is the expressive layer — it powers
+   * gradients, spectrum tones and the effect components. It never replaces a
+   * semantic token: success is still success, danger is still red.
+   * Each hue has a `-text` tint that clears AA on --myui-color-bg; that is the
+   * only step allowed to become glyphs. The mid hues are light enough that
+   * --myui-color-accent-ink text still passes when it sits on top of them.
+   * --------------------------------------------------------------------- */
+  --myui-color-neon-cyan: #19e0ff;
+  --myui-color-neon-cyan-text: #6cf0ff;
+  --myui-color-neon-magenta: #ff2e88;
+  --myui-color-neon-magenta-text: #ff7ab6;
+  --myui-color-neon-violet: #a970ff;
+  --myui-color-neon-violet-text: #c9a8ff;
+  --myui-color-neon-blue: #4d7cff;
+  --myui-color-neon-blue-text: #9db8ff;
+  --myui-color-neon-lime: #b6ff3b;
+  --myui-color-neon-lime-text: #d3ff8a;
+  --myui-color-neon-amber: #ffc24b;
+  --myui-color-neon-amber-text: #ffd37a;
+
+  --myui-color-neon-cyan-wash: rgba(25, 224, 255, 0.13);
+  --myui-color-neon-magenta-wash: rgba(255, 46, 136, 0.14);
+  --myui-color-neon-violet-wash: rgba(169, 112, 255, 0.15);
+  --myui-color-neon-lime-wash: rgba(182, 255, 59, 0.12);
+  --myui-color-neon-amber-wash: rgba(255, 194, 75, 0.13);
+
+  /* --- gradients ---------------------------------------------------------
+   * Multi-colour is a *form*, not a colour: it is opt-in through tone="spectrum"
+   * and it is the default of nothing. The signature spectrum runs
+   * cyan → blue → violet → magenta at 100deg — four stops, because three read as
+   * "cyan to pink" and stop being multi-colour. The diagonal is deliberate too: a
+   * horizontal
+   * rainbow reads as a 2010 progress bar, a diagonal one reads as a portal edge.
+   *
+   * Stops are chosen light enough that --myui-color-accent-ink (near black here,
+   * white in the daylight theme) clears AA on *every* stop, which is why the
+   * spectrum never takes light text on the dark theme.
+   * --------------------------------------------------------------------- */
+  --myui-gradient-spectrum: linear-gradient(
+    100deg,
+    var(--myui-color-neon-cyan) 0%,
+    var(--myui-color-neon-blue) 28%,
+    var(--myui-color-neon-violet) 62%,
+    var(--myui-color-neon-magenta) 100%
+  );
+  --myui-gradient-spectrum-vertical: linear-gradient(
+    180deg,
+    var(--myui-color-neon-cyan) 0%,
+    var(--myui-color-neon-blue) 28%,
+    var(--myui-color-neon-violet) 62%,
+    var(--myui-color-neon-magenta) 100%
+  );
+  --myui-gradient-acid: linear-gradient(
+    100deg,
+    var(--myui-color-neon-lime) 0%,
+    var(--myui-color-neon-cyan) 100%
+  );
+  --myui-gradient-heat: linear-gradient(
+    100deg,
+    var(--myui-color-neon-amber) 0%,
+    var(--myui-color-signal) 100%
+  );
+  --myui-gradient-deep: linear-gradient(
+    100deg,
+    var(--myui-color-neon-blue) 0%,
+    var(--myui-color-neon-violet) 100%
+  );
+
   /* --- scrim: flat deep-space, plus the grid it sits on ------------------ */
   --myui-color-scrim: rgba(2, 4, 10, 0.82);
 
@@ -121,6 +191,14 @@
   --myui-border-width: 1px;
   --myui-border-hair: 1px solid var(--myui-color-line-soft);
   --myui-border-bold: var(--myui-border-width) solid var(--myui-color-line-strong);
+
+  /* --- shear: the diagonal form ------------------------------------------
+   * One angle for the whole library. Negative leans the top edge right, the way
+   * italics lean. Components never write skewX() themselves: they spread this
+   * through --myui-shear, so their hover/press movement still composes on top
+   * instead of being overwritten. See the myui-shear-* mixins.
+   * --------------------------------------------------------------------- */
+  --myui-skew-angle: -12deg;
 
   /* --- elevation: glow, tight and low-alpha ------------------------------ */
   --myui-shadow-glow-sm: 0 0 8px rgba(25, 224, 255, 0.22);
@@ -196,6 +274,62 @@
   --myui-color-info-wash: rgba(20, 83, 156, 0.1);
 
   --myui-color-scrim: rgba(10, 20, 32, 0.55);
+
+  /* --- neon ramp, on paper -----------------------------------------------
+   * The same six hues dropped to pigment depth so glyphs and hairlines still
+   * clear AA on a light surface. "Neon" here means saturated ink, not glow:
+   * glow has no meaning on white, and faking it would only look dirty.
+   * --------------------------------------------------------------------- */
+  --myui-color-neon-cyan: #00739c;
+  --myui-color-neon-cyan-text: #00628a;
+  --myui-color-neon-magenta: #c9135f;
+  --myui-color-neon-magenta-text: #a80f4f;
+  --myui-color-neon-violet: #6338c9;
+  --myui-color-neon-violet-text: #502aa8;
+  --myui-color-neon-blue: #1f4fd8;
+  --myui-color-neon-blue-text: #1a41b0;
+  --myui-color-neon-lime: #3f7a00;
+  --myui-color-neon-lime-text: #336300;
+  --myui-color-neon-amber: #8a5a00;
+  --myui-color-neon-amber-text: #6f4900;
+
+  --myui-color-neon-cyan-wash: rgba(0, 115, 156, 0.1);
+  --myui-color-neon-magenta-wash: rgba(201, 19, 95, 0.1);
+  --myui-color-neon-violet-wash: rgba(99, 56, 201, 0.1);
+  --myui-color-neon-lime-wash: rgba(63, 122, 0, 0.1);
+  --myui-color-neon-amber-wash: rgba(138, 90, 0, 0.12);
+
+  /* Same spectrum, pigment stops. The ink on top is white here (accent-ink),
+   * which clears AA on all three stops. */
+  --myui-gradient-spectrum: linear-gradient(
+    100deg,
+    var(--myui-color-neon-cyan) 0%,
+    var(--myui-color-neon-blue) 28%,
+    var(--myui-color-neon-violet) 62%,
+    var(--myui-color-neon-magenta) 100%
+  );
+  --myui-gradient-spectrum-vertical: linear-gradient(
+    180deg,
+    var(--myui-color-neon-cyan) 0%,
+    var(--myui-color-neon-blue) 28%,
+    var(--myui-color-neon-violet) 62%,
+    var(--myui-color-neon-magenta) 100%
+  );
+  --myui-gradient-acid: linear-gradient(
+    100deg,
+    var(--myui-color-neon-lime) 0%,
+    var(--myui-color-neon-cyan) 100%
+  );
+  --myui-gradient-heat: linear-gradient(
+    100deg,
+    var(--myui-color-neon-amber) 0%,
+    var(--myui-color-signal) 100%
+  );
+  --myui-gradient-deep: linear-gradient(
+    100deg,
+    var(--myui-color-neon-blue) 0%,
+    var(--myui-color-neon-violet) 100%
+  );
 
   --myui-shadow-glow-sm: 0 0 0 1px rgba(0, 115, 156, 0.18);
   --myui-shadow-glow: 0 6px 20px rgba(10, 20, 32, 0.1);

@@ -16,7 +16,8 @@ const locked = ref(65)
 
 # Slider 滑动条
 
-一条硬边横杠。填充部分吃系统的朱红（或纯墨），拇指是带墨线的纸盘，压在硬投影上。
+一条硬边横杠。填充部分吃强调色（`ink` 时换成纯墨），拇指是 24px 的圆盘，悬停时放大 8%、辉光收敛。
+`skew` 形态下只有拇指变成斜方块，轨道保持水平——拖拽轴必须是直的。
 
 一个拇指是数值，传 `[min, max]` 数组就变成双拇指区间。两个拇指永远不会交叉，`min === max` 也不会算出 `NaN`。
 
@@ -100,7 +101,7 @@ const volume = ref(40)
 
 ## 色调
 
-`tone="ink"` 把填充换成墨黑——在一堆朱红之间需要喘口气的地方用它，别用它替代主操作。
+`tone="ink"` 把填充换成纯墨——在一堆强调色之间需要喘口气的地方用它，别用它替代主操作。
 
 ::: demo
 <div class="demo-stack" style="width:360px">
@@ -130,6 +131,57 @@ const volume = ref(40)
 <MyuiSlider v-model="volume" :show-tooltip="false" />
 ```
 
+## 斜切形态
+
+`skew` 只把滑块变成平行四边形，导轨保持水平。
+
+这是刻意的：滑块是那个跟着手指跑的小物体，带点姿态不影响读数；轨道是量值的标尺，一旦斜了，指针位置和数值的对应关系就不再直观，拖动时眼睛得重新换算。所以斜切只落在滑块上。
+
+所有状态的位移都组合了 `var(--myui-shear)`——包括 `prefers-reduced-motion` 下取消缩放的那些覆盖，否则关掉动画的用户会在悬停时看到滑块突然变正。
+
+::: demo
+<div class="demo-stack" style="width:360px">
+  <MyuiSlider v-model="volume" skew />
+  <p style="margin:0; font-family:var(--myui-font-mono); font-size:var(--myui-text-xs)">volume = {{ volume }}</p>
+</div>
+:::
+
+```vue
+<MyuiSlider v-model="volume" skew />
+```
+
+## 渐变形态
+
+`tone="spectrum"` 用系统渐变填满已走过的部分。横向走 100° 对角渐变；`vertical` 时换成 180° 的竖版——竖条里塞对角渐变会糊成三条色带。
+
+填充始终保持矩形直边，不跟着滑块斜：渐变是轨道的一部分，不是滑块的一部分。禁用时压成 muted 平色，禁用控件不该还在发亮。
+
+::: demo
+<div class="demo-stack" style="width:360px">
+  <MyuiSlider v-model="volume" tone="spectrum" />
+  <MyuiSlider v-model="priceRange" tone="spectrum" :min="0" :max="200" :step="10" />
+</div>
+:::
+
+```vue
+<MyuiSlider v-model="volume" tone="spectrum" />
+<MyuiSlider v-model="range" tone="spectrum" :min="0" :max="200" />
+```
+
+::: demo
+<div class="demo-row" style="align-items:flex-end; gap:var(--myui-space-5)">
+  <MyuiSlider v-model="height" vertical tone="spectrum" :show-tooltip="false" />
+  <MyuiSlider v-model="height" vertical tone="spectrum" skew :show-tooltip="false" />
+  <MyuiSlider v-model="locked" disabled tone="spectrum" :show-tooltip="false" />
+</div>
+:::
+
+```vue
+<MyuiSlider v-model="height" vertical tone="spectrum" />
+<MyuiSlider v-model="height" vertical tone="spectrum" skew />
+<MyuiSlider v-model="locked" disabled tone="spectrum" />
+```
+
 ## Props
 
 | 属性 | 类型 | 默认值 | 说明 |
@@ -142,7 +194,8 @@ const volume = ref(40)
 | `vertical` | `boolean` | `false` | 垂直方向 |
 | `showTooltip` | `boolean` | `true` | 悬停 / 聚焦 / 拖动时显示值气泡 |
 | `marks` | `Record<number, string>` | — | 刻度位置与文案 |
-| `tone` | `'accent' \| 'ink'` | `'accent'` | 填充色 |
+| `tone` | `'accent' \| 'ink' \| 'spectrum'` | `'accent'` | 填充色：动作色、纯墨，或系统渐变 |
+| `skew` | `boolean` | `false` | 斜切形态：滑块变平行四边形，轨道不动 |
 
 ## 事件
 

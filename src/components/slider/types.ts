@@ -1,4 +1,4 @@
-export type SliderTone = 'accent' | 'ink'
+export type SliderTone = 'accent' | 'ink' | 'spectrum'
 /** A single value, or a `[lower, upper]` pair for a two-thumb range. */
 export type SliderValue = number | [number, number]
 
@@ -17,4 +17,6 @@ export interface SliderProps {
   marks?: Record<number, string>
   /** Which colour the filled part claims. */
   tone?: SliderTone
+  /** Sheared square handles. The track deliberately stays horizontal. */
+  skew?: boolean
 }

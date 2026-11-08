@@ -1,6 +1,6 @@
 export type NumberTrend = 'up' | 'down' | 'flat' | 'auto'
 export type NumberSize = 'sm' | 'md' | 'lg' | 'xl'
-export type NumberTone = 'ink' | 'accent' | 'success' | 'danger'
+export type NumberTone = 'ink' | 'accent' | 'success' | 'danger' | 'spectrum'
 
 export interface NumberProps {
   /** The number. Required — a display of nothing is a layout bug. */
@@ -18,5 +18,12 @@ export interface NumberProps {
   /** Count-up length in milliseconds. */
   duration?: number
   size?: NumberSize
+  /** Semantic colour. `spectrum` is the multi-colour form: glyphs get the gradient, the arrow keeps its shape. */
   tone?: NumberTone
+  /**
+   * Shears the whole figure — digits, affixes and trend arrow — on the
+   * library's one diagonal (`--myui-skew-angle`). The angle rides in
+   * `--myui-shear`, so no state has to restate it.
+   */
+  skew?: boolean
 }

@@ -11,6 +11,7 @@ const props = withDefaults(defineProps<ButtonProps>(), {
   tone: 'accent',
   size: 'md',
   shape: 'rect',
+  skew: false,
   htmlType: 'button',
   block: false,
   shadow: true,
@@ -35,6 +36,7 @@ const classes = computed(() => [
   `myui-button--${props.shape}`,
   {
     'myui-button--block': props.block,
+    'myui-button--skew': props.skew,
     'myui-button--shadow':
       props.shadow && (props.variant === 'solid' || props.variant === 'outline'),
     'myui-button--icon-only': props.iconOnly,

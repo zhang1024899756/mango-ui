@@ -1,4 +1,5 @@
 import { mount } from '@vue/test-utils'
+import { defineComponent } from 'vue'
 import { describe, expect, it } from 'vitest'
 import Progress from './Progress.vue'
 
@@ -72,5 +73,52 @@ describe('MyuiProgress', () => {
     expect(classes).toContain('myui-progress--tone-danger')
     expect(classes).toContain('myui-progress--lg')
     expect(classes).toContain('myui-progress--line')
+  })
+
+  it('adds the skew form class only when asked', () => {
+    const skewed = mount(Progress, { props: { skew: true } })
+
+    expect(skewed.classes()).toContain('myui-progress--skew')
+    expect(mount(Progress).classes()).not.toContain('myui-progress--skew')
+  })
+
+  it('paints the spectrum ring with a per-instance SVG gradient', () => {
+    // Two rings in the same app: useId must hand out distinct definitions, or the
+    // second ring silently inherits the first one's paint.
+    const Host = defineComponent({
+      components: { MyuiProgress: Progress },
+      template: `<div>
+        <MyuiProgress type="circle" tone="spectrum" :percent="40" />
+        <MyuiProgress type="circle" tone="spectrum" :percent="70" />
+      </div>`,
+    })
+    const wrapper = mount(Host)
+    const ids = [...wrapper.html().matchAll(/<lineargradient id="([^"]+)"/gi)].map(
+      (match) => match[1],
+    )
+
+    expect(ids).toHaveLength(2)
+    expect(ids[0]).toBeTruthy()
+    expect(ids[0]).not.toBe(ids[1])
+
+    const svg = wrapper.find('svg')
+    const stops = svg.findAll('stop')
+    expect(stops).toHaveLength(3)
+    expect(stops[0]?.attributes('style')).toContain('--myui-color-neon-cyan')
+    expect(stops[2]?.attributes('style')).toContain('--myui-color-neon-magenta')
+
+    // The CSSOM serialises the paint server as url("#id") — quoted — so assert on
+    // the id rather than on one particular spelling.
+    const fillStyle = wrapper.find('.myui-progress__ring-fill').attributes('style') ?? ''
+    expect(fillStyle).toContain('url(')
+    expect(fillStyle).toContain(ids[0])
+  })
+
+  it('only declares a ring gradient for the circle type', () => {
+    const line = mount(Progress, { props: { tone: 'spectrum', percent: 30 } })
+
+    expect(line.classes()).toContain('myui-progress--tone-spectrum')
+    expect(line.html()).not.toContain('<lineargradient')
+    expect(line.find('.myui-progress__fill').exists()).toBe(true)
   })
 })

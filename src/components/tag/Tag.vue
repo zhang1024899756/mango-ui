@@ -11,6 +11,7 @@ const props = withDefaults(defineProps<TagProps>(), {
   variant: 'outline',
   size: 'sm',
   shape: 'rect',
+  skew: false,
   closable: false,
   active: false,
 })
@@ -25,7 +26,7 @@ const classes = computed(() => [
   `myui-tag--tone-${props.tone}`,
   `myui-tag--${props.size}`,
   `myui-tag--${props.shape}`,
-  { 'myui-tag--closable': props.closable },
+  { 'myui-tag--closable': props.closable, 'myui-tag--skew': props.skew },
 ])
 
 function onClose(event: MouseEvent) {

@@ -6,6 +6,9 @@
  * ========================================================================== */
 
 .myui-link {
+  /* The shear slot is always declared so the transform below is valid even
+   * when the link is not skewed (it resolves to an identity skew). */
+  @include myui-shear-slot;
   display: inline-flex;
   align-items: baseline;
   gap: var(--myui-space-1);
@@ -18,12 +21,21 @@
   text-decoration-color: currentColor;
   text-decoration-thickness: var(--myui-border-width);
   text-underline-offset: 3px;
+  /* The diagonal is a variable, never a literal skewX(): the underline is
+   * painted in the same transformed space as the glyphs, so it stays glued to
+   * the text at 3px offset, and future hover transforms still compose. */
+  transform: var(--myui-shear);
   cursor: pointer;
   transition:
     color var(--myui-duration-fast) var(--myui-ease-snap),
     text-decoration-color var(--myui-duration-fast) var(--myui-ease-snap);
 
   @include myui-focus-ring;
+}
+
+/* --- shear ------------------------------------------------------------------ */
+.myui-link--skew {
+  @include myui-shear-on;
 }
 
 .myui-link__label {
@@ -60,6 +72,23 @@
 
 .myui-link--tone-muted:hover {
   color: var(--myui-color-text);
+}
+
+/* --- tone: spectrum ---------------------------------------------------------
+ * The multi-colour form. `--tone-spectrum` is the tone mapping; the paint is
+ * gated on `[data-spectrum]`, which the component only emits while the link can
+ * actually be followed — disabled wins, and an inert link never wears a
+ * gradient (it keeps the solid neon-cyan ink at disabled opacity).
+ *
+ * The gradient is applied to the label, not to the anchor: the anchor is an
+ * inline-flex box, and the suffix plus the external arrow must stay solid ink
+ * a level below the gradient, not dissolve into a shared text-fill. */
+.myui-link--tone-spectrum {
+  color: var(--myui-color-neon-cyan-text);
+}
+
+.myui-link[data-spectrum='true'] .myui-link__label {
+  @include myui-spectrum-text;
 }
 
 /* --- underline -------------------------------------------------------------- */

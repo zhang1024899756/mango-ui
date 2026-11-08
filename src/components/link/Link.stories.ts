@@ -15,10 +15,11 @@ const meta = {
     },
   },
   argTypes: {
-    tone: { control: 'inline-radio', options: ['ink', 'accent', 'muted'] },
+    tone: { control: 'inline-radio', options: ['ink', 'accent', 'muted', 'spectrum'] },
     underline: { control: 'inline-radio', options: ['always', 'hover', 'none'] },
     external: { control: 'boolean' },
     disabled: { control: 'boolean' },
+    skew: { control: 'boolean' },
   },
   args: {
     href: '/drops',
@@ -26,6 +27,7 @@ const meta = {
     underline: 'hover',
     external: false,
     disabled: false,
+    skew: false,
   },
 } satisfies Meta<typeof MyuiLink>
 
@@ -50,6 +52,39 @@ export const Tones: Story = {
         <myui-link v-bind="args" tone="ink">INK 正文链接</myui-link>
         <myui-link v-bind="args" tone="accent">ACCENT 强调链接</myui-link>
         <myui-link v-bind="args" tone="muted">MUTED 次级链接</myui-link>
+        <myui-link v-bind="args" tone="spectrum">SPECTRUM 渐变链接</myui-link>
+      </div>
+    `,
+  }),
+}
+
+export const Skew: Story = {
+  name: 'Skewed glyphs',
+  args: { skew: true },
+  render: (args) => ({
+    components: { MyuiLink },
+    setup: () => ({ args }),
+    template: `
+      <div style="display:flex; gap:var(--myui-space-5); flex-wrap:wrap; align-items:baseline">
+        <myui-link v-bind="args" href="/a">斜切文字链接</myui-link>
+        <myui-link v-bind="args" href="https://example.com" external>外链一起斜</myui-link>
+        <myui-link v-bind="args" href="/a" tone="spectrum">斜切 + 渐变</myui-link>
+      </div>
+    `,
+  }),
+}
+
+export const Spectrum: Story = {
+  name: 'Spectrum glyphs',
+  args: { tone: 'spectrum' },
+  render: (args) => ({
+    components: { MyuiLink },
+    setup: () => ({ args }),
+    template: `
+      <div style="display:flex; gap:var(--myui-space-5); flex-wrap:wrap; align-items:baseline">
+        <myui-link v-bind="args" href="/a" underline="always">渐变字形</myui-link>
+        <myui-link v-bind="args" href="/a" underline="always" skew>渐变 + 斜切</myui-link>
+        <myui-link v-bind="args" href="/a" disabled>禁用态退回实心色</myui-link>
       </div>
     `,
   }),

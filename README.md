@@ -43,7 +43,7 @@ CSS 故障字特效组件。v2 是一次彻底重写：
 | 视觉方向 | 一个 CSS 故障字 | **赛博朋克 · 数字穿越 · 未来科技** |
 | 开发验收 | Storybook 6 | **Storybook 10** |
 | 官网 | 无 | **[VitePress 1.x 在线文档](https://zhang1024899756.github.io/mango-ui/)** |
-| 组件数 | 1 | **14**（2 特效 + 12 元素） |
+| 组件数 | 1 | **15**（3 特效 + 12 元素） |
 | 测试 | 1 个 `toBeDefined()` | Vitest，逐组件行为测试 |
 
 ---
@@ -62,10 +62,15 @@ CSS 故障字特效组件。v2 是一次彻底重写：
 <MyuiFlotage :amplitude="20" :duration="5">
   <MyuiImage src="/lookbook/01.jpg" ratio="3:4" caption="SS26 LOOKBOOK" />
 </MyuiFlotage>
+
+<MyuiGlitchRipple intensity="intense" speed="slow">
+  <MyuiButton size="lg">限量发售</MyuiButton>
+</MyuiGlitchRipple>
 ```
 
 - **Neon 霓虹特效** —— 静态就有灯管辉光，再叠呼吸/闪断/扫光，`glow` / `scan` / `flicker` 三种模式
 - **Flotage 漂浮特效** —— 持续失重漂浮，可轴向、可 hover 触发、可关
+- **GlitchRipple 故障波纹** —— 噪声场（`feTurbulence`）+ 逐像素位移（`feDisplacementMap`）把**内容本身**推向波纹：水平条带缓缓流过，像信号守不住；减弱动效时冻结成一帧轻微扭曲而不是消失
 
 ### 元素组件：自带海报气质
 
@@ -82,7 +87,23 @@ CSS 故障字特效组件。v2 是一次彻底重写：
 | Switch | `<MyuiSwitch>` | 开关 —— `role="switch"`，空格/回车切换 |
 | Slider | `<MyuiSlider>` | 滑动条 —— 单值/双柄、键盘、轨道点击 |
 | Dialog | `<MyuiDialog>` | 对话框 —— 焦点陷阱、滚动锁定、Esc 关闭 |
-| Progress | `<MyuiProgress>` | 进度条 —— 条形/圆环/不确定态 |
+### 形体：斜切与渐变
+
+除了变体与语义色，元素组件还支持两种可选**形体**，可与任意变体、尺寸组合：
+
+| 形体 | 写法 | 效果 |
+| --- | --- | --- |
+| 斜切 | `skew` | 整体按 `--myui-skew-angle`（默认 `-12deg`）倾斜：矩形变斜矩形、纯文字组件倾斜字形；开关是斜矩形轨道套斜方块滑块，滑动条只有手柄斜切、轨道保持水平 |
+| 渐变 | `tone="spectrum"` | 填充 / 描边 / 字形换上 `--myui-gradient-spectrum`（青 → 蓝 → 紫 → 品红），字色切到 `--myui-color-accent-ink`，每个色标都过 AA |
+
+```vue
+<MyuiButton tone="spectrum" skew>进入传送门</MyuiButton>
+<MyuiSwitch v-model="on" skew tone="spectrum" />
+<MyuiProgress :percent="72" tone="spectrum" skew />
+```
+
+斜切靠 `--myui-shear` 变量承载，所以悬停上浮、按下回落、滑块缩放仍然能叠加在它上面；
+渐变是**形体**而不是底色：错误仍是红、成功仍是绿，语义色不会因为它而改变含义。
 
 ---
 
@@ -194,7 +215,7 @@ src/
 │       ├── styles/<name>.scss   只用令牌
 │       ├── <Name>.stories.ts    Storybook
 │       └── <Name>.test.ts       Vitest
-├── effects/             特效组件（neon/ flotage/），结构同上
+├── effects/             特效组件（neon/ flotage/ glitch-ripple/），结构同上
 ├── styles/
 │   ├── tokens.scss      设计令牌（公开的主题 API）
 │   ├── mixins.scss      SCSS 编译期辅助
@@ -220,8 +241,11 @@ plop-template/           组件脚手架模板
 4. **v2.1 起 `Magic` 更名为 `Neon`**，并按"霓虹灯管"重做：`glitch`（RGB 分离）
    模式移除，改为 `glow`（默认，常亮+呼吸）/ `flicker` / `scan`；`MyuiMagic` →
    `MyuiNeon`，`.myui-magic*` → `.myui-neon*`。同时新增元素组件 `Text`。
-4. **Vue 2 的 `Vue.use()` 插件协议**换成了标准的 Vue 3 `app.use()`；视觉方向也从单个 CSS 故障字扩展为整套赛博朋克设计系统。
-5. **Jest + `@vue/test-utils@1`** 换成了 Vitest + `@vue/test-utils@2`。
+5. **v2.2 起新增两种形体**：斜切 `skew` 与渐变 `tone="spectrum"`，覆盖 Button / Tag / Link /
+   Number / Progress / Switch / Slider；同时新增特效组件 `GlitchRipple`，并扩充霓虹色阶与
+   渐变令牌（`--myui-color-neon-*`、`--myui-gradient-*`）。两者都是可选形体，默认不变。
+6. **Vue 2 的 `Vue.use()` 插件协议**换成了标准的 Vue 3 `app.use()`；视觉方向也从单个 CSS 故障字扩展为整套赛博朋克设计系统。
+7. **Jest + `@vue/test-utils@1`** 换成了 Vitest + `@vue/test-utils@2`。
 
 ---
 

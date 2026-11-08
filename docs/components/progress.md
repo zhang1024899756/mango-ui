@@ -72,16 +72,46 @@ description: 一条有刻度的墨线。硬边、平涂、零圆角，圆环用 
 </div>
 :::
 
+## 斜切形态
+
+`skew` 只作用于条形：轨道按 `--myui-skew-angle` 斜切，填充是它的子元素，跟着一起斜，
+右侧的百分比保持水平。
+
+圆环不参与——它由 SVG 描边画成，斜切会把圆变成描边粗细不均的椭圆。测量工具在成为
+海报之前，先得是个可信的读数。
+
+::: demo
+<div class="demo-stack" style="width: 100%">
+<MyuiProgress :percent="68" skew label="斜切进度" />
+<MyuiProgress :percent="86" skew tone="spectrum" label="斜切渐变" />
+</div>
+:::
+
+## 渐变形态
+
+`tone="spectrum"` 让填充变成多色渐变。圆环用的是 SVG `<linearGradient>`：CSS 渐变
+画不了描边。不确定进度的斜纹叠在渐变之上，纹理不丢。
+
+每个圆环的渐变都有独立 id（来自 `useId`），同页多个圆环不会互相串色。
+
+::: demo
+<div class="demo-stack" style="width: 100%">
+<MyuiProgress :percent="74" tone="spectrum" label="渐变进度" />
+<MyuiProgress type="circle" :percent="74" tone="spectrum" label="渐变圆环" />
+</div>
+:::
+
 ## Props
 
 | 属性 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | `percent` | `number` | `0` | 0–100，越界夹紧 |
 | `type` | `'line' \| 'circle'` | `'line'` | 条形或环形 |
-| `tone` | `'accent' \| 'ink' \| 'success' \| 'warning' \| 'danger'` | `'accent'` | 语义色 |
+| `tone` | `'accent' \| 'ink' \| 'success' \| 'warning' \| 'danger' \| 'spectrum'` | `'accent'` | 语义色；`spectrum` 是多色渐变形态 |
 | `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | 尺寸 |
 | `showText` | `boolean` | `true` | 是否显示百分比 |
 | `indeterminate` | `boolean` | `false` | 不确定进度 |
+| `skew` | `boolean` | `false` | 斜切形态（仅 `type="line"`；圆环保持几何） |
 | `label` | `string` | `'Progress'` | 进度条的无障碍名称 |
 
 ## 可访问性

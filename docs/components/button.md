@@ -115,14 +115,57 @@ description: 系统里最亮的元素。霓虹辉光，悬停亮起并上浮 1px
 <MyuiButton href="/drops" target="_blank">GitHub</MyuiButton>
 ```
 
+## 斜切形态
+
+`skew` 是形体，不是状态：整枚按钮按 `--myui-skew-angle`（默认 `-12deg`）斜切，
+标签随之倾斜——这里要的是几何，不是给正立的字套一个斜框。
+
+它可以和所有变体、语义色、尺寸组合。剪切值存在 `--myui-shear` 变量里，所以悬停的
+1px 上浮、按下的回落都还在，不会因为多了一个形状就失效。
+
+::: demo
+<div class="demo-row">
+<MyuiButton skew>立即抢购</MyuiButton>
+<MyuiButton skew variant="outline">加入收藏</MyuiButton>
+<MyuiButton skew tone="ink">ENTER GRID</MyuiButton>
+<MyuiButton skew variant="ghost" size="sm">SMALL</MyuiButton>
+</div>
+:::
+
+```vue
+<MyuiButton skew>立即抢购</MyuiButton>
+<MyuiButton skew variant="outline">加入收藏</MyuiButton>
+```
+
+## 渐变形态
+
+`tone="spectrum"` 是系统里唯一的多色形态：填充换成 `--myui-gradient-spectrum`
+（青 → 蓝 → 紫 → 品红，100deg），字色切到 `--myui-color-accent-ink`。
+
+这个字色是算出来的，不是挑出来的：深色墨在四个色标上分别是青 11.9:1、蓝 5.1:1、
+紫 5.8:1、品红 5.4:1，全部过 AA；反过来浅色字在青色端只有 1.6:1。所以渐变按钮
+永远不接浅色字。
+
+它是表达层，不是语义层——错误按钮不会因为好看而变成渐变。
+
+::: demo
+<div class="demo-row">
+<MyuiButton tone="spectrum">进入传送门</MyuiButton>
+<MyuiButton tone="spectrum" variant="outline">OUTLINE</MyuiButton>
+<MyuiButton tone="spectrum" variant="ghost">GHOST</MyuiButton>
+<MyuiButton tone="spectrum" skew>斜切 + 渐变</MyuiButton>
+</div>
+:::
+
 ## Props
 
 | 属性 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | `variant` | `'solid' \| 'outline' \| 'ghost' \| 'text'` | `'solid'` | 视觉权重 |
-| `tone` | `'accent' \| 'ink' \| 'neutral' \| 'danger'` | `'accent'` | 语义色 |
+| `tone` | `'accent' \| 'ink' \| 'neutral' \| 'danger' \| 'spectrum'` | `'accent'` | 语义色；`spectrum` 是多色渐变形态 |
 | `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | 尺寸（32 / 40 / 48px 高） |
 | `shape` | `'rect' \| 'pill'` | `'rect'` | 方角或胶囊 |
+| `skew` | `boolean` | `false` | 斜切形态（整体按 `--myui-skew-angle` 倾斜） |
 | `tag` | `'button' \| 'a'` | — | 渲染的元素；有 `href` 时自动为 `a` |
 | `href` | `string` | — | 渲染为链接 |
 | `target` | `string` | — | 链接目标 |

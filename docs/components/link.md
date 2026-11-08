@@ -22,7 +22,7 @@ description: 一条 2px 的墨线，不是蓝色小字。外链自动带 target 
 
 ## 语义色
 
-`ink` 是正文链接，`accent` 留给"真的要去外面"的那一个，`muted` 是次级信息。
+`ink` 是正文链接，`accent` 留给"真的要去外面"的那一个，`muted` 是次级信息，`spectrum` 是渐变形态（见下面的「渐变形态」）。
 
 ::: demo
 <div class="demo-row">
@@ -34,6 +34,47 @@ description: 一条 2px 的墨线，不是蓝色小字。外链自动带 target 
 
 ```vue
 <MyuiLink href="/a" tone="accent">ACCENT 强调</MyuiLink>
+```
+
+## 斜切形态
+
+`skew` 斜的是字形本身。角度是全局那一个 `--myui-skew-angle`（-12deg），通过 `--myui-shear` 传进 `transform`，所以悬停、焦点这些已有的变换不会被覆盖。
+
+下划线和文字在同一个变换空间里画，倾斜之后仍然贴着字——它不会脱开、也不会被拉粗。
+
+::: demo
+<div class="demo-row" style="align-items:baseline">
+<MyuiLink href="/a" skew>斜切文字链接</MyuiLink>
+<MyuiLink href="/a" skew underline="always">下划线跟着一起斜</MyuiLink>
+<MyuiLink href="https://example.com" skew external>外链也一起斜</MyuiLink>
+</div>
+:::
+
+```vue
+<MyuiLink href="/a" skew>斜切文字链接</MyuiLink>
+<MyuiLink href="/a" skew underline="always">下划线跟着一起斜</MyuiLink>
+```
+
+## 渐变形态
+
+`tone="spectrum"` 把字形刷成青 → 蓝 → 紫 → 品红的那一支渐变。它是**表达层**，不是默认：一段文字里最多让它出现一次。
+
+两件事是刻意做对的：
+
+- 浏览器不支持 `background-clip: text` 时回退成实心霓虹青，不会出现"透明文字"这种经典事故。
+- `disabled` 与 `muted` 优先于渐变。禁用后链接退回实心色（再叠 disabled 的透明度），`data-spectrum` 只在链接真的能点时出现。
+
+::: demo
+<div class="demo-row" style="align-items:baseline">
+<MyuiLink href="/a" tone="spectrum" underline="always">渐变字形</MyuiLink>
+<MyuiLink href="/a" tone="spectrum" underline="always" skew>渐变 + 斜切</MyuiLink>
+<MyuiLink href="/a" tone="spectrum" disabled>禁用后退回实心色</MyuiLink>
+</div>
+:::
+
+```vue
+<MyuiLink href="/a" tone="spectrum" underline="always">渐变字形</MyuiLink>
+<MyuiLink href="/a" tone="spectrum" disabled>禁用后退回实心色</MyuiLink>
 ```
 
 ## 下划线
@@ -126,12 +167,13 @@ description: 一条 2px 的墨线，不是蓝色小字。外链自动带 target 
 | 属性 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | `href` | `string` | `undefined` | 目标地址 |
-| `tone` | `'ink' \| 'accent' \| 'muted'` | `'ink'` | 文字颜色 |
+| `tone` | `'ink' \| 'accent' \| 'muted' \| 'spectrum'` | `'ink'` | 文字颜色；`spectrum` 为渐变形态 |
 | `underline` | `'always' \| 'hover' \| 'none'` | `'hover'` | 下划线出现的时机 |
 | `external` | `boolean` | `false` | 外链：自动 `target` + `rel` + 箭头 |
-| `disabled` | `boolean` | `false` | 拦截跳转与点击 |
+| `disabled` | `boolean` | `false` | 拦截跳转与点击，并让渐变退场 |
 | `target` | `string` | `undefined` | 覆盖自动的 `_blank` |
 | `rel` | `string` | `undefined` | 覆盖自动的 `noreferrer noopener` |
+| `skew` | `boolean` | `false` | 斜切字形（含下划线），角度取 `--myui-skew-angle` |
 
 ## 插槽
 

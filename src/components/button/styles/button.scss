@@ -8,6 +8,10 @@
 .myui-button {
   @include myui-control-reset;
   position: relative;
+  /* The shear slot is always present, so `transform: var(--myui-shear)` is valid
+   * in every state and the --skew modifier only has to flip one variable. */
+  @include myui-shear-slot;
+  transform: var(--myui-shear);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -55,6 +59,15 @@
 /* --- shape ------------------------------------------------------------------ */
 .myui-button--pill {
   border-radius: var(--myui-radius-pill);
+}
+
+/* --- the diagonal form ------------------------------------------------------
+ * A form, not a state: it composes with every variant, tone and size. Because the
+ * shear lives in a variable, the lift on hover and the fall on press still work
+ * on top of it — see the glow block below.
+ * -------------------------------------------------------------------------- */
+.myui-button--skew {
+  @include myui-shear-on;
 }
 
 .myui-button--block {
@@ -200,6 +213,67 @@
   color: var(--myui-color-danger);
 }
 
+/* --- tone: spectrum ---------------------------------------------------------
+ * The one multi-colour form in the system. Two rules keep it honest:
+ *   1. The ink is --myui-color-accent-ink, never light text. Every stop of the
+ *      spectrum is light enough for dark ink (cyan 11.9:1, blue 5.1:1, violet
+ *      5.8:1, magenta 5.4:1); light text would fail on the cyan end at 1.6:1.
+ *   2. It is opt-in and never appears on a disabled control — the inert block at
+ *      the end of this file strips it back to the flat muted surface.
+ * -------------------------------------------------------------------------- */
+.myui-button--tone-spectrum.myui-button--solid {
+  @include myui-spectrum-fill;
+  border-color: transparent;
+  color: var(--myui-color-accent-ink);
+}
+
+/* A gradient cannot brighten through background-color, so the two states move
+ * `filter` instead — the fill is an image, not a colour. */
+.myui-button--tone-spectrum.myui-button--solid:hover {
+  filter: brightness(1.06) saturate(1.08);
+}
+
+.myui-button--tone-spectrum.myui-button--solid:active {
+  filter: brightness(0.94) saturate(1.12);
+}
+
+/* Outline: the hairline itself becomes the gradient. border-image cannot follow a
+ * border-radius, which is safe here because this system has none — the pill rule
+ * below is the exception that proves it. */
+.myui-button--tone-spectrum.myui-button--outline {
+  border-color: transparent;
+  border-image: var(--myui-gradient-spectrum) 1;
+  background-color: transparent;
+  @include myui-spectrum-text;
+}
+
+.myui-button--tone-spectrum.myui-button--outline:hover {
+  background-color: var(--myui-color-neon-violet-wash);
+  filter: brightness(1.1);
+}
+
+.myui-button--pill.myui-button--tone-spectrum.myui-button--outline {
+  border-image: none;
+  border-color: var(--myui-color-neon-cyan);
+}
+
+.myui-button--tone-spectrum.myui-button--ghost {
+  @include myui-spectrum-text;
+}
+
+.myui-button--tone-spectrum.myui-button--ghost:hover {
+  background-color: var(--myui-color-neon-violet-wash);
+  filter: brightness(1.12);
+}
+
+.myui-button--tone-spectrum.myui-button--text {
+  @include myui-spectrum-text;
+}
+
+.myui-button--tone-spectrum.myui-button--text:hover {
+  filter: brightness(1.12);
+}
+
 /* --- the signature glow ----------------------------------------------------- */
 /* Cyberpunk elevation is light, not offset: the button sits in the dark and
  * lights up, then dims when pressed like a key on a console. */
@@ -208,12 +282,12 @@
 }
 
 .myui-button--shadow:hover {
-  transform: translateY(-1px);
+  transform: var(--myui-shear) translateY(-1px);
   box-shadow: var(--myui-shadow-glow);
 }
 
 .myui-button--shadow:active {
-  transform: translateY(0);
+  transform: var(--myui-shear);
   box-shadow: none;
 }
 
@@ -258,8 +332,14 @@
   background-color: var(--myui-color-surface-deep);
   /* ink-soft, not ink-ghost: disabled text still has to clear AA. */
   color: var(--myui-color-text-soft);
+  /* A disabled control keeps its form (the shear survives) but loses every
+   * expressive layer: gradient fill, gradient hairlines and gradient glyphs all
+   * collapse to the flat muted surface. */
+  background-image: none;
+  border-image: none;
+  -webkit-text-fill-color: currentColor;
   box-shadow: none;
-  transform: none;
+  transform: var(--myui-shear);
   pointer-events: none;
 }
 

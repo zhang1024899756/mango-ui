@@ -7,6 +7,10 @@
 .myui-tag {
   display: inline-flex;
   align-items: center;
+  /* Same contract as Button: the slot exists on every tag, the --skew modifier
+   * only flips the variable, and the glyphs lean with the stamp. */
+  @include myui-shear-slot;
+  transform: var(--myui-shear);
   gap: var(--myui-space-1);
   border: var(--myui-border-width) solid transparent;
   border-radius: var(--myui-radius-none);
@@ -22,6 +26,14 @@
 
 .myui-tag--pill {
   border-radius: var(--myui-radius-pill);
+}
+
+/* --- the diagonal form ------------------------------------------------------
+ * A stamp leaning on the poster. Composes with every variant and tone; the
+ * close button leans with the tag because it is a child of it.
+ * -------------------------------------------------------------------------- */
+.myui-tag--skew {
+  @include myui-shear-on;
 }
 
 /* --- sizes ----------------------------------------------------------------- */
@@ -156,11 +168,45 @@
   color: var(--myui-color-info);
 }
 
+/* --- tone: spectrum ---------------------------------------------------------
+ * Solid paints the stamp with the spectrum (dark ink on top, chosen per stop);
+ * outline paints the hairline and the glyphs; ghost keeps a violet wash behind
+ * gradient glyphs. `data-active` still wins over all three: an active filter is a
+ * state, and a state has to read at a glance without colour analysis.
+ * -------------------------------------------------------------------------- */
+.myui-tag--tone-spectrum.myui-tag--solid {
+  @include myui-spectrum-fill;
+  border-color: transparent;
+  color: var(--myui-color-accent-ink);
+}
+
+.myui-tag--tone-spectrum.myui-tag--outline {
+  border-color: transparent;
+  border-image: var(--myui-gradient-spectrum) 1;
+  background-color: transparent;
+  @include myui-spectrum-text;
+}
+
+/* border-image cannot follow a radius: on a pill the hairline falls back to the
+ * flat leading hue while the glyphs keep the gradient. */
+.myui-tag--pill.myui-tag--tone-spectrum.myui-tag--outline {
+  border-image: none;
+  border-color: var(--myui-color-neon-cyan);
+}
+
+.myui-tag--tone-spectrum.myui-tag--ghost {
+  background-color: var(--myui-color-neon-violet-wash);
+  @include myui-spectrum-text;
+}
+
 /* --- active filter state ----------------------------------------------------- */
 .myui-tag[data-active='true'] {
   border-color: var(--myui-color-line);
+  border-image: none;
   background-color: var(--myui-color-accent);
+  background-image: none;
   color: var(--myui-color-accent-ink);
+  -webkit-text-fill-color: currentColor;
 }
 
 /* --- close button ------------------------------------------------------------ */

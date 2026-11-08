@@ -15,6 +15,7 @@ const props = withDefaults(defineProps<SliderProps>(), {
   vertical: false,
   showTooltip: true,
   tone: 'accent',
+  skew: false,
 })
 
 const emit = defineEmits<{
@@ -153,6 +154,7 @@ const rootClasses = computed(() => [
     'myui-slider--disabled': props.disabled,
     'myui-slider--dragging': dragging.value,
     'myui-slider--with-marks': markList.value.length > 0,
+    'myui-slider--skew': props.skew,
   },
 ])
 

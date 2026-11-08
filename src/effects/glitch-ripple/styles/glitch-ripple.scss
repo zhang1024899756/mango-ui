@@ -1,0 +1,183 @@
+@use '../../../styles/mixins.scss' as *;
+
+/* =============================================================================
+ * GlitchRipple — 故障波纹. A displacement field laid over whatever you wrap.
+ * Classes: .myui-glitch-ripple [+ --{intensity} --{speed} --{trigger} --text
+ *          --force-motion, is-active, is-distorting]
+ * Elements: __filter (the paint server, zero-sized) __content (the distorted box)
+ *
+ * This file owns layout, the tremble and the fade — and deliberately not the
+ * ripple itself.
+ *
+ * The effect is a plain SVG filter — feTurbulence builds an anisotropic noise
+ * field, feOffset slides it, feDisplacementMap moves the content's pixels along
+ * it — and the setup script only writes two attributes on that filter. There is no
+ * keyframe here because SVG filter primitives are not CSS properties: they cannot
+ * be animated from a stylesheet at all.
+ *
+ * That split is what makes the frozen frame possible. The attribute values in the
+ * markup are a mild warp; the rAF loop is the only thing that ever overwrites
+ * them. With animations off (this project's dev machine), under SSR, in a
+ * screenshot, or with JS never booting, the content still reads as a slightly
+ * broken signal instead of as untouched content.
+ * ========================================================================== */
+
+.myui-glitch-ripple {
+  /* Inline-block keeps a text node in the line box; block tags are restored below. */
+  display: inline-block;
+  max-width: 100%;
+}
+
+/* A wrapper around a card must still be a card: restore block flow for the
+ * block-level tags, at flat specificity so a consumer's own display wins. */
+.myui-glitch-ripple:where(div, section, article, aside, header, footer, main, nav, figure, figcaption, p, ul, ol, li, blockquote, h1, h2, h3, h4, h5, h6, form, details, td, th) {
+  display: block;
+}
+
+/* The paint server must never occupy space, catch a pointer or a tab stop.
+ * `position: absolute` keeps it out of the wrapper's layout box entirely. */
+.myui-glitch-ripple__filter {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* A filter needs one box to paint. An inline box fragments across line boxes and
+ * the displacement would be applied per fragment — that looks like a paint bug,
+ * not like a ripple. Inline-block gives the filter a single rectangle to work on,
+ * and `max-width: 100%` keeps long text from escaping its container. */
+.myui-glitch-ripple__content {
+  display: inline-block;
+  max-width: 100%;
+}
+
+/* When the wrapper is block-level the payload should be too. */
+.myui-glitch-ripple:where(div, section, article, aside, header, footer, main, nav, figure, figcaption, p, ul, ol, li, blockquote, h1, h2, h3, h4, h5, h6, form, details, td, th)
+  > .myui-glitch-ripple__content {
+  display: block;
+}
+
+/* =============================================================================
+ * The other two halves of "the signal is failing"
+ * -----------------------------------------------------------------------------
+ * A ripple alone reads as water. What makes it a *broken feed* is that the whole
+ * frame also trembles and dims in bursts — the way a weak transmission shakes and
+ * drops instead of travelling smoothly.
+ *
+ *   tremble  the content shivers 0.5–1.2px, irregularly, in ~30% of its cycle
+ *   flicker  two or three hard opacity dips per cycle, never past ~0.55, so the
+ *            text stays readable and the cadence stays under the three-flashes-
+ *            per-second guideline
+ *
+ * THE CONSTRAINT BETWEEN THE TWO HALVES OF THE EFFECT
+ *   The ripple (feDisplacementMap) tears *different parts of the box by different
+ *   amounts* — that is what reads as "the content is broken". The tremble is a
+ *   single translate of the whole box. If the shiver ever gets close to the band
+ *   offset, the eye stops seeing a tear and sees the element sliding, which is
+ *   the "floating" misread this component exists to avoid. So the shiver is kept
+ *   deliberately small — hence intense is 1.2px, not 1.5px — and any future bump
+ *   has to stay well under the displacement scale (see `measure()` in the .vue).
+ *
+ * Both are stepped: an eased shake looks like a camera move, a stepped one looks
+ * like a signal.
+ * ========================================================================== */
+
+.myui-glitch-ripple {
+  --myui-gr-shiver: 0.9px;
+  --myui-gr-tremble-duration: 1000ms;
+  --myui-gr-flicker-duration: 2600ms;
+}
+
+.myui-glitch-ripple--subtle {
+  --myui-gr-shiver: 0.5px;
+}
+
+.myui-glitch-ripple--intense {
+  --myui-gr-shiver: 1.2px;
+}
+
+.myui-glitch-ripple--slow {
+  --myui-gr-tremble-duration: 1400ms;
+  --myui-gr-flicker-duration: 3400ms;
+}
+
+.myui-glitch-ripple--fast {
+  --myui-gr-tremble-duration: 760ms;
+  --myui-gr-flicker-duration: 1900ms;
+}
+
+/* `is-animating` is set by the component from the same conditions the script
+ * uses: active, distorting, and not frozen by reduced motion. */
+.myui-glitch-ripple.is-animating .myui-glitch-ripple__content {
+  will-change: transform, opacity;
+  animation:
+    myui-gr-tremble var(--myui-gr-tremble-duration) steps(1, end) infinite,
+    myui-gr-flicker var(--myui-gr-flicker-duration) steps(1, end) infinite;
+}
+
+@keyframes myui-gr-tremble {
+  0%,
+  41%,
+  58%,
+  74%,
+  79%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  43% {
+    transform: translate3d(var(--myui-gr-shiver), calc(var(--myui-gr-shiver) * -0.6), 0);
+  }
+
+  47% {
+    transform: translate3d(calc(var(--myui-gr-shiver) * -0.8), var(--myui-gr-shiver), 0);
+  }
+
+  52% {
+    transform: translate3d(calc(var(--myui-gr-shiver) * 0.7), 0, 0);
+  }
+
+  76% {
+    transform: translate3d(calc(var(--myui-gr-shiver) * -0.55), calc(var(--myui-gr-shiver) * 0.4), 0);
+  }
+}
+
+@keyframes myui-gr-flicker {
+  0%,
+  9%,
+  33%,
+  40%,
+  68%,
+  72%,
+  100% {
+    opacity: 1;
+  }
+
+  6% {
+    opacity: 0.72;
+  }
+
+  35% {
+    opacity: 0.55;
+  }
+
+  38% {
+    opacity: 0.9;
+  }
+
+  70% {
+    opacity: 0.66;
+  }
+}
+
+/* A reduced-motion visitor gets the frozen warp and nothing else: the CSS layers
+ * are switched off here as well as in the script, so the guard holds even if the
+ * setup never runs (SSR, a bundle that failed to boot, a screenshot service). */
+@include myui-motion-safe {
+  .myui-glitch-ripple:not(.myui-glitch-ripple--force-motion) .myui-glitch-ripple__content {
+    animation: none !important;
+    transform: none !important;
+  }
+}

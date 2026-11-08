@@ -2,8 +2,8 @@
 
 /* =============================================================================
  * Slider — a hard rule you drag along.
- * Classes: .myui-slider [+ --vertical --tone-{accent|ink} --disabled
- *                           --dragging --with-marks]
+ * Classes: .myui-slider [+ --vertical --tone-{accent|ink|spectrum} --disabled
+ *                           --dragging --with-marks --skew]
  * Structure: .myui-slider > .myui-slider__rail
  *              > .myui-slider__line > .myui-slider__fill
  *              > .myui-slider__thumb (one per handle)
@@ -11,6 +11,11 @@
  * ========================================================================== */
 
 .myui-slider {
+  /* The shear slot lives on the root and is always emitted, so every thumb
+   * transform can compose `var(--myui-shear)` unconditionally: the identity
+   * case is skewX(0deg) rather than an undeclared variable. Only the thumb ever
+   * reads it — the rail, line and fill stay horizontal. */
+  @include myui-shear-slot;
   position: relative;
   display: block;
   width: 100%;
@@ -59,12 +64,38 @@
   background-color: var(--myui-color-text);
 }
 
+/* `spectrum` is the multi-colour form of the same fill. The mixin keeps a flat
+ * colour under the image, so the fill never goes transparent if a host strips
+ * background-image. */
+.myui-slider--tone-spectrum .myui-slider__fill {
+  @include myui-spectrum-fill;
+}
+
+/* A vertical bar cannot carry the 100deg diagonal: the ramp would spread across
+ * 8px of width and land as three flat stripes. Swap to the 180deg twin, which
+ * runs along the only axis a vertical slider has.
+ *
+ * `:where()` holds this at the same specificity as the rule above (the repo uses
+ * the same trick in reset.scss), so it wins on source order alone and the
+ * disabled rule further down can still override it without a duplicate rule. */
+.myui-slider--tone-spectrum:where(.myui-slider--vertical) .myui-slider__fill {
+  background-image: var(--myui-gradient-spectrum-vertical);
+}
+
 .myui-slider--dragging .myui-slider__fill {
   /* While a finger is down the thumb is the animation; the fill snaps. */
   transition: none;
 }
 
-/* --- thumb ------------------------------------------------------------------ */
+/* --- thumb ------------------------------------------------------------------
+ * Every transform below composes `var(--myui-shear)` — the base rule, hover,
+ * active, both vertical variants and both reduced-motion overrides. That is the
+ * whole reason the shear is a custom property instead of a literal skewX(): a
+ * transform declaration replaces the previous one wholesale, so a rule that
+ * forgot the shear would silently square the handle back up in exactly one
+ * state. The reduced-motion block is the easiest one to forget and the most
+ * visible, because the users who see it are the ones with animation off.
+ * -------------------------------------------------------------------------- */
 .myui-slider__thumb {
   @include myui-control-reset;
   @include myui-focus-ring;
@@ -75,7 +106,7 @@
   justify-content: center;
   width: var(--myui-space-5);
   height: var(--myui-space-5);
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%) var(--myui-shear);
   border: var(--myui-border-width) solid var(--myui-color-line);
   border-radius: var(--myui-radius-pill);
   background-color: var(--myui-color-surface);
@@ -88,14 +119,40 @@
 
 .myui-slider__thumb:hover,
 .myui-slider__thumb.is-active {
-  transform: translate(-50%, -50%) scale(1.08);
+  transform: translate(-50%, -50%) scale(1.08) var(--myui-shear);
 }
 
 .myui-slider__thumb.is-active {
   box-shadow: none;
 }
 
-/* --- tooltip ---------------------------------------------------------------- */
+/* --- skew -------------------------------------------------------------------
+ * Only the handle turns into a parallelogram; the rail, the line and the fill
+ * stay level. A slanted track would tilt the one thing the user reads the value
+ * against — the drag axis has to stay a straight horizontal (or vertical) rule,
+ * or the pointer position stops mapping onto the number legibly. The handle is
+ * the small movable object, so it can carry the attitude without costing
+ * readability.
+ * -------------------------------------------------------------------------- */
+.myui-slider--skew {
+  @include myui-shear-on;
+}
+
+.myui-slider--skew .myui-slider__thumb {
+  border-radius: var(--myui-radius-none);
+}
+
+/* --- tooltip ----------------------------------------------------------------
+ * The bubble is a child of the thumb, so in the skew form it leans with the
+ * handle instead of being counter-skewed with myui-shear-upright. That is a
+ * deliberate call, measured in the browser: counter-skewing makes the digits
+ * upright but leaves the bubble ~6.7px to the right of the handle's centre (the
+ * shear displaces anything above the handle's origin by distance×tan(12°), and
+ * the upright mixin cannot cancel that without knowing the bubble's own height).
+ * A leaning bubble that sits dead centre over a leaning handle reads as one
+ * shape; an upright bubble that sits visibly off-centre reads as a bug. If the
+ * text ever has to be upright, the anchor has to be corrected too.
+ * -------------------------------------------------------------------------- */
 .myui-slider__tooltip {
   position: absolute;
   bottom: calc(100% + var(--myui-space-2));
@@ -199,12 +256,12 @@
 .myui-slider--vertical .myui-slider__thumb {
   top: auto;
   left: 50%;
-  transform: translate(-50%, 50%);
+  transform: translate(-50%, 50%) var(--myui-shear);
 }
 
 .myui-slider--vertical .myui-slider__thumb:hover,
 .myui-slider--vertical .myui-slider__thumb.is-active {
-  transform: translate(-50%, 50%) scale(1.08);
+  transform: translate(-50%, 50%) scale(1.08) var(--myui-shear);
 }
 
 .myui-slider--vertical .myui-slider__tooltip {
@@ -233,6 +290,10 @@
 
 .myui-slider--disabled .myui-slider__fill {
   background-color: var(--myui-color-text-faint);
+  /* Muted beats tone: a disabled slider is a flat rule, never a gradient. The
+   * state rules sit below the tone rules on purpose — same specificity, so
+   * falling later in the file is what lets them win. */
+  background-image: none;
 }
 
 .myui-slider--disabled .myui-slider__thumb {
@@ -260,11 +321,11 @@
 
   .myui-slider__thumb:hover,
   .myui-slider__thumb.is-active {
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%) var(--myui-shear);
   }
 
   .myui-slider--vertical .myui-slider__thumb:hover,
   .myui-slider--vertical .myui-slider__thumb.is-active {
-    transform: translate(-50%, 50%);
+    transform: translate(-50%, 50%) var(--myui-shear);
   }
 }

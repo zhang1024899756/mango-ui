@@ -81,6 +81,70 @@
   }
 }
 
+/* -----------------------------------------------------------------------------
+ * Shear — the diagonal form.
+ * -----------------------------------------------------------------------------
+ * The skew is carried in a custom property instead of being written into
+ * `transform:` directly, for one reason: components already animate `transform`
+ * on hover, press and drag. A component that wrote `transform: skewX(-12deg)`
+ * would have to rewrite every one of those rules as
+ * `skewX(-12deg) translateY(-1px)`, and the next state added would be forgotten.
+ * Instead:
+ *
+ *   base rule      transform: var(--myui-shear);
+ *   hover rule     transform: var(--myui-shear) translateY(-1px);
+ *   skew modifier  --myui-shear: skewX(var(--myui-skew-angle));
+ *
+ * Every state keeps working and only the modifier knows the shape exists.
+ * -------------------------------------------------------------------------- */
+
+/// Declare the shear slot on a root. Always emitted, so `transform: var(--myui-shear)`
+/// is valid even when the component is not skewed (identity).
+@mixin myui-shear-slot {
+  --myui-shear: skewX(0deg);
+}
+
+/// Turn the slot on. Use from a `--skew` modifier class only.
+@mixin myui-shear-on {
+  --myui-shear: skewX(var(--myui-skew-angle));
+}
+
+/// Undo the shear on a label that has to stay horizontal inside a sheared box.
+/// Components that put text *inside* a skewed surface use this on the payload;
+/// pure-text components never need it, because they are the text.
+@mixin myui-shear-upright {
+  transform: skewX(calc(var(--myui-skew-angle) * -1));
+}
+
+/* -----------------------------------------------------------------------------
+ * Spectrum — the multi-colour form.
+ * -------------------------------------------------------------------------- */
+
+/// Paint a surface with the signature gradient. A flat `background-color` is
+/// always emitted first: a consumer that overrides `background-image` then still
+/// gets a usable surface instead of a transparent hole.
+@mixin myui-spectrum-fill {
+  background-color: var(--myui-color-neon-cyan);
+  background-image: var(--myui-gradient-spectrum);
+}
+
+/// Paint glyphs with the gradient.
+/// `color` sits *outside* the @supports block on purpose: a browser without
+/// `background-clip: text` must fall back to a solid neon tint, never to
+/// invisible text — `-webkit-text-fill-color: transparent` alone would do
+/// exactly that, which is the classic gradient-text accessibility bug.
+@mixin myui-spectrum-text {
+  color: var(--myui-color-neon-cyan-text);
+
+  @supports (background-clip: text) or (-webkit-background-clip: text) {
+    background-image: var(--myui-gradient-spectrum);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: var(--myui-color-neon-cyan-text);
+  }
+}
+
 /// Uppercase micro-caps used for labels and meta rows.
 @mixin myui-eyebrow {
   font-family: var(--myui-font-body);

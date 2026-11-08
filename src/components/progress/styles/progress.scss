@@ -143,6 +143,18 @@
   color: var(--myui-color-text);
 }
 
+/* --- shear: the bar only ----------------------------------------------------
+ * The bar is a rectangle, so it can lean: the track and — because it is a child
+ * of the track — the fill lean together, and the percentage label beside it
+ * stays upright. The ring is a measuring device drawn with an SVG stroke;
+ * shearing it turns a circle into a wobbling ellipse with a varying stroke
+ * width, so `skew` is deliberately a bar-only form.
+ * -------------------------------------------------------------------------- */
+.myui-progress--line.myui-progress--skew .myui-progress__track {
+  @include myui-shear-on;
+  transform: var(--myui-shear);
+}
+
 /* --- tones ------------------------------------------------------------------ */
 .myui-progress--tone-ink {
   --myui-progress-tone: var(--myui-color-text);
@@ -158,6 +170,28 @@
 
 .myui-progress--tone-danger {
   --myui-progress-tone: var(--myui-color-danger);
+}
+
+/* --- tone: spectrum ---------------------------------------------------------
+ * The bar carries the gradient. The indeterminate stripe keeps its tread by
+ * layering the repeating gradient *over* the spectrum instead of replacing it,
+ * and the ring's gradient is an SVG paint server declared in the template — a
+ * CSS gradient cannot fill a stroke.
+ * -------------------------------------------------------------------------- */
+.myui-progress--tone-spectrum .myui-progress__fill {
+  @include myui-spectrum-fill;
+}
+
+.myui-progress--tone-spectrum .myui-progress__sweep {
+  background-image:
+    repeating-linear-gradient(
+      45deg,
+      rgba(0, 0, 0, 0.16) 0,
+      rgba(0, 0, 0, 0.16) 6px,
+      transparent 6px,
+      transparent 12px
+    ),
+    var(--myui-gradient-spectrum);
 }
 
 /* --- indeterminate ---------------------------------------------------------- */

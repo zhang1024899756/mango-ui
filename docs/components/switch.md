@@ -111,6 +111,60 @@ const nightMode = ref(false)
 <MyuiSwitch disabled :model-value="true" />
 ```
 
+## 斜切形态
+
+`skew` 把胶囊换成平行四边形：轨道去掉圆角再整体剪切，滑块跟着轨道一起斜。滑块不需要（也不应该）再斜一次——它本来就在轨道内部，继承的是同一套坐标系，再写一次 `skewX` 会把 12° 叠成 24°。
+
+行程也不用改：`--myui-switch-travel` 是在轨道的本地坐标里算出来的，而 `skewX` 只是把每一行横向平移，所以开、关两端仍旧贴齐内沿，3px 内边距也还是 3px。
+
+::: demo
+<div class="demo-row" style="gap:var(--myui-space-4)">
+  <MyuiSwitch v-model="nightMode" skew />
+  <MyuiSwitch v-model="onSale" skew />
+  <MyuiSwitch v-model="large" skew size="sm" />
+</div>
+:::
+
+```vue
+<MyuiSwitch v-model="off" skew />
+<MyuiSwitch v-model="on" skew />
+<MyuiSwitch v-model="on" skew size="sm" />
+```
+
+剪切的代价是视觉宽度：宽 × 高剪切 12° 之后，包围盒会多出 `轨道高 × tan(12°)`（`md` 约 7px，左右各 3.4px）。布局盒没变，多出来的部分靠 `overflow: visible` 画出去；也因为这样，根节点不能裁切，否则滑块角上会被削掉。旁边的文字标签不受影响——剪切只发生在轨道上。
+
+## 渐变形态
+
+`tone="spectrum"` 只换**打开时**的轨道：关着的时候还是深空色槽。滑块永远保持 surface 色，它是载荷，不是信号。
+
+禁用优先于色调：`disabled` 状态下渐变会被强制压成 muted 平色，禁用控件不该还在发亮。
+
+::: demo
+<div class="demo-row">
+  <MyuiSwitch v-model="nightMode" tone="spectrum" />
+  <MyuiSwitch v-model="onSale" tone="spectrum" />
+  <MyuiSwitch :model-value="true" tone="spectrum" disabled />
+</div>
+:::
+
+```vue
+<MyuiSwitch v-model="on" tone="spectrum" />
+<MyuiSwitch v-model="on" tone="spectrum" disabled />
+```
+
+两种形态互不干扰，可以直接叠：
+
+::: demo
+<div class="demo-row">
+  <MyuiSwitch v-model="onSale" skew tone="spectrum" />
+  <MyuiSwitch v-model="nightMode" skew tone="spectrum" active-text="ON" inactive-text="OFF" />
+</div>
+:::
+
+```vue
+<MyuiSwitch v-model="on" skew tone="spectrum" />
+```
+
 ## Props
 
 | 属性 | 类型 | 默认值 | 说明 |
@@ -123,6 +177,8 @@ const nightMode = ref(false)
 | `loading` | `boolean` | `false` | 加载中，同时挡住交互 |
 | `activeText` | `string` | `''` | 打开时的文案，同时作为可访问名称 |
 | `inactiveText` | `string` | `''` | 关闭时的文案，同时作为可访问名称 |
+| `skew` | `boolean` | `false` | 斜切形态：平行四边形轨道与滑块 |
+| `tone` | `'accent' \| 'spectrum'` | `'accent'` | 打开时轨道的颜色：动作色，或系统渐变 |
 
 ## 事件
 

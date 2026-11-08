@@ -12,6 +12,7 @@ const props = withDefaults(defineProps<LinkProps>(), {
   underline: 'hover',
   external: false,
   disabled: false,
+  skew: false,
 })
 
 const emit = defineEmits<{
@@ -29,11 +30,21 @@ const anchorRel = computed(() =>
   isExternal.value ? (props.rel ?? 'noreferrer noopener') : props.rel,
 )
 
+/**
+ * The gradient is a *paint*, not a state: an inert link never wears one, so the
+ * resolved flag is reported to CSS instead of leaving the cascade to guess.
+ */
+const paintsSpectrum = computed(() => props.tone === 'spectrum' && !props.disabled)
+
 const classes = computed(() => [
   'myui-link',
   `myui-link--tone-${props.tone}`,
   `myui-link--underline-${props.underline}`,
-  { 'is-disabled': props.disabled, 'myui-link--external': isExternal.value },
+  {
+    'is-disabled': props.disabled,
+    'myui-link--external': isExternal.value,
+    'myui-link--skew': props.skew,
+  },
 ])
 
 function onClick(event: MouseEvent) {
@@ -54,6 +65,7 @@ function onClick(event: MouseEvent) {
     :rel="anchorRel"
     :tabindex="disabled ? -1 : undefined"
     :aria-disabled="disabled ? 'true' : undefined"
+    :data-spectrum="paintsSpectrum ? 'true' : undefined"
     @click="onClick"
   >
     <span class="myui-link__label"><slot /></span>

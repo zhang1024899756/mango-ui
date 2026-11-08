@@ -42,7 +42,7 @@ const drop = ref('')
 
 ## 线条形态
 
-`variant="line"` 去掉石板，只留一条底线。聚焦时底线变成朱红。
+`variant="line"` 去掉石板，只留一条底线。聚焦时底线变成强调色（电光青）。
 
 ::: demo
 <div class="demo-stack" style="width:360px">

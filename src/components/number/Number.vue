@@ -16,6 +16,7 @@ const props = withDefaults(defineProps<NumberProps>(), {
   duration: 600,
   size: 'md',
   tone: 'ink',
+  skew: false,
 })
 
 /** Reading it from globalThis keeps the check testable and SSR-safe. */
@@ -130,6 +131,7 @@ const classes = computed(() => [
   'myui-number',
   `myui-number--${props.size}`,
   `myui-number--tone-${props.tone}`,
+  { 'myui-number--skew': props.skew },
 ])
 </script>
 

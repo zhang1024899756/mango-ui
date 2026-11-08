@@ -26,7 +26,8 @@ title: 赛博朋克 · 数字穿越的 Vue 3 组件库
     <a class="poster__card" :href="withBase('/components/neon')">
       <div class="poster__card-title">特效组件</div>
       <div class="poster__card-desc">
-        <code>Neon</code> 霓虹灯管、<code>Flotage</code> 失重漂浮。套在按钮、图片、整块卡片外面就能生效。
+        <code>Neon</code> 霓虹灯管、<code>Flotage</code> 失重漂浮、<code>GlitchRipple</code> 故障波纹。
+        套在按钮、图片、整块卡片外面就能生效。
       </div>
     </a>
     <a class="poster__card" :href="withBase('/components/text')">
@@ -55,7 +56,7 @@ title: 赛博朋克 · 数字穿越的 Vue 3 组件库
       <div class="poster__card">
         <div class="poster__card-title">Neon</div>
         <div class="poster__fx">
-          <MyuiNeon :intensity="0.7">
+          <MyuiNeon :intensity="0.7" motion-preference="always">
             <span class="poster__fx-word">NEON</span>
           </MyuiNeon>
         </div>
@@ -71,10 +72,19 @@ title: 赛博朋克 · 数字穿越的 Vue 3 组件库
         <div class="poster__card-desc">持续失重，可轴向、可 hover 触发、可关闭。</div>
       </div>
       <div class="poster__card">
+        <div class="poster__card-title">GlitchRipple</div>
+        <div class="poster__fx">
+          <MyuiGlitchRipple intensity="normal" motion-preference="always">
+            <span class="poster__fx-word">SIGNAL</span>
+          </MyuiGlitchRipple>
+        </div>
+        <div class="poster__card-desc">信号守不住的波纹：噪声场把内容逐像素位移，水平条带缓缓流过。</div>
+      </div>
+      <div class="poster__card">
         <div class="poster__card-title">组合</div>
         <div class="poster__fx">
           <MyuiFlotage :amplitude="12" :duration="3.2" motion-preference="always">
-            <MyuiNeon mode="flicker" :intensity="0.55">
+            <MyuiNeon mode="flicker" :intensity="0.55" motion-preference="always">
               <MyuiButton size="lg">限量发售</MyuiButton>
             </MyuiNeon>
           </MyuiFlotage>
@@ -101,6 +111,13 @@ title: 赛博朋克 · 数字穿越的 Vue 3 组件库
         </MyuiButton>
         <MyuiButton variant="ghost" tone="accent">GHOST</MyuiButton>
         <MyuiButton variant="text">TEXT LINK</MyuiButton>
+      </div>
+      <div class="poster__stage-row">
+        <MyuiButton skew>斜切按钮</MyuiButton>
+        <MyuiButton tone="spectrum" skew>斜切 + 渐变</MyuiButton>
+        <MyuiTag tone="spectrum" variant="solid" skew>SPECTRUM</MyuiTag>
+        <MyuiTag tone="spectrum">GRADIENT</MyuiTag>
+        <MyuiProgress :percent="58" tone="spectrum" skew label="渐变进度" style="max-width: 220px" />
       </div>
       <div class="poster__stage-row">
         <MyuiTag variant="solid" tone="accent">NEW DROP</MyuiTag>
@@ -161,6 +178,8 @@ title: 赛博朋克 · 数字穿越的 Vue 3 组件库
     <p class="poster__lead">
       深空近黑打底、1px 霓虹发丝线、<strong>只有一个</strong>电光青作为行动色，
       品红只做信号。辉光即层级、圆角为零、动效短促不发弹。
+      彩色是<strong>形体</strong>而不是底色：<code>tone="spectrum"</code> 与 <code>skew</code>
+      是可选的表达层，一次只让一个元素说话。
       所有数值都是 CSS 变量；系统开了「减弱动态效果」时动画会停下，
       但霓虹的静态辉光留着 —— 特效不会变成一片普通内容。
     </p>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, useId } from 'vue'
 import type { ProgressProps } from './types'
 
 defineOptions({
@@ -13,6 +13,7 @@ const props = withDefaults(defineProps<ProgressProps>(), {
   size: 'md',
   showText: true,
   indeterminate: false,
+  skew: false,
 })
 
 const RADIUS = 42
@@ -32,8 +33,18 @@ const classes = computed(() => [
   `myui-progress--${props.type}`,
   `myui-progress--${props.size}`,
   `myui-progress--tone-${props.tone}`,
-  { 'myui-progress--indeterminate': props.indeterminate },
+  { 'myui-progress--indeterminate': props.indeterminate, 'myui-progress--skew': props.skew },
 ])
+
+/**
+ * A CSS gradient cannot paint an SVG stroke, so the spectrum ring needs a real
+ * <linearGradient>. Its id has to be unique per instance or two rings on a page
+ * would share the first one's definition.
+ */
+const gradientId = `myui-progress-spectrum-${useId().replace(/[^\w-]/g, '')}`
+
+const isSpectrum = computed(() => props.tone === 'spectrum')
+const hasRingGradient = computed(() => props.type === 'circle' && isSpectrum.value)
 
 const fillStyle = computed(() => ({ width: `${clamped.value}%` }))
 
@@ -41,6 +52,14 @@ const ringStyle = computed(() => ({
   strokeDasharray: `${CIRCUMFERENCE} ${CIRCUMFERENCE}`,
   strokeDashoffset: `${CIRCUMFERENCE * (1 - clamped.value / 100)}`,
 }))
+
+/** The spectrum ring swaps the inline stroke for a paint server; the dash maths
+ *  is unchanged, so the fill still reads the same percentage. */
+const ringFillStyle = computed(() => {
+  const style: Record<string, string> = { ...ringStyle.value }
+  if (hasRingGradient.value) style.stroke = `url(#${gradientId})`
+  return style
+})
 
 const displayText = computed(() => (props.indeterminate ? '—' : `${rounded.value}%`))
 </script>
@@ -77,6 +96,13 @@ const displayText = computed(() => (props.indeterminate ? '—' : `${rounded.val
           :aria-valuenow="indeterminate ? undefined : rounded"
           :aria-valuetext="indeterminate ? undefined : displayText"
         >
+          <defs v-if="hasRingGradient">
+            <linearGradient :id="gradientId" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" style="stop-color: var(--myui-color-neon-cyan)" />
+              <stop offset="52%" style="stop-color: var(--myui-color-neon-violet)" />
+              <stop offset="100%" style="stop-color: var(--myui-color-neon-magenta)" />
+            </linearGradient>
+          </defs>
           <circle class="myui-progress__ring-track" cx="50" cy="50" :r="RADIUS" />
           <circle
             v-if="!indeterminate"
@@ -84,7 +110,7 @@ const displayText = computed(() => (props.indeterminate ? '—' : `${rounded.val
             cx="50"
             cy="50"
             :r="RADIUS"
-            :style="ringStyle"
+            :style="ringFillStyle"
           />
         </svg>
         <span v-if="showText" class="myui-progress__ring-text">{{ displayText }}</span>

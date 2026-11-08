@@ -26,7 +26,8 @@ const meta = {
     animated: { control: 'boolean' },
     duration: { control: { type: 'number', min: 100, max: 3000, step: 100 } },
     size: { control: 'inline-radio', options: ['sm', 'md', 'lg', 'xl'] },
-    tone: { control: 'inline-radio', options: ['ink', 'accent', 'success', 'danger'] },
+    tone: { control: 'inline-radio', options: ['ink', 'accent', 'success', 'danger', 'spectrum'] },
+    skew: { control: 'boolean' },
   },
   args: {
     value: 128600,
@@ -36,6 +37,7 @@ const meta = {
     duration: 600,
     size: 'md',
     tone: 'ink',
+    skew: false,
   },
 } satisfies Meta<typeof MyuiNumber>
 
@@ -81,6 +83,39 @@ export const Tones: Story = {
         <myui-number v-bind="args" tone="accent" />
         <myui-number v-bind="args" tone="success" />
         <myui-number v-bind="args" tone="danger" />
+        <myui-number v-bind="args" tone="spectrum" />
+      </div>
+    `,
+  }),
+}
+
+export const Skew: Story = {
+  name: 'Skewed figures',
+  args: { skew: true },
+  render: (args) => ({
+    components: { MyuiNumber },
+    setup: () => ({ args }),
+    template: `
+      <div style="display:flex; gap:var(--myui-space-6); align-items:baseline; flex-wrap:wrap">
+        <myui-number v-bind="args" size="lg" />
+        <myui-number v-bind="args" size="lg" trend="up" />
+        <myui-number v-bind="args" size="lg" prefix="¥" suffix="+12%" />
+      </div>
+    `,
+  }),
+}
+
+export const Spectrum: Story = {
+  name: 'Spectrum figures',
+  args: { tone: 'spectrum' },
+  render: (args) => ({
+    components: { MyuiNumber },
+    setup: () => ({ args }),
+    template: `
+      <div style="display:flex; gap:var(--myui-space-6); align-items:baseline; flex-wrap:wrap">
+        <myui-number v-bind="args" size="lg" />
+        <myui-number v-bind="args" size="lg" trend="up" />
+        <myui-number v-bind="args" size="lg" prefix="¥" suffix="+12%" skew />
       </div>
     `,
   }),

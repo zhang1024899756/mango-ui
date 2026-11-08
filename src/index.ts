@@ -22,14 +22,16 @@ import { MyuiSwitch } from './components/switch'
 import { MyuiTag } from './components/tag'
 import { MyuiText } from './components/text'
 import { MyuiFlotage } from './effects/flotage'
+import { MyuiGlitchRipple } from './effects/glitch-ripple'
 import { MyuiNeon } from './effects/neon'
 
-export const version = '2.1.0'
+export const version = '2.2.0'
 
 const components: Plugin[] = [
   // effects — wrap anything, add attitude
   MyuiNeon,
   MyuiFlotage,
+  MyuiGlitchRipple,
   // elements
   MyuiButton,
   MyuiIcon,
@@ -67,6 +69,7 @@ export {
   MyuiTag,
   MyuiText,
   MyuiFlotage,
+  MyuiGlitchRipple,
   MyuiNeon,
 }
 
@@ -97,7 +100,7 @@ export type { ProgressProps, ProgressType, ProgressTone, ProgressSize } from './
 
 export type { SliderProps, SliderTone, SliderValue } from './components/slider'
 
-export type { SwitchProps, SwitchSize, SwitchValue } from './components/switch'
+export type { SwitchProps, SwitchSize, SwitchValue, SwitchTone } from './components/switch'
 
 export type { TagProps, TagTone, TagVariant, TagSize, TagShape } from './components/tag'
 
@@ -121,5 +124,13 @@ export type {
 } from './effects/flotage'
 
 export type { NeonProps, NeonMode, NeonSpeed } from './effects/neon'
+
+export type {
+  GlitchRippleProps,
+  GlitchRippleIntensity,
+  GlitchRippleSpeed,
+  GlitchRippleTrigger,
+  GlitchRippleMotionPreference,
+} from './effects/glitch-ripple'
 
 export default MangoUI

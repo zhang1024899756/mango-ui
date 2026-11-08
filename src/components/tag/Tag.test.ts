@@ -62,4 +62,28 @@ describe('MyuiTag', () => {
     expect(wrapper.attributes('data-closable')).toBe('true')
     expect(wrapper.classes()).toContain('myui-tag--closable')
   })
+
+  it('adds the skew form class only when asked', () => {
+    expect(mount(Tag, { props: { skew: true } }).classes()).toContain('myui-tag--skew')
+    expect(mount(Tag).classes()).not.toContain('myui-tag--skew')
+  })
+
+  it('accepts spectrum as a tone and keeps neutral as the default', () => {
+    expect(mount(Tag, { props: { tone: 'spectrum' } }).classes()).toContain(
+      'myui-tag--tone-spectrum',
+    )
+    expect(mount(Tag).classes()).toContain('myui-tag--tone-neutral')
+  })
+
+  it('composes the skew form with a closable spectrum tag', () => {
+    const wrapper = mount(Tag, {
+      props: { skew: true, tone: 'spectrum', variant: 'solid', closable: true },
+    })
+    const classes = wrapper.classes()
+
+    expect(classes).toContain('myui-tag--skew')
+    expect(classes).toContain('myui-tag--tone-spectrum')
+    expect(classes).toContain('myui-tag--solid')
+    expect(wrapper.find('.myui-tag__close').exists()).toBe(true)
+  })
 })

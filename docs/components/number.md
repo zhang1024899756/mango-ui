@@ -41,7 +41,7 @@ description: 终端大屏上的数字，等宽排版，可选的滚动计数。
 
 ## 语义色
 
-`tone` 只有四档，而且只在语义真的成立时才用。
+`tone` 有语义四档，外加一个表达档 `spectrum`（渐变，见下面的「渐变形态」）。语义色只在语义真的成立时才用。
 
 ::: demo
 <div class="demo-row" style="align-items:baseline">
@@ -54,6 +54,44 @@ description: 终端大屏上的数字，等宽排版，可选的滚动计数。
 
 ```vue
 <MyuiNumber :value="128600" tone="accent" />
+```
+
+## 斜切形态
+
+`skew` 斜的是整块数字：字形、前后缀、趋势箭头一起走同一个 `--myui-skew-angle`（-12deg），因为它们本来就在同一行里。
+
+箭头不会被翻转，也不会被压扁——方向一直由箭头本身的形状表达（没有用 `scaleX(-1)` 镜像），倾斜只是把整行一起推斜。
+
+::: demo
+<div class="demo-row" style="align-items:baseline">
+<MyuiNumber :value="128600" size="lg" skew />
+<MyuiNumber :value="128600" size="lg" skew trend="up" />
+<MyuiNumber :value="499" prefix="¥" suffix="+12%" size="lg" skew />
+</div>
+:::
+
+```vue
+<MyuiNumber :value="128600" size="lg" skew />
+<MyuiNumber :value="128600" size="lg" skew trend="up" />
+```
+
+## 渐变形态
+
+`tone="spectrum"` 给**数字字形**刷上青 → 蓝 → 紫 → 品红的渐变，前后缀保持它们原本的次级实心色（前缀是符号，不是主角）。
+
+趋势箭头在渐变下回到字色的实心档，不再用绿/红：六个 pigments 旁边再掺一个语义色，看起来像 bug。方向仍然由形状和 `data-trend` 表达，不依赖颜色。
+
+::: demo
+<div class="demo-row" style="align-items:baseline">
+<MyuiNumber :value="48291" size="lg" tone="spectrum" />
+<MyuiNumber :value="48291" size="lg" tone="spectrum" trend="down" />
+<MyuiNumber :value="499" prefix="¥" suffix="+12%" size="lg" tone="spectrum" skew />
+</div>
+:::
+
+```vue
+<MyuiNumber :value="48291" size="lg" tone="spectrum" />
+<MyuiNumber :value="499" prefix="¥" suffix="+12%" size="lg" tone="spectrum" skew />
 ```
 
 ## 精度与分隔符
@@ -134,7 +172,8 @@ description: 终端大屏上的数字，等宽排版，可选的滚动计数。
 | `animated` | `boolean` | `false` | 滚动计数 |
 | `duration` | `number` | `600` | 计数时长（毫秒） |
 | `size` | `'sm' \| 'md' \| 'lg' \| 'xl'` | `'md'` | 字号档位 |
-| `tone` | `'ink' \| 'accent' \| 'success' \| 'danger'` | `'ink'` | 语义色 |
+| `tone` | `'ink' \| 'accent' \| 'success' \| 'danger' \| 'spectrum'` | `'ink'` | 语义色；`spectrum` 为渐变形态 |
+| `skew` | `boolean` | `false` | 斜切整块数字（含前后缀与箭头），角度取 `--myui-skew-angle` |
 
 ## 可访问性
 

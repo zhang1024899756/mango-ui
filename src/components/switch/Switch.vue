@@ -13,6 +13,8 @@ const props = withDefaults(defineProps<SwitchProps>(), {
   loading: false,
   activeText: '',
   inactiveText: '',
+  skew: false,
+  tone: 'accent',
 })
 
 const emit = defineEmits<{
@@ -39,11 +41,13 @@ const currentText = computed(() => (isActive.value ? props.activeText : props.in
 const classes = computed(() => [
   'myui-switch',
   `myui-switch--${props.size}`,
+  `myui-switch--tone-${props.tone}`,
   {
     'myui-switch--checked': isActive.value,
     'myui-switch--disabled': props.disabled,
     'myui-switch--loading': props.loading,
     'myui-switch--with-text': hasText.value,
+    'myui-switch--skew': props.skew,
   },
 ])
 

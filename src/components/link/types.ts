@@ -1,10 +1,13 @@
-export type LinkTone = 'ink' | 'accent' | 'muted'
+export type LinkTone = 'ink' | 'accent' | 'muted' | 'spectrum'
 export type LinkUnderline = 'always' | 'hover' | 'none'
 
 export interface LinkProps {
   /** Where the link goes. Without it the anchor is inert but still focusable-shaped. */
   href?: string
-  /** Colour of the text. `accent` is reserved for links that leave the page. */
+  /**
+   * Colour of the text. `accent` is reserved for links that leave the page;
+   * `spectrum` is the multi-colour form, and an inert (`disabled`) link drops it.
+   */
   tone?: LinkTone
   /** `hover` reserves the underline space so the line never shifts the layout. */
   underline?: LinkUnderline
@@ -20,4 +23,10 @@ export interface LinkProps {
   target?: string
   /** Overrides the automatic `noreferrer noopener`. */
   rel?: string
+  /**
+   * Shears the glyphs on the library's one diagonal (`--myui-skew-angle`).
+   * The angle travels through `--myui-shear`, not through an inline
+   * `transform`, so hover and focus states still compose on top of it.
+   */
+  skew?: boolean
 }

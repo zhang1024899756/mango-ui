@@ -2,7 +2,8 @@
 
 /* =============================================================================
  * Switch — a hard-edged pill that snaps between two states.
- * Classes: .myui-switch [+ --sm/--md --checked --disabled --loading --with-text]
+ * Classes: .myui-switch [+ --sm/--md --checked --disabled --loading --with-text
+ *                          --skew --tone-{accent|spectrum}]
  *
  * Track geometry is component-owned: width, height and thumb diameter are not
  * on the token scale, everything inside them is.
@@ -80,6 +81,19 @@
   background-color: var(--myui-color-accent);
 }
 
+/* --- tone -------------------------------------------------------------------
+ * `spectrum` replaces the flat action colour on the *on* state only: an
+ * unselected switch stays a dark slot, because the gradient is a reward for the
+ * active state, not a decoration on every switch on the page. The thumb never
+ * changes tone — it is the payload, the track is the signal.
+ *
+ * The mixin emits a flat background-color underneath the image, so a consumer
+ * that strips background-image still gets a usable track.
+ * -------------------------------------------------------------------------- */
+.myui-switch--tone-spectrum.myui-switch--checked .myui-switch__track {
+  @include myui-spectrum-fill;
+}
+
 /* --- thumb ------------------------------------------------------------------
  * Offsets are padding-box relative, hence --myui-switch-inset rather than the
  * border width: the border already eats into the box the offset is measured
@@ -102,6 +116,50 @@
   transform: translateX(var(--myui-switch-travel));
 }
 
+/* --- skew -------------------------------------------------------------------
+ * The sheared form is a parallelogram, so it drops the pill radius — a rounded
+ * parallelogram reads as a rendering accident rather than a shape. The radius
+ * has to go on the thumb too, otherwise it keeps a pill inside a square box.
+ *
+ * The shear lives on the track and nowhere else. Not on the root: the root is
+ * the button, and its focus ring is drawn from its own untransformed box, so
+ * shearing it would slant the ring and re-aim the hit area off the paint. Not on
+ * the label either: that is text sitting beside the control, and leaning it
+ * would make it look like part of the switch.
+ *
+ * The thumb is deliberately NOT given a second `transform: skewX(...)`. It is a
+ * child of the track, so it is painted inside the track's already-sheared
+ * coordinate space and inherits the lean for free; skewing it again would
+ * compose 12° + 12° into a 24° parallelogram.
+ *
+ * `translateX(var(--myui-switch-travel))` keeps working untouched, and here is
+ * why: the thumb's offset resolves in the track's *local* space, before the
+ * shear is applied. skewX is a pure horizontal shear — it maps (x, y) to
+ * (x - y·tan(12°), y), i.e. a plain translation for every single row y. The
+ * track's right edge and the thumb's right edge are sheared by that same
+ * amount at every y, so a thumb that sits flush against the inside of the track
+ * still sits flush in the sheared form, and the 3px inset stays 3px. No new
+ * geometry constants, no per-variant travel.
+ *
+ * What does change is the painted outline. Shearing a w×h box by 12° widens its
+ * bounding box to w + h·tan(12°) — for md that is 60 + 32×0.213 ≈ 66.8px, so
+ * the shape hangs ≈3.4px past the layout box on each side. `overflow: visible`
+ * is therefore load bearing: clipping here would shave the corners off. The
+ * layout box itself stays 60px, which is why the inline-flex root keeps its own
+ * overflow alone as well, and why the 8px gap to the label is enough to absorb
+ * the overhang without the two ever touching.
+ * -------------------------------------------------------------------------- */
+.myui-switch--skew .myui-switch__track {
+  @include myui-shear-on;
+  transform: var(--myui-shear);
+  border-radius: var(--myui-radius-none);
+  overflow: visible;
+}
+
+.myui-switch--skew .myui-switch__thumb {
+  border-radius: var(--myui-radius-none);
+}
+
 /* --- label ------------------------------------------------------------------ */
 .myui-switch__label {
   @include myui-eyebrow;
@@ -120,6 +178,10 @@
 
 .myui-switch--disabled.myui-switch--checked .myui-switch__track {
   background-color: var(--myui-color-surface-deep);
+  /* Muted beats tone: a disabled switch never advertises the spectrum form, so
+   * the gradient has to be switched off explicitly — background-color alone
+   * would leave the image sitting on top of it. */
+  background-image: none;
 }
 
 .myui-switch--disabled .myui-switch__thumb {

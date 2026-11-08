@@ -99,14 +99,45 @@ description: HUD 式微标——等宽大写、字距拉开、1px 发丝线。�
 </div>
 :::
 
+## 斜切形态
+
+`skew` 让这一枚印章斜贴在页面上：整个标签（含关闭按钮）随 `--myui-skew-angle` 倾斜，
+字形一起斜。斜切会让视觉外框比布局框略宽，成排使用时留够间隔。
+
+::: demo
+<div class="demo-row">
+<MyuiTag skew tone="accent">NEW DROP</MyuiTag>
+<MyuiTag skew tone="accent" variant="solid">HOT</MyuiTag>
+<MyuiTag skew tone="danger">!!</MyuiTag>
+<MyuiTag skew tone="ink" variant="solid">SS26</MyuiTag>
+</div>
+:::
+
+## 渐变形态
+
+`tone="spectrum"` 把标签刷成多色：`solid` 填充渐变并接深色字，`outline` 让 1px 描边
+与字形同时走渐变，`ghost` 在紫色薄雾上留渐变字。
+
+`active` 筛选态优先于它：状态必须一眼可读，不能靠辨色。
+
+::: demo
+<div class="demo-row">
+<MyuiTag tone="spectrum" variant="solid">SPECTRUM</MyuiTag>
+<MyuiTag tone="spectrum">SPECTRUM</MyuiTag>
+<MyuiTag tone="spectrum" variant="ghost">SPECTRUM</MyuiTag>
+<MyuiTag tone="spectrum" skew>斜切 + 渐变</MyuiTag>
+</div>
+:::
+
 ## Props
 
 | 属性 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| `tone` | `'neutral' \| 'accent' \| 'success' \| 'warning' \| 'danger' \| 'info' \| 'ink'` | `'neutral'` | 语义色 |
+| `tone` | `'neutral' \| 'accent' \| 'success' \| 'warning' \| 'danger' \| 'info' \| 'ink' \| 'spectrum'` | `'neutral'` | 语义色；`spectrum` 是多色渐变形态 |
 | `variant` | `'solid' \| 'outline' \| 'ghost'` | `'outline'` | 视觉权重 |
 | `size` | `'sm' \| 'md'` | `'sm'` | 尺寸 |
 | `shape` | `'rect' \| 'pill'` | `'rect'` | 方角或胶囊 |
+| `skew` | `boolean` | `false` | 斜切形态（标签与字形一起倾斜） |
 | `closable` | `boolean` | `false` | 显示关闭按钮 |
 | `active` | `boolean` | `false` | 筛选选中态 |
 
