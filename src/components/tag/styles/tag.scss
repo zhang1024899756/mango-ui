@@ -1,0 +1,197 @@
+@use '../../../styles/mixins.scss' as *;
+
+/* =============================================================================
+ * Tag — a stamp on the poster. Small, hard-edged, unapologetic.
+ * ========================================================================== */
+
+.myui-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--myui-space-1);
+  border: var(--myui-border-width) solid transparent;
+  border-radius: var(--myui-radius-none);
+  font-family: var(--myui-font-body);
+  font-weight: var(--myui-weight-bold);
+  line-height: 1;
+  letter-spacing: var(--myui-tracking-wide);
+  text-transform: uppercase;
+  white-space: nowrap;
+  vertical-align: middle;
+  user-select: none;
+}
+
+.myui-tag--pill {
+  border-radius: var(--myui-radius-pill);
+}
+
+/* --- sizes ----------------------------------------------------------------- */
+.myui-tag--sm {
+  min-height: 22px;
+  padding: 0 var(--myui-space-2);
+  font-size: var(--myui-text-xs);
+}
+
+.myui-tag--md {
+  min-height: 28px;
+  padding: 0 var(--myui-space-3);
+  font-size: var(--myui-text-xs);
+}
+
+.myui-tag--closable.myui-tag--sm {
+  padding-right: var(--myui-space-1);
+}
+
+.myui-tag--closable.myui-tag--md {
+  padding-right: var(--myui-space-2);
+}
+
+.myui-tag__label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--myui-space-1);
+}
+
+/* --- tones: outline (default) ---------------------------------------------- */
+.myui-tag--outline {
+  background-color: transparent;
+  border-color: var(--myui-color-line);
+  color: var(--myui-color-text);
+}
+
+.myui-tag--outline.myui-tag--tone-neutral {
+  border-color: var(--myui-color-line-soft);
+  color: var(--myui-color-text-soft);
+}
+
+.myui-tag--outline.myui-tag--tone-accent {
+  border-color: var(--myui-color-accent);
+  color: var(--myui-color-accent-text);
+}
+
+.myui-tag--outline.myui-tag--tone-success {
+  border-color: var(--myui-color-success);
+  color: var(--myui-color-success);
+}
+
+.myui-tag--outline.myui-tag--tone-warning {
+  border-color: var(--myui-color-warning);
+  color: var(--myui-color-warning);
+}
+
+.myui-tag--outline.myui-tag--tone-danger {
+  border-color: var(--myui-color-danger);
+  color: var(--myui-color-danger);
+}
+
+.myui-tag--outline.myui-tag--tone-info {
+  border-color: var(--myui-color-info);
+  color: var(--myui-color-info);
+}
+
+/* --- tones: solid ----------------------------------------------------------- */
+.myui-tag--solid {
+  border-color: var(--myui-color-line);
+  background-color: var(--myui-color-text);
+  color: var(--myui-color-bg);
+}
+
+.myui-tag--solid.myui-tag--tone-neutral {
+  background-color: var(--myui-color-surface-deep);
+  color: var(--myui-color-text);
+}
+
+.myui-tag--solid.myui-tag--tone-accent {
+  background-color: var(--myui-color-accent);
+  color: var(--myui-color-accent-ink);
+}
+
+.myui-tag--solid.myui-tag--tone-success {
+  background-color: var(--myui-color-success);
+  color: var(--myui-color-bg);
+}
+
+.myui-tag--solid.myui-tag--tone-warning {
+  background-color: var(--myui-color-warning);
+  color: var(--myui-color-bg);
+}
+
+.myui-tag--solid.myui-tag--tone-danger {
+  background-color: var(--myui-color-danger);
+  color: var(--myui-color-bg);
+}
+
+.myui-tag--solid.myui-tag--tone-info {
+  background-color: var(--myui-color-info);
+  color: var(--myui-color-bg);
+}
+
+/* --- tones: ghost ----------------------------------------------------------- */
+.myui-tag--ghost {
+  background-color: var(--myui-color-surface-deep);
+  color: var(--myui-color-text-soft);
+}
+
+.myui-tag--ghost.myui-tag--tone-accent {
+  background-color: var(--myui-color-accent-wash);
+  color: var(--myui-color-accent-text);
+}
+
+.myui-tag--ghost.myui-tag--tone-success {
+  background-color: var(--myui-color-success-wash);
+  color: var(--myui-color-success);
+}
+
+.myui-tag--ghost.myui-tag--tone-warning {
+  background-color: var(--myui-color-warning-wash);
+  color: var(--myui-color-warning);
+}
+
+.myui-tag--ghost.myui-tag--tone-danger {
+  background-color: var(--myui-color-danger-wash);
+  color: var(--myui-color-danger);
+}
+
+.myui-tag--ghost.myui-tag--tone-info {
+  background-color: var(--myui-color-info-wash);
+  color: var(--myui-color-info);
+}
+
+/* --- active filter state ----------------------------------------------------- */
+.myui-tag[data-active='true'] {
+  border-color: var(--myui-color-line);
+  background-color: var(--myui-color-accent);
+  color: var(--myui-color-accent-ink);
+}
+
+/* --- close button ------------------------------------------------------------ */
+.myui-tag__close {
+  @include myui-control-reset;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 16px;
+  height: 16px;
+  flex: none;
+  border-radius: var(--myui-radius-none);
+  opacity: 0.65;
+  transition: opacity var(--myui-duration-fast) var(--myui-ease-snap);
+
+  @include myui-focus-ring-inset;
+
+  &:hover {
+    opacity: 1;
+  }
+
+  /* The glyph stays 16px so the tag keeps its proportions, but the pointer
+   * target grows to the 24px minimum through an invisible overlay. */
+  &::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+  }
+}
+
+.myui-tag--pill .myui-tag__close {
+  border-radius: var(--myui-radius-pill);
+}

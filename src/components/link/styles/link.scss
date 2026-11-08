@@ -1,0 +1,110 @@
+@use '../../../styles/mixins.scss' as *;
+
+/* =============================================================================
+ * Link — an inked underline, not a blue text run.
+ * Classes: .myui-link [--tone-{ink|accent|muted}] [--underline-{always|hover|none}]
+ * ========================================================================== */
+
+.myui-link {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--myui-space-1);
+  max-width: 100%;
+  font-family: var(--myui-font-body);
+  font-weight: var(--myui-weight-medium);
+  line-height: var(--myui-leading-snug);
+  color: var(--myui-color-text);
+  text-decoration-line: underline;
+  text-decoration-color: currentColor;
+  text-decoration-thickness: var(--myui-border-width);
+  text-underline-offset: 3px;
+  cursor: pointer;
+  transition:
+    color var(--myui-duration-fast) var(--myui-ease-snap),
+    text-decoration-color var(--myui-duration-fast) var(--myui-ease-snap);
+
+  @include myui-focus-ring;
+}
+
+.myui-link__label {
+  min-width: 0;
+}
+
+.myui-link__suffix {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  color: var(--myui-color-text-faint);
+}
+
+/* --- tone ------------------------------------------------------------------- */
+.myui-link--tone-ink {
+  color: var(--myui-color-text);
+}
+
+.myui-link--tone-accent {
+  color: var(--myui-color-accent-text);
+}
+
+.myui-link--tone-muted {
+  color: var(--myui-color-text-faint);
+}
+
+.myui-link--tone-ink:hover {
+  color: var(--myui-color-accent-text);
+}
+
+.myui-link--tone-accent:hover {
+  color: var(--myui-color-accent-hover);
+}
+
+.myui-link--tone-muted:hover {
+  color: var(--myui-color-text);
+}
+
+/* --- underline -------------------------------------------------------------- */
+/* The space is reserved either way, so revealing the rule never moves the text. */
+.myui-link--underline-hover {
+  text-decoration-color: transparent;
+}
+
+.myui-link--underline-hover:hover,
+.myui-link--underline-hover:focus-visible {
+  text-decoration-color: currentColor;
+}
+
+.myui-link--underline-none,
+.myui-link--underline-none:hover {
+  text-decoration-line: none;
+}
+
+/* --- external arrow --------------------------------------------------------- */
+.myui-link__arrow {
+  flex: none;
+  align-self: center;
+  width: 0.85em;
+  height: 0.85em;
+  transition: transform var(--myui-duration-fast) var(--myui-ease-snap);
+}
+
+.myui-link--external:hover .myui-link__arrow {
+  transform: translate(0.08em, -0.08em);
+}
+
+/* --- disabled --------------------------------------------------------------- */
+.myui-link[aria-disabled='true'] {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+@include myui-motion-safe {
+  .myui-link,
+  .myui-link__arrow {
+    transition: none;
+  }
+
+  .myui-link--external:hover .myui-link__arrow {
+    transform: none;
+  }
+}

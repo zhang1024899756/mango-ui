@@ -1,0 +1,775 @@
+/* =============================================================================
+ * Mango UI docs — CYBERPUNK / DIGITAL TIME-TRAVEL theme for VitePress
+ * -----------------------------------------------------------------------------
+ * Deep-space ground, a 24px data grid, faint scanlines, neon cyan as the single
+ * action colour and magenta as the signal. Rules are 1px hairlines; elevation is
+ * glow. Display type is Chakra Petch; every micro-label is monospace, tracked
+ * wide, uppercase — the HUD voice.
+ * ========================================================================== */
+
+:root {
+  /* Map VitePress onto Mango UI tokens so there is exactly one palette. */
+  --vp-c-bg: var(--myui-color-bg);
+  --vp-c-bg-alt: var(--myui-color-surface);
+  --vp-c-bg-soft: var(--myui-color-surface-raised);
+  --vp-c-bg-elv: var(--myui-color-surface);
+
+  --vp-c-text-1: var(--myui-color-text);
+  --vp-c-text-2: var(--myui-color-text-soft);
+  --vp-c-text-3: var(--myui-color-text-faint);
+
+  --vp-c-brand-1: var(--myui-color-accent-text);
+  --vp-c-brand-2: var(--myui-color-accent);
+  --vp-c-brand-3: var(--myui-color-accent-active);
+  --vp-c-brand-soft: var(--myui-color-accent-wash);
+
+  --vp-c-divider: var(--myui-color-line);
+  --vp-c-border: var(--myui-color-line);
+  --vp-c-gutter: var(--myui-color-line);
+
+  --vp-font-family-base: var(--myui-font-body);
+  --vp-font-family-mono: var(--myui-font-mono);
+
+  --vp-nav-height: 64px;
+  --vp-sidebar-width: 288px;
+  --vp-layout-max-width: 1440px;
+
+  --vp-code-color: var(--myui-color-accent-text);
+  --vp-code-bg: var(--myui-color-surface-deep);
+  --vp-code-block-bg: var(--myui-color-surface-deep);
+  --vp-code-block-color: var(--myui-color-text);
+  --vp-code-block-divider-color: var(--myui-color-line);
+  --vp-code-line-highlight-color: var(--myui-color-accent-wash);
+
+  --vp-button-brand-bg: var(--myui-color-accent);
+  --vp-button-brand-text: var(--myui-color-accent-ink);
+  --vp-button-brand-border: var(--myui-color-accent);
+  --vp-button-brand-hover-bg: var(--myui-color-accent-hover);
+}
+
+html {
+  background-color: var(--myui-color-bg);
+}
+
+body {
+  font-family: var(--myui-font-body);
+  font-size: var(--myui-text-md);
+  color: var(--myui-color-text);
+  background-color: var(--myui-color-bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* --- the ground: data grid + scanlines ------------------------------------ */
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+body::before {
+  background-image:
+    linear-gradient(to right, var(--myui-color-grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--myui-color-grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+  mask-image: radial-gradient(circle at 50% 0%, #000 0%, transparent 78%);
+}
+
+body::after {
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.22) 0px,
+    rgba(0, 0, 0, 0.22) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  opacity: 0.35;
+}
+
+/* --- nav: a HUD top bar ---------------------------------------------------- */
+.VPNav .VPNavBar {
+  background-color: color-mix(in srgb, var(--myui-color-bg) 86%, transparent);
+  backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--myui-color-line-strong);
+}
+
+.VPNavBar.has-sidebar .content,
+.VPNavBar .content {
+  background-color: transparent;
+}
+
+.VPNavBarTitle .title {
+  font-family: var(--myui-font-display);
+  font-size: var(--myui-text-lg);
+  font-weight: 700;
+  letter-spacing: var(--myui-tracking-wide);
+  text-transform: uppercase;
+  color: var(--myui-color-text);
+  text-shadow: 0 0 18px rgba(25, 224, 255, 0.35);
+}
+
+.VPNavBarMenuLink {
+  font-family: var(--myui-font-mono);
+  font-size: var(--myui-text-sm);
+  font-weight: var(--myui-weight-medium);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.VPNavBarMenuLink.active,
+.VPNavBarMenuLink:hover {
+  color: var(--myui-color-accent-text);
+}
+
+/* --- sidebar: a manifest column ------------------------------------------- */
+.VPSidebar {
+  background-color: color-mix(in srgb, var(--myui-color-bg) 92%, transparent);
+  border-right: 1px solid var(--myui-color-line);
+}
+
+.VPSidebarItem .text {
+  font-size: var(--myui-text-sm);
+  font-weight: var(--myui-weight-regular);
+  letter-spacing: 0.02em;
+}
+
+.VPSidebarItem.level-0 > .item > .text {
+  font-family: var(--myui-font-mono);
+  font-size: var(--myui-text-xs);
+  font-weight: var(--myui-weight-medium);
+  letter-spacing: var(--myui-tracking-wide);
+  text-transform: uppercase;
+  color: var(--myui-color-text-faint);
+}
+
+.VPSidebarItem.is-active > .item > .link > .text,
+.VPSidebarItem.is-active > .item .link .text {
+  color: var(--myui-color-accent-text);
+  font-weight: var(--myui-weight-medium);
+  text-shadow: 0 0 14px rgba(25, 224, 255, 0.4);
+}
+
+.VPSidebarItem .indicator {
+  background-color: var(--myui-color-accent);
+  border-radius: 0;
+  box-shadow: 0 0 10px var(--myui-color-accent);
+}
+
+/* --- content typography --------------------------------------------------- */
+.VPDoc h1,
+.VPDoc h2,
+.VPDoc h3 {
+  font-family: var(--myui-font-display);
+  font-weight: 700;
+  letter-spacing: var(--myui-tracking-tight);
+  color: var(--myui-color-text);
+}
+
+.VPDoc h1 {
+  font-size: clamp(34px, 4vw, var(--myui-text-3xl));
+  line-height: 1.1;
+  margin-bottom: var(--myui-space-3);
+}
+
+.VPDoc h2 {
+  position: relative;
+  font-size: var(--myui-text-2xl);
+  line-height: var(--myui-leading-snug);
+  padding-top: var(--myui-space-5);
+  margin-top: var(--myui-space-7);
+  border-top: 1px solid var(--myui-color-line);
+}
+
+/* A short cyan tick on each section rule — the section marker of a HUD. */
+.VPDoc h2::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 56px;
+  height: 1px;
+  background-color: var(--myui-color-accent);
+  box-shadow: 0 0 12px var(--myui-color-accent);
+}
+
+.VPDoc h3 {
+  font-size: var(--myui-text-xl);
+  margin-top: var(--myui-space-6);
+}
+
+.VPDoc p,
+.VPDoc li {
+  font-size: var(--myui-text-md);
+  line-height: var(--myui-leading-relaxed);
+  color: var(--myui-color-text-soft);
+}
+
+.VPDoc a {
+  color: var(--myui-color-accent-text);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--myui-color-line-strong);
+  font-weight: var(--myui-weight-medium);
+}
+
+.VPDoc a:hover {
+  text-decoration-color: var(--myui-color-accent);
+  text-shadow: 0 0 12px rgba(25, 224, 255, 0.35);
+}
+
+/* --- tables: terminal readout -------------------------------------------- */
+.vp-doc table {
+  display: table;
+  width: 100%;
+  border: 1px solid var(--myui-color-line-strong);
+  border-radius: 0;
+  border-collapse: collapse;
+  margin: var(--myui-space-5) 0;
+}
+
+.vp-doc th,
+.vp-doc td {
+  border: 0;
+  border-bottom: 1px solid var(--myui-color-line-soft);
+  padding: var(--myui-space-3) var(--myui-space-4);
+  text-align: left;
+  font-size: var(--myui-text-sm);
+}
+
+.vp-doc th {
+  background-color: var(--myui-color-accent-wash);
+  color: var(--myui-color-accent-text);
+  font-family: var(--myui-font-mono);
+  font-size: var(--myui-text-xs);
+  font-weight: var(--myui-weight-medium);
+  letter-spacing: var(--myui-tracking-wide);
+  text-transform: uppercase;
+}
+
+.vp-doc td {
+  color: var(--myui-color-text-soft);
+}
+
+.vp-doc tr:last-child td {
+  border-bottom: 0;
+}
+
+.vp-doc tr:hover td {
+  background-color: rgba(25, 224, 255, 0.04);
+}
+
+/* --- code ------------------------------------------------------------------ */
+.vp-doc code {
+  font-family: var(--myui-font-mono);
+  background-color: var(--myui-color-surface-deep);
+  color: var(--myui-color-accent-text);
+  border: 1px solid var(--myui-color-line-soft);
+  border-radius: 0;
+  padding: 0 var(--myui-space-1);
+}
+
+.vp-doc div[class*='language-'] {
+  border: 1px solid var(--myui-color-line-strong);
+  border-radius: 0;
+  background-color: var(--myui-color-surface-deep);
+  margin: var(--myui-space-4) 0;
+  box-shadow: var(--myui-shadow-inset);
+}
+
+.vp-doc div[class*='language-'] code {
+  border: 0;
+  background: none;
+  padding: 0;
+  color: var(--myui-color-text);
+}
+
+.vp-doc blockquote {
+  border-left: 2px solid var(--myui-color-accent);
+  padding-left: var(--myui-space-4);
+  color: var(--myui-color-text-soft);
+}
+
+/* --- custom containers ---------------------------------------------------- */
+/* ::: demo — the live component stage: a HUD panel with corner brackets. */
+.vp-doc .custom-block.demo {
+  position: relative;
+  margin: var(--myui-space-6) 0;
+  padding: var(--myui-space-6) var(--myui-space-5) var(--myui-space-5);
+  background-color: var(--myui-color-surface);
+  border: 1px solid var(--myui-color-line-strong);
+  box-shadow: var(--myui-shadow-inset), 0 0 40px rgba(25, 224, 255, 0.06);
+  color: var(--myui-color-text);
+}
+
+.vp-doc .custom-block.demo::before,
+.vp-doc .custom-block.demo::after {
+  content: '';
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-color: var(--myui-color-accent);
+  border-style: solid;
+  pointer-events: none;
+}
+
+.vp-doc .custom-block.demo::before {
+  top: -1px;
+  left: -1px;
+  border-width: 1px 0 0 1px;
+}
+
+.vp-doc .custom-block.demo::after {
+  right: -1px;
+  bottom: -1px;
+  border-width: 0 1px 1px 0;
+}
+
+.vp-doc .custom-block.demo > .demo-row,
+.vp-doc .custom-block.demo > p {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--myui-space-4);
+  margin: 0;
+}
+
+.vp-doc .custom-block.demo > .demo-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--myui-space-4);
+  align-items: flex-start;
+}
+
+/* The stage label — injected by the container renderer, positioned so it never
+ * joins the flex flow of the demo row. */
+.vp-doc .custom-block.demo .demo-tag {
+  position: absolute;
+  top: -1px;
+  left: var(--myui-space-4);
+  padding: 0 var(--myui-space-2);
+  background-color: var(--myui-color-accent);
+  color: var(--myui-color-accent-ink);
+  font-family: var(--myui-font-mono);
+  font-size: var(--myui-text-xs);
+  font-weight: var(--myui-weight-medium);
+  letter-spacing: var(--myui-tracking-wide);
+  line-height: 18px;
+  box-shadow: 0 0 14px rgba(25, 224, 255, 0.45);
+}
+
+.vp-doc .custom-block.tip,
+.vp-doc .custom-block.warning,
+.vp-doc .custom-block.danger {
+  border: 1px solid var(--myui-color-line-strong);
+  border-left-width: 2px;
+  border-radius: 0;
+  background-color: var(--myui-color-surface);
+}
+
+.vp-doc .custom-block.tip {
+  border-left-color: var(--myui-color-success);
+}
+
+.vp-doc .custom-block.warning {
+  border-left-color: var(--myui-color-warning);
+}
+
+.vp-doc .custom-block.danger {
+  border-left-color: var(--myui-color-danger);
+}
+
+.vp-doc .custom-block .custom-block-title {
+  font-family: var(--myui-font-mono);
+  font-size: var(--myui-text-xs);
+  letter-spacing: var(--myui-tracking-wide);
+  text-transform: uppercase;
+}
+
+/* --- page bits ------------------------------------------------------------- */
+.VPDoc .content-container {
+  max-width: 860px;
+}
+
+.VPDocAsideOutline .outline-link {
+  font-size: var(--myui-text-sm);
+  color: var(--myui-color-text-faint);
+}
+
+.VPDocAsideOutline .outline-link.active {
+  color: var(--myui-color-accent-text);
+}
+
+.VPDocFooter .pager-link {
+  border: 1px solid var(--myui-color-line);
+  border-radius: 0;
+  background-color: var(--myui-color-surface);
+}
+
+.VPDocFooter .pager-link:hover {
+  border-color: var(--myui-color-accent);
+  box-shadow: var(--myui-shadow-glow-sm);
+}
+
+.VPFooter {
+  border-top: 1px solid var(--myui-color-line);
+  background-color: var(--myui-color-bg);
+}
+
+.VPFooter .message,
+.VPFooter .copyright {
+  font-family: var(--myui-font-mono);
+  font-size: var(--myui-text-xs);
+  letter-spacing: 0.06em;
+  color: var(--myui-color-text-faint);
+}
+
+/* --- chrome hit areas ----------------------------------------------------- */
+.VPNav .VPSwitch,
+.VPNav .VPSwitchAppearance {
+  height: 24px;
+}
+
+.VPNav .VPSwitchAppearance {
+  width: 44px;
+}
+
+/* VitePress styles its chrome with scoped [data-v-*] attributes, which outrank
+ * any plain class selector. These are the only !important declarations in the
+ * repo, and they exist purely to re-skin the docs site — library CSS never uses
+ * !important, because users are meant to be able to override it. */
+body .VPSkipLink {
+  padding: var(--myui-space-1) var(--myui-space-4);
+  min-height: 24px;
+  border: 1px solid var(--myui-color-accent);
+  background-color: var(--myui-color-surface) !important;
+  color: var(--myui-color-accent-text) !important;
+  font-family: var(--myui-font-mono) !important;
+  font-size: var(--myui-text-sm) !important;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  box-shadow: var(--myui-shadow-glow-sm) !important;
+}
+
+/* Collapse VitePress chrome typography onto the library scale. */
+body .VPNavBarMenuLink,
+body .VPNavBarMenuGroup .text,
+body .VPNavBarExtra .text,
+body .VPSidebarItem .text,
+body .VPDocAsideOutline .outline-link,
+body .VPDocAside .outline-link,
+body .VPNavBarMenuGroup .VPMenuLink .text,
+body .VPFooter .message,
+body .VPFooter .copyright {
+  font-size: var(--myui-text-sm) !important;
+}
+
+body .VPSidebarItem.level-0 > .item > .text {
+  font-size: var(--myui-text-xs) !important;
+}
+
+body .VPNavBarTitle .title {
+  font-size: var(--myui-text-lg) !important;
+}
+
+body .vp-doc code {
+  font-size: inherit !important;
+}
+
+body .vp-doc div[class*='language-'] code {
+  font-size: var(--myui-text-sm) !important;
+}
+
+/* --- poster home page ------------------------------------------------------ */
+.poster {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: var(--myui-space-8) var(--myui-space-5) var(--myui-space-8);
+}
+
+.poster__kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--myui-space-2);
+  padding: var(--myui-space-1) var(--myui-space-3);
+  border: 1px solid var(--myui-color-accent);
+  background-color: var(--myui-color-accent-wash);
+  color: var(--myui-color-accent-text);
+  font-family: var(--myui-font-mono);
+  font-size: var(--myui-text-xs);
+  font-weight: var(--myui-weight-medium);
+  letter-spacing: var(--myui-tracking-wide);
+  text-transform: uppercase;
+  box-shadow: var(--myui-shadow-glow-sm);
+}
+
+.poster__kicker::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background-color: var(--myui-color-accent);
+  box-shadow: 0 0 10px var(--myui-color-accent);
+}
+
+.poster__title {
+  font-family: var(--myui-font-display);
+  font-size: clamp(44px, 9.5vw, 112px);
+  font-weight: 700;
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  margin: var(--myui-space-5) 0;
+  color: var(--myui-color-text);
+}
+
+.poster__title em {
+  font-style: normal;
+  color: var(--myui-color-accent);
+  text-shadow:
+    0 0 24px rgba(25, 224, 255, 0.5),
+    2px 0 0 rgba(255, 46, 136, 0.45),
+    -2px 0 0 rgba(25, 224, 255, 0.35);
+}
+
+.poster__lead {
+  max-width: 56ch;
+  font-size: var(--myui-text-lg);
+  line-height: var(--myui-leading-relaxed);
+  color: var(--myui-color-text-soft);
+}
+
+.poster__lead strong {
+  color: var(--myui-color-text);
+}
+
+.poster__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--myui-space-4);
+  margin-top: var(--myui-space-6);
+}
+
+.poster__band {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--myui-space-4);
+  margin-top: var(--myui-space-8);
+}
+
+.poster__card {
+  position: relative;
+  display: block;
+  padding: var(--myui-space-5);
+  background-color: var(--myui-color-surface);
+  border: 1px solid var(--myui-color-line);
+  text-decoration: none;
+  color: var(--myui-color-text);
+  transition:
+    border-color var(--myui-duration-fast) var(--myui-ease-snap),
+    box-shadow var(--myui-duration-fast) var(--myui-ease-snap),
+    transform var(--myui-duration-fast) var(--myui-ease-snap);
+}
+
+.poster__card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--myui-color-accent),
+    transparent
+  );
+  opacity: 0.35;
+}
+
+.poster__card:hover {
+  transform: translateY(-2px);
+  border-color: var(--myui-color-line-strong);
+  box-shadow: var(--myui-shadow-glow);
+}
+
+.poster__card-title {
+  font-family: var(--myui-font-display);
+  font-size: var(--myui-text-lg);
+  font-weight: 700;
+  letter-spacing: var(--myui-tracking-tight);
+  text-transform: uppercase;
+  margin-bottom: var(--myui-space-2);
+  color: var(--myui-color-text);
+}
+
+.poster__card-desc {
+  font-size: var(--myui-text-sm);
+  line-height: var(--myui-leading-relaxed);
+  color: var(--myui-color-text-soft);
+}
+
+.poster__section {
+  margin-top: var(--myui-space-8);
+  padding-top: var(--myui-space-6);
+  border-top: 1px solid var(--myui-color-line);
+}
+
+.poster__section-title {
+  position: relative;
+  font-family: var(--myui-font-display);
+  font-size: var(--myui-text-2xl);
+  font-weight: 700;
+  letter-spacing: var(--myui-tracking-tight);
+  text-transform: uppercase;
+  margin-bottom: var(--myui-space-5);
+  color: var(--myui-color-text);
+}
+
+.poster__section-title::before {
+  content: '//';
+  margin-right: var(--myui-space-2);
+  font-family: var(--myui-font-mono);
+  font-size: var(--myui-text-lg);
+  color: var(--myui-color-accent);
+  text-shadow: 0 0 12px rgba(25, 224, 255, 0.5);
+}
+
+.poster__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--myui-space-3);
+}
+
+.poster__grid a {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--myui-space-2);
+  padding: var(--myui-space-3) var(--myui-space-4);
+  border: 1px solid var(--myui-color-line);
+  background-color: var(--myui-color-surface);
+  color: var(--myui-color-text);
+  text-decoration: none;
+  font-weight: var(--myui-weight-medium);
+  font-size: var(--myui-text-sm);
+  transition:
+    border-color var(--myui-duration-fast) var(--myui-ease-snap),
+    box-shadow var(--myui-duration-fast) var(--myui-ease-snap),
+    color var(--myui-duration-fast) var(--myui-ease-snap);
+}
+
+.poster__grid a:hover {
+  border-color: var(--myui-color-accent);
+  color: var(--myui-color-accent-text);
+  box-shadow: var(--myui-shadow-glow-sm);
+}
+
+.poster__grid a span {
+  font-family: var(--myui-font-mono);
+  font-size: var(--myui-text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--myui-color-text-faint);
+}
+
+.poster__grid a:hover span {
+  color: var(--myui-color-accent);
+}
+
+/* --- live component stages on the home page -------------------------------- */
+.poster__fx {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 96px;
+  margin: var(--myui-space-3) 0;
+  padding: var(--myui-space-4);
+  border: 1px solid var(--myui-color-line-soft);
+  background-color: var(--myui-color-surface-deep);
+  background-image:
+    linear-gradient(to right, var(--myui-color-grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--myui-color-grid) 1px, transparent 1px);
+  background-size: 16px 16px;
+  overflow: hidden;
+}
+
+.poster__fx-word {
+  font-family: var(--myui-font-display);
+  font-size: var(--myui-text-2xl);
+  font-weight: 700;
+  letter-spacing: var(--myui-tracking-wide);
+  text-transform: uppercase;
+  color: var(--myui-color-accent);
+  text-shadow: 0 0 22px rgba(25, 224, 255, 0.55);
+}
+
+.poster__stage {
+  display: flex;
+  flex-direction: column;
+  gap: var(--myui-space-4);
+  padding: var(--myui-space-5);
+  border: 1px solid var(--myui-color-line-strong);
+  background-color: var(--myui-color-surface);
+  box-shadow:
+    var(--myui-shadow-inset),
+    0 0 60px rgba(25, 224, 255, 0.05);
+}
+
+.poster__stage-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--myui-space-4);
+}
+
+/* --- token swatch strip ---------------------------------------------------- */
+.swatch-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0;
+  border: 1px solid var(--myui-color-line-strong);
+}
+
+.swatch {
+  padding: var(--myui-space-4);
+  border-right: 1px solid var(--myui-color-line-soft);
+  border-bottom: 1px solid var(--myui-color-line-soft);
+  background-color: var(--myui-color-surface);
+}
+
+.swatch__chip {
+  height: 48px;
+  border: 1px solid var(--myui-color-line-strong);
+  margin-bottom: var(--myui-space-2);
+}
+
+.swatch__name {
+  font-family: var(--myui-font-mono);
+  font-size: 11px;
+  color: var(--myui-color-text-soft);
+  word-break: break-all;
+}
+
+/* --- responsive ------------------------------------------------------------ */
+@media (max-width: 960px) {
+  .poster {
+    padding: var(--myui-space-6) var(--myui-space-4);
+  }
+
+  .poster__title {
+    font-size: clamp(38px, 12vw, 72px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::after {
+    opacity: 0.2;
+  }
+
+  .poster__card,
+  .poster__grid a {
+    transition: none;
+  }
+}

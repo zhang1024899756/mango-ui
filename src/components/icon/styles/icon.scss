@@ -1,0 +1,45 @@
+@use '../../../styles/mixins.scss' as *;
+
+/* =============================================================================
+ * Icon — a drawn glyph, never a font, never an emoji.
+ * Classes: .myui-icon [--sm --md --lg] [--spin]
+ * ========================================================================== */
+
+.myui-icon {
+  display: inline-block;
+  flex: none;
+  width: var(--myui-icon-size);
+  height: var(--myui-icon-size);
+  vertical-align: middle;
+  overflow: visible;
+}
+
+.myui-icon--sm {
+  --myui-icon-size: var(--myui-space-4); /* 16 */
+}
+
+.myui-icon--md {
+  --myui-icon-size: calc(var(--myui-space-4) + var(--myui-space-1)); /* 20 */
+}
+
+.myui-icon--lg {
+  --myui-icon-size: var(--myui-space-5); /* 24 */
+}
+
+/* --- spin ------------------------------------------------------------------- */
+.myui-icon--spin {
+  transform-origin: center;
+  animation: myui-icon-spin 1.4s linear infinite;
+}
+
+@keyframes myui-icon-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@include myui-motion-safe {
+  .myui-icon--spin {
+    animation: none;
+  }
+}

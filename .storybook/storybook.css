@@ -1,0 +1,35 @@
+/* Storybook canvas — the poster wall. Keeps stories on the real paper surface
+ * instead of Storybook's default white, so components are judged in context. */
+html,
+body {
+  background: var(--myui-color-bg);
+  color-scheme: dark;
+}
+
+.sb-canvas {
+  min-height: 100%;
+  padding: var(--myui-space-6) var(--myui-space-7);
+  background-color: var(--myui-color-bg);
+  background-image:
+    linear-gradient(to right, var(--myui-color-grid) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--myui-color-grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+  color: var(--myui-color-text);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sb-canvas__inner {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--myui-space-4);
+}
+
+.docs-story > div {
+  background: transparent;
+}

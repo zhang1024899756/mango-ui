@@ -1,0 +1,90 @@
+/* =============================================================================
+ * Mango UI — base reset
+ * -----------------------------------------------------------------------------
+ * Every rule is wrapped in :where() so its specificity is ZERO. Any rule the
+ * host application writes — even a bare element selector — wins without
+ * !important. This is the difference between a library that tolerates being
+ * restyled and one that has to be fought.
+ *
+ * Optional: import this only if your app has no global reset of its own.
+ * ========================================================================== */
+
+:where(*, *::before, *::after) {
+  box-sizing: border-box;
+}
+
+:where(html) {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+:where(body) {
+  margin: 0;
+  font-family: var(--myui-font-body);
+  font-size: var(--myui-text-md);
+  line-height: var(--myui-leading-normal);
+  color: var(--myui-color-text);
+  background-color: var(--myui-color-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:where(h1, h2, h3, h4, h5, h6, p, figure, blockquote, dl, dd, pre) {
+  margin: 0;
+}
+
+:where(ul, ol) {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+:where(a) {
+  color: inherit;
+  text-decoration: inherit;
+}
+
+:where(button, input, select, textarea) {
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+}
+
+:where(button) {
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+:where(img, svg, video, canvas) {
+  display: block;
+  max-width: 100%;
+}
+
+:where(table) {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+:where(hr) {
+  height: 0;
+  margin: 0;
+  border: 0;
+  border-top: var(--myui-border-hair);
+}
+
+:where(:focus-visible) {
+  outline: var(--myui-focus-width) solid var(--myui-color-accent);
+  outline-offset: var(--myui-focus-offset);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(*, *::before, *::after) {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

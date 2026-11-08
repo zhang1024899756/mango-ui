@@ -1,0 +1,21 @@
+import { mount } from '@vue/test-utils'
+import { describe, expect, it } from 'vitest'
+import {{pascalCase name}} from './{{pascalCase name}}.vue'
+
+describe('Myui{{pascalCase name}}', () => {
+  it('renders the label prop when there is no slot', () => {
+    const wrapper = mount({{pascalCase name}}, { props: { label: '示例' } })
+
+    expect(wrapper.text()).toBe('示例')
+    expect(wrapper.classes()).toContain('myui-{{name}}')
+  })
+
+  it('prefers the default slot over the label prop', () => {
+    const wrapper = mount({{pascalCase name}}, {
+      props: { label: 'prop' },
+      slots: { default: 'slot' },
+    })
+
+    expect(wrapper.text()).toBe('slot')
+  })
+})

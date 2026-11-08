@@ -1,0 +1,125 @@
+@use '../../../styles/mixins.scss' as *;
+
+/* =============================================================================
+ * Switch — a hard-edged pill that snaps between two states.
+ * Classes: .myui-switch [+ --sm/--md --checked --disabled --loading --with-text]
+ *
+ * Track geometry is component-owned: width, height and thumb diameter are not
+ * on the token scale, everything inside them is.
+ * ========================================================================== */
+
+.myui-switch {
+  @include myui-control-reset;
+  @include myui-focus-ring;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--myui-space-2);
+  font-family: var(--myui-font-body);
+  color: var(--myui-color-text);
+}
+
+/* --- sizes ------------------------------------------------------------------ */
+.myui-switch--sm {
+  --myui-switch-track-w: 44px;
+  --myui-switch-track-h: 24px;
+  --myui-switch-thumb-size: 16px;
+}
+
+.myui-switch--md {
+  --myui-switch-track-w: 60px;
+  --myui-switch-track-h: 32px;
+  --myui-switch-thumb-size: 24px;
+}
+
+/* --- track ------------------------------------------------------------------ */
+.myui-switch__track {
+  position: relative;
+  display: block;
+  flex: none;
+  width: var(--myui-switch-track-w);
+  height: var(--myui-switch-track-h);
+  border: var(--myui-border-width) solid var(--myui-color-line);
+  border-radius: var(--myui-radius-pill);
+  background-color: var(--myui-color-surface-deep);
+  transition: background-color var(--myui-duration-fast) var(--myui-ease-snap);
+}
+
+.myui-switch--checked .myui-switch__track {
+  background-color: var(--myui-color-accent);
+}
+
+/* --- thumb ------------------------------------------------------------------ */
+.myui-switch__thumb {
+  position: absolute;
+  top: var(--myui-border-width);
+  left: var(--myui-border-width);
+  display: block;
+  width: var(--myui-switch-thumb-size);
+  height: var(--myui-switch-thumb-size);
+  border: var(--myui-border-width) solid var(--myui-color-line);
+  border-radius: var(--myui-radius-pill);
+  background-color: var(--myui-color-surface);
+  transition: transform var(--myui-duration-fast) var(--myui-ease-snap);
+}
+
+.myui-switch--checked .myui-switch__thumb {
+  transform: translateX(
+    calc(var(--myui-switch-track-w) - var(--myui-switch-thumb-size) - var(--myui-space-2))
+  );
+}
+
+/* --- label ------------------------------------------------------------------ */
+.myui-switch__label {
+  @include myui-eyebrow;
+  color: currentColor;
+}
+
+/* --- states ----------------------------------------------------------------- */
+.myui-switch--disabled {
+  color: var(--myui-color-text-faint);
+}
+
+.myui-switch--disabled .myui-switch__track {
+  border-color: var(--myui-color-line-soft);
+  background-color: var(--myui-color-bg);
+}
+
+.myui-switch--disabled.myui-switch--checked .myui-switch__track {
+  background-color: var(--myui-color-surface-deep);
+}
+
+.myui-switch--disabled .myui-switch__thumb {
+  border-color: var(--myui-color-line-soft);
+  background-color: var(--myui-color-bg);
+}
+
+/* --- loading ---------------------------------------------------------------- */
+.myui-switch__spinner {
+  position: absolute;
+  inset: 0;
+  width: var(--myui-space-3);
+  height: var(--myui-space-3);
+  margin: auto;
+  border: var(--myui-border-width) solid var(--myui-color-line-soft);
+  border-top-color: var(--myui-color-text);
+  border-radius: var(--myui-radius-pill);
+  animation: myui-switch-spin var(--myui-duration-slow) linear infinite;
+}
+
+@keyframes myui-switch-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* --- motion ----------------------------------------------------------------- */
+@include myui-motion-safe {
+  .myui-switch__track,
+  .myui-switch__thumb {
+    transition: none;
+  }
+
+  .myui-switch__spinner {
+    animation: none;
+  }
+}

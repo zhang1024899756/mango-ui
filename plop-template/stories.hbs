@@ -1,0 +1,32 @@
+import type { Meta, StoryObj } from '@storybook/vue3-vite'
+import { Myui{{pascalCase name}} } from './index'
+
+const meta = {
+  title: '{{groupId kind}}/{{pascalCase name}}',
+  component: Myui{{pascalCase name}},
+  tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: 'TODO: what problem this solves, and what the house style imposes on it.',
+      },
+    },
+  },
+  argTypes: {
+    label: { control: 'text' },
+  },
+  args: {
+    label: '示例',
+  },
+} satisfies Meta<typeof Myui{{pascalCase name}}>
+
+export default meta
+type Story = StoryObj<typeof meta>
+
+export const Basic: Story = {
+  render: (args) => ({
+    components: { Myui{{pascalCase name}} },
+    setup: () => ({ args }),
+    template: '<myui-{{name}} v-bind="args" />',
+  }),
+}

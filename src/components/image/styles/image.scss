@@ -1,0 +1,143 @@
+@use '../../../styles/mixins.scss' as *;
+
+/* =============================================================================
+ * Image — a frame that never moves, even while the pixels are late.
+ * Classes: .myui-image [--fit-{cover|contain}] [--radius-{none|pill}] [--bordered]
+ * ========================================================================== */
+
+.myui-image {
+  --myui-image-ratio: 4 / 3;
+
+  display: block;
+  max-width: 100%;
+  margin: 0;
+}
+
+/* The ratio lives on the frame, so the loading shimmer, the photo and the
+   error block all occupy exactly the same box. */
+.myui-image__frame {
+  position: relative;
+  display: block;
+  width: 100%;
+  aspect-ratio: var(--myui-image-ratio);
+  overflow: hidden;
+  background-color: var(--myui-color-surface-deep);
+}
+
+.myui-image--bordered .myui-image__frame {
+  border: var(--myui-border-bold);
+}
+
+.myui-image--radius-pill .myui-image__frame {
+  border-radius: var(--myui-radius-pill);
+}
+
+.myui-image__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity var(--myui-duration-slow) var(--myui-ease-out);
+}
+
+.myui-image--fit-cover .myui-image__img {
+  object-fit: cover;
+}
+
+.myui-image--fit-contain .myui-image__img {
+  object-fit: contain;
+}
+
+.myui-image__img--ready {
+  opacity: 1;
+}
+
+/* --- loading: hard hatch and one sweeping bar, never a blur ---------------- */
+.myui-image__shimmer {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background-image: repeating-linear-gradient(
+    45deg,
+    var(--myui-color-surface-deep) 0,
+    var(--myui-color-surface-deep) var(--myui-space-2),
+    var(--myui-color-surface) var(--myui-space-2),
+    var(--myui-color-surface) var(--myui-space-4)
+  );
+}
+
+.myui-image__shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 32%;
+  background-image: linear-gradient(
+    90deg,
+    transparent,
+    var(--myui-color-accent-wash),
+    transparent
+  );
+  animation: myui-image-sweep 1.2s var(--myui-ease-out) infinite;
+}
+
+@keyframes myui-image-sweep {
+  from {
+    transform: translateX(-110%);
+  }
+
+  to {
+    transform: translateX(330%);
+  }
+}
+
+/* --- error ------------------------------------------------------------------ */
+.myui-image__error {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--myui-space-2);
+  padding: var(--myui-space-4);
+  background-color: var(--myui-color-surface-deep);
+  color: var(--myui-color-text-faint);
+  text-align: center;
+}
+
+.myui-image__error-mark {
+  flex: none;
+  width: var(--myui-space-6);
+  height: var(--myui-space-6);
+}
+
+.myui-image__error-text {
+  @include myui-eyebrow;
+}
+
+/* --- caption ---------------------------------------------------------------- */
+.myui-image__caption {
+  display: flex;
+  align-items: baseline;
+  gap: var(--myui-space-2);
+  margin-top: var(--myui-space-2);
+  padding-left: var(--myui-space-2);
+  border-left: var(--myui-border-width) solid var(--myui-color-accent);
+  font-family: var(--myui-font-body);
+  font-size: var(--myui-text-xs);
+  line-height: var(--myui-leading-snug);
+  color: var(--myui-color-text-soft);
+}
+
+@include myui-motion-safe {
+  .myui-image__img {
+    transition: none;
+  }
+
+  .myui-image__shimmer::after {
+    animation: none;
+    display: none;
+  }
+}
