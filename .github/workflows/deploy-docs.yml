@@ -1,0 +1,90 @@
+name: Deploy docs
+
+# Publishes the VitePress site to GitHub Pages as a project site:
+#   https://zhang1024899756.github.io/mango-ui/
+# Requires Settings → Pages → Source = "GitHub Actions" (done once per repo).
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Never cancel an in-flight deployment; let it finish, queue the next one.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build docs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Build docs
+        run: pnpm docs:build
+        env:
+          DOCS_BASE: /mango-ui/
+
+      # The site is served from /mango-ui/, so anything the build emits with a
+      # domain-root URL (fonts, favicon, in-page links) would 404 in production
+      # while still working locally. Fail loudly instead of shipping that.
+      - name: Verify sub-path assets
+        run: |
+          set -eu
+          test -f docs/.vitepress/dist/fonts.css
+          test -f docs/.vitepress/dist/favicon.svg
+          test -f docs/.vitepress/dist/fonts/chakra-petch-600-latin.woff2
+          grep -q '/mango-ui/fonts\.css' docs/.vitepress/dist/index.html
+          grep -q '/mango-ui/guide/getting-started' docs/.vitepress/dist/index.html
+          # Every root-relative link on the landing page must already carry the
+          # base prefix. Anything else is a link written as raw HTML, which
+          # VitePress does not rewrite for us.
+          bad=$(grep -oE 'href="/[^"]*"' docs/.vitepress/dist/index.html \
+            | grep -v '^href="/mango-ui/' || true)
+          if [ -n "$bad" ]; then
+            echo '::error::index.html contains domain-root links; wrap them in withBase()'
+            echo "$bad"
+            exit 1
+          fi
+          echo 'sub-path assets OK'
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs/.vitepress/dist
+
+  deploy:
+    name: Deploy
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

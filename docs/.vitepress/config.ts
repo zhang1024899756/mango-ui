@@ -1,17 +1,42 @@
 import container from 'markdown-it-container'
 import { defineConfig } from 'vitepress'
 
+/**
+ * The docs are published to GitHub Pages as a *project* site, so they live at
+ * https://zhang1024899756.github.io/mango-ui/ instead of the domain root.
+ * `base` therefore has to be the repo name, and every hand-written absolute
+ * URL in the markdown/config must go through `withBase()` — VitePress only
+ * rewrites the links it generates itself (nav, sidebar, assets), not the raw
+ * HTML we author inside a page.
+ *
+ * Override with DOCS_BASE=/ when you want to serve from the root (e.g. a
+ * custom domain, or a preview behind a different path).
+ */
+const base = (process.env.DOCS_BASE ?? '/mango-ui/').replace(/\/?$/, '/')
+
 export default defineConfig({
   title: 'Mango UI',
   description:
     'Mango UI v2 — 一套赛博朋克 · 数字穿越风格的 Vue 3 组件库。特效组件可包裹任意内容，元素组件自带霓虹界面。',
   lang: 'zh-CN',
-  base: process.env.DOCS_BASE ?? '/',
+  base,
   appearance: 'dark',
   cleanUrls: true,
+  sitemap: { hostname: 'https://zhang1024899756.github.io/mango-ui/' },
   head: [
-    ['link', { rel: 'stylesheet', href: '/fonts.css' }],
-    ['meta', { name: 'theme-color', content: '#ff4d1a' }],
+    ['link', { rel: 'stylesheet', href: `${base}fonts.css` }],
+    ['link', { rel: 'icon', type: 'image/svg+xml', href: `${base}favicon.svg` }],
+    // Matches --myui-color-bg so mobile browser chrome melts into the page.
+    ['meta', { name: 'theme-color', content: '#05070d' }],
+    ['meta', { name: 'og:type', content: 'website' }],
+    ['meta', { name: 'og:title', content: 'Mango UI — 赛博朋克 · 数字穿越的 Vue 3 组件库' }],
+    [
+      'meta',
+      {
+        name: 'og:description',
+        content: '特效组件可包裹任意内容，元素组件自带霓虹界面。为潮流门户而生，不是后台管理系统。',
+      },
+    ],
   ],
   vite: {
     css: {
@@ -22,7 +47,7 @@ export default defineConfig({
   },
   markdown: {
     config(md) {
-      // :::
+      // ::::
       // Custom live-demo container used by every component page.
       // VitePress only ships tip/info/warning/danger/details, so `demo` has to
       // be registered here; without it the fences render as literal text.
@@ -39,6 +64,8 @@ export default defineConfig({
   themeConfig: {
     logo: undefined,
     siteTitle: 'MANGO UI',
+    // Local search: no external service, works offline and on Pages.
+    search: { provider: 'local' },
     nav: [
       { text: '指南', link: '/guide/getting-started', activeMatch: '/guide/' },
       { text: '元素组件', link: '/components/button', activeMatch: '/components/' },
@@ -46,8 +73,12 @@ export default defineConfig({
       {
         text: 'v2.0.0',
         items: [
-          { text: '更新日志', link: 'https://github.com/zhang1024899756/mango-ui/releases' },
-          { text: 'Storybook', link: 'https://github.com/zhang1024899756/mango-ui' },
+          { text: '在线组件库', link: 'https://zhang1024899756.github.io/mango-ui/' },
+          {
+            text: '更新日志',
+            link: 'https://github.com/zhang1024899756/mango-ui/releases',
+          },
+          { text: 'GitHub 仓库', link: 'https://github.com/zhang1024899756/mango-ui' },
         ],
       },
     ],

@@ -2,6 +2,8 @@
 
 **一套为赛博朋克门户而生的 Vue 3 组件库。**
 
+**[📖 在线文档](https://zhang1024899756.github.io/mango-ui/)** · **[GitHub 仓库](https://github.com/zhang1024899756/mango-ui)** · **[更新日志](https://github.com/zhang1024899756/mango-ui/releases)**
+
 深空近黑打底、1px 霓虹发丝线、只有一个电光青作为行动色，品红只做信号。
 为数字穿越题材的门户站、数字艺术与未来科技产品而生，
 以及一切不想长得像后台管理系统的前端。
@@ -40,7 +42,7 @@ CSS 故障字特效组件。v2 是一次彻底重写：
 | 样式 | 组件内写死颜色与尺寸 | **SCSS → CSS 变量**，`.myui-` 前缀，`:where()` 重置 |
 | 视觉方向 | 一个 CSS 故障字 | **赛博朋克 · 数字穿越 · 未来科技** |
 | 开发验收 | Storybook 6 | **Storybook 10** |
-| 官网 | 无 | **VitePress 1.x** |
+| 官网 | 无 | **[VitePress 1.x 在线文档](https://zhang1024899756.github.io/mango-ui/)** |
 | 组件数 | 1 | **13**（2 特效 + 11 元素） |
 | 测试 | 1 个 `toBeDefined()` | Vitest，逐组件行为测试 |
 
@@ -170,7 +172,9 @@ import type { ButtonProps, ButtonVariant } from 'mango-ui'
 pnpm install
 
 pnpm dev            # Storybook 6006 —— 开发与验收
-pnpm docs:dev       # VitePress 文档站
+pnpm docs:dev       # VitePress 文档站 → http://localhost:5173/mango-ui/
+pnpm docs:build     # 产出 docs/.vitepress/dist（base 已内置 /mango-ui/）
+pnpm docs:preview   # 按生产路径预览构建产物
 pnpm test           # Vitest
 pnpm type-check     # vue-tsc
 pnpm build          # Vite lib 模式 + .d.ts
@@ -216,6 +220,15 @@ plop-template/           组件脚手架模板
 5. **Jest + `@vue/test-utils@1`** 换成了 Vitest + `@vue/test-utils@2`。
 
 ---
+
+## 文档站部署
+
+文档站跑在 GitHub Pages 的**项目子路径**上：<https://zhang1024899756.github.io/mango-ui/>。
+
+- `docs/.vitepress/config.ts` 的 `base` 默认就是 `/mango-ui/`，可用环境变量覆盖：`DOCS_BASE=/ pnpm docs:build`（换自定义域名时才需要）。
+- **页面里手写的绝对链接必须走 `withBase()`**。VitePress 只会重写它自己生成的链接（导航、侧边栏、构建资源），裸 HTML 里写的 `href="/x"`、`src="/x"` 不会带上 base，上线后就是 404。字体样式 `docs/public/fonts.css` 同理，内部 `url()` 一律写成相对路径。
+- `.github/workflows/deploy-docs.yml` 在 `main` 有新提交（或手动触发）时构建并发布；构建后带一道断言，检查首页没有漏掉 base 的根路径链接，防止再次静默上线坏链接。
+- 首次启用：仓库 **Settings → Pages → Source** 选 **GitHub Actions**（本仓库已配置好）。
 
 ## 浏览器支持
 

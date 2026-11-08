@@ -18,30 +18,30 @@ title: Mango UI — 赛博朋克 · 数字穿越的 Vue 3 组件库
   </p>
 
   <div class="poster__actions">
-    <MyuiButton size="lg" href="/guide/getting-started">开始使用</MyuiButton>
-    <MyuiButton variant="outline" size="lg" tone="ink" href="/guide/design-principles">设计原则</MyuiButton>
+    <MyuiButton size="lg" :href="withBase('/guide/getting-started')">开始使用</MyuiButton>
+    <MyuiButton variant="outline" size="lg" tone="ink" :href="withBase('/guide/design-principles')">设计原则</MyuiButton>
   </div>
 
   <div class="poster__band">
-    <a class="poster__card" href="/components/magic">
+    <a class="poster__card" :href="withBase('/components/magic')">
       <div class="poster__card-title">特效组件</div>
       <div class="poster__card-desc">
         <code>Magic</code> 故障撕裂、<code>Flotage</code> 失重漂浮。套在按钮、图片、整块卡片外面就能生效。
       </div>
     </a>
-    <a class="poster__card" href="/components/button">
+    <a class="poster__card" :href="withBase('/components/button')">
       <div class="poster__card-title">元素组件</div>
       <div class="poster__card-desc">
         按钮、图标、链接、图片、数值、标签、输入框、开关、滑动条、对话框、进度条。
       </div>
     </a>
-    <a class="poster__card" href="/guide/theming">
+    <a class="poster__card" :href="withBase('/guide/theming')">
       <div class="poster__card-title">CSS 变量主题</div>
       <div class="poster__card-desc">
         深空底色、霓虹发丝线、辉光与间距全是 CSS 变量。换一组值就换一个站点人格。
       </div>
     </a>
-    <a class="poster__card" href="/guide/getting-started">
+    <a class="poster__card" :href="withBase('/guide/getting-started')">
       <div class="poster__card-title">零运行时依赖</div>
       <div class="poster__card-desc">
         Vue 是唯一的 peer 依赖。没有 lodash，没有 CSS-in-JS，没有图标字体。
@@ -133,19 +133,19 @@ title: Mango UI — 赛博朋克 · 数字穿越的 Vue 3 组件库
   <div class="poster__section">
     <h2 class="poster__section-title">组件清单</h2>
     <div class="poster__grid">
-      <a href="/components/magic">Magic 魔法特效<span>effect</span></a>
-      <a href="/components/flotage">Flotage 漂浮特效<span>effect</span></a>
-      <a href="/components/button">Button 按钮<span>element</span></a>
-      <a href="/components/icon">Icon 图标<span>element</span></a>
-      <a href="/components/link">Link 链接<span>element</span></a>
-      <a href="/components/image">Image 图片<span>element</span></a>
-      <a href="/components/number">Number 数值<span>element</span></a>
-      <a href="/components/tag">Tag 标签<span>element</span></a>
-      <a href="/components/input">Input 输入框<span>element</span></a>
-      <a href="/components/switch">Switch 开关<span>element</span></a>
-      <a href="/components/slider">Slider 滑动条<span>element</span></a>
-      <a href="/components/dialog">Dialog 对话框<span>element</span></a>
-      <a href="/components/progress">Progress 进度条<span>element</span></a>
+      <a :href="withBase('/components/magic')">Magic 魔法特效<span>effect</span></a>
+      <a :href="withBase('/components/flotage')">Flotage 漂浮特效<span>effect</span></a>
+      <a :href="withBase('/components/button')">Button 按钮<span>element</span></a>
+      <a :href="withBase('/components/icon')">Icon 图标<span>element</span></a>
+      <a :href="withBase('/components/link')">Link 链接<span>element</span></a>
+      <a :href="withBase('/components/image')">Image 图片<span>element</span></a>
+      <a :href="withBase('/components/number')">Number 数值<span>element</span></a>
+      <a :href="withBase('/components/tag')">Tag 标签<span>element</span></a>
+      <a :href="withBase('/components/input')">Input 输入框<span>element</span></a>
+      <a :href="withBase('/components/switch')">Switch 开关<span>element</span></a>
+      <a :href="withBase('/components/slider')">Slider 滑动条<span>element</span></a>
+      <a :href="withBase('/components/dialog')">Dialog 对话框<span>element</span></a>
+      <a :href="withBase('/components/progress')">Progress 进度条<span>element</span></a>
     </div>
   </div>
 
@@ -161,6 +161,7 @@ title: Mango UI — 赛博朋克 · 数字穿越的 Vue 3 组件库
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { withBase } from 'vitepress'
 
 const switched = ref(true)
 const volume = ref(64)
