@@ -1,0 +1,272 @@
+@use '../../../styles/mixins.scss' as *;
+
+/* =============================================================================
+ * Button — the loudest element on the poster.
+ * Classes: .myui-button [+ --{variant} --tone-{tone} --{size} --{shape}]
+ * ========================================================================== */
+
+.myui-button {
+  @include myui-control-reset;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--myui-space-2);
+  border: var(--myui-border-width) solid transparent;
+  border-radius: var(--myui-radius-none);
+  font-family: var(--myui-font-body);
+  font-weight: var(--myui-weight-bold);
+  line-height: var(--myui-leading-snug);
+  letter-spacing: 0.01em;
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  vertical-align: middle;
+  user-select: none;
+  transition:
+    background-color var(--myui-duration-fast) var(--myui-ease-snap),
+    border-color var(--myui-duration-fast) var(--myui-ease-snap),
+    color var(--myui-duration-fast) var(--myui-ease-snap),
+    box-shadow var(--myui-duration-fast) var(--myui-ease-snap),
+    transform var(--myui-duration-fast) var(--myui-ease-snap);
+
+  @include myui-focus-ring;
+}
+
+/* --- sizes ----------------------------------------------------------------- */
+.myui-button--sm {
+  min-height: var(--myui-control-sm);
+  padding: 0 var(--myui-space-3);
+  font-size: var(--myui-text-sm);
+}
+
+.myui-button--md {
+  min-height: var(--myui-control-md);
+  padding: 0 var(--myui-space-4);
+  font-size: var(--myui-text-md);
+}
+
+.myui-button--lg {
+  min-height: var(--myui-control-lg);
+  padding: 0 var(--myui-space-5);
+  font-size: var(--myui-text-lg);
+}
+
+/* --- shape ------------------------------------------------------------------ */
+.myui-button--pill {
+  border-radius: var(--myui-radius-pill);
+}
+
+.myui-button--block {
+  width: 100%;
+}
+
+.myui-button--icon-only {
+  padding: 0;
+  aspect-ratio: 1;
+  min-width: var(--myui-control-md);
+}
+
+.myui-button--icon-only.myui-button--sm {
+  min-width: var(--myui-control-sm);
+}
+
+.myui-button--icon-only.myui-button--lg {
+  min-width: var(--myui-control-lg);
+}
+
+/* --- variant: solid --------------------------------------------------------- */
+.myui-button--solid {
+  border-color: var(--myui-color-line);
+  background-color: var(--myui-color-accent);
+  color: var(--myui-color-accent-ink);
+}
+
+.myui-button--solid:hover {
+  background-color: var(--myui-color-accent-hover);
+}
+
+.myui-button--solid:active {
+  background-color: var(--myui-color-accent-active);
+}
+
+.myui-button--solid.myui-button--tone-ink {
+  background-color: var(--myui-color-text);
+  color: var(--myui-color-bg);
+}
+
+.myui-button--solid.myui-button--tone-ink:hover {
+  background-color: var(--myui-color-text-soft);
+}
+
+.myui-button--solid.myui-button--tone-neutral {
+  background-color: var(--myui-color-surface);
+  color: var(--myui-color-text);
+}
+
+.myui-button--solid.myui-button--tone-neutral:hover {
+  background-color: var(--myui-color-surface-deep);
+}
+
+.myui-button--solid.myui-button--tone-danger {
+  background-color: var(--myui-color-danger);
+  color: var(--myui-color-surface);
+}
+
+.myui-button--solid.myui-button--tone-danger:hover {
+  filter: brightness(1.08);
+}
+
+/* --- variant: outline ------------------------------------------------------- */
+.myui-button--outline {
+  border-color: var(--myui-color-line);
+  background-color: transparent;
+  color: var(--myui-color-text);
+}
+
+.myui-button--outline:hover {
+  background-color: var(--myui-color-text);
+  color: var(--myui-color-bg);
+}
+
+.myui-button--outline.myui-button--tone-accent {
+  border-color: var(--myui-color-accent);
+  color: var(--myui-color-accent-text);
+}
+
+.myui-button--outline.myui-button--tone-accent:hover {
+  background-color: var(--myui-color-accent);
+  border-color: var(--myui-color-line);
+  color: var(--myui-color-accent-ink);
+}
+
+.myui-button--outline.myui-button--tone-danger {
+  border-color: var(--myui-color-danger);
+  color: var(--myui-color-danger);
+}
+
+.myui-button--outline.myui-button--tone-danger:hover {
+  background-color: var(--myui-color-danger);
+  color: var(--myui-color-surface);
+}
+
+/* --- variant: ghost --------------------------------------------------------- */
+.myui-button--ghost {
+  background-color: transparent;
+  color: var(--myui-color-text);
+}
+
+.myui-button--ghost:hover {
+  background-color: var(--myui-color-surface-deep);
+}
+
+.myui-button--ghost.myui-button--tone-accent {
+  color: var(--myui-color-accent-text);
+}
+
+.myui-button--ghost.myui-button--tone-accent:hover {
+  background-color: var(--myui-color-accent-wash);
+}
+
+.myui-button--ghost.myui-button--tone-danger {
+  color: var(--myui-color-danger);
+}
+
+.myui-button--ghost.myui-button--tone-danger:hover {
+  background-color: var(--myui-color-danger-wash);
+}
+
+/* --- variant: text ---------------------------------------------------------- */
+.myui-button--text {
+  min-height: 24px;
+  padding: 0;
+  gap: var(--myui-space-1);
+  background-color: transparent;
+  color: var(--myui-color-text);
+}
+
+.myui-button--text:hover {
+  color: var(--myui-color-accent-text);
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
+.myui-button--text.myui-button--tone-accent {
+  color: var(--myui-color-accent-text);
+}
+
+.myui-button--text.myui-button--tone-danger {
+  color: var(--myui-color-danger);
+}
+
+/* --- the signature glow ----------------------------------------------------- */
+/* Cyberpunk elevation is light, not offset: the button sits in the dark and
+ * lights up, then dims when pressed like a key on a console. */
+.myui-button--shadow {
+  box-shadow: var(--myui-shadow-glow-sm);
+}
+
+.myui-button--shadow:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--myui-shadow-glow);
+}
+
+.myui-button--shadow:active {
+  transform: translateY(0);
+  box-shadow: none;
+}
+
+/* --- affixes ---------------------------------------------------------------- */
+.myui-button__affix {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  /* Inherit the button's own size: `1.1em` produced 14.3px / 16.5px values that
+   * are not on the type scale. Icons should track the label, not invent sizes. */
+  font-size: inherit;
+}
+
+.myui-button__label {
+  display: inline-flex;
+  align-items: center;
+  gap: inherit;
+}
+
+/* --- loading ---------------------------------------------------------------- */
+.myui-button__spinner {
+  flex: none;
+  width: 1em;
+  height: 1em;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: var(--myui-radius-pill);
+  animation: myui-button-spin 720ms linear infinite;
+}
+
+@keyframes myui-button-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* --- inert ------------------------------------------------------------------ */
+.myui-button:disabled,
+.myui-button[aria-disabled='true'] {
+  border-color: var(--myui-color-line-soft);
+  background-color: var(--myui-color-surface-deep);
+  /* ink-soft, not ink-ghost: disabled text still has to clear AA. */
+  color: var(--myui-color-text-soft);
+  box-shadow: none;
+  transform: none;
+  pointer-events: none;
+}
+
+@include myui-motion-safe {
+  .myui-button,
+  .myui-button__spinner {
+    animation: none !important;
+    transition: none !important;
+  }
+}

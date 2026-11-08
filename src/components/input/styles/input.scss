@@ -1,0 +1,224 @@
+@use '../../../styles/mixins.scss' as *;
+
+/* =============================================================================
+ * Input — a hard-edged slab the text sits in.
+ * Classes: .myui-input [+ --{size} --{variant} --invalid --disabled --focused]
+ * Structure: .myui-input > .myui-input__shell > .myui-input__field
+ *            + optional .myui-input__meta (error + counter)
+ * ========================================================================== */
+
+.myui-input {
+  display: flex;
+  flex-direction: column;
+  gap: var(--myui-space-1);
+  width: 100%;
+  font-family: var(--myui-font-body);
+  color: var(--myui-color-text);
+}
+
+/* --- the slab -------------------------------------------------------------- */
+.myui-input__shell {
+  display: flex;
+  align-items: center;
+  gap: var(--myui-space-2);
+  padding-inline: var(--myui-space-3);
+  border: var(--myui-border-width) solid var(--myui-color-line);
+  border-radius: var(--myui-radius-none);
+  background-color: var(--myui-color-surface);
+  color: var(--myui-color-text);
+  transition:
+    border-color var(--myui-duration-fast) var(--myui-ease-snap),
+    background-color var(--myui-duration-fast) var(--myui-ease-snap),
+    box-shadow var(--myui-duration-fast) var(--myui-ease-snap),
+    transform var(--myui-duration-fast) var(--myui-ease-snap);
+
+  /* The slab, not the field, owns the ring: focus reads as one hard block from
+   * edge to edge. Same width / colour / offset as `myui-focus-ring`. */
+  &:focus-within {
+    outline: var(--myui-focus-width) solid var(--myui-color-accent);
+    outline-offset: var(--myui-focus-offset);
+  }
+}
+
+/* --- sizes ------------------------------------------------------------------ */
+.myui-input--sm .myui-input__shell {
+  min-height: var(--myui-control-sm);
+  padding-inline: var(--myui-space-2);
+}
+
+.myui-input--sm .myui-input__field {
+  font-size: var(--myui-text-sm);
+}
+
+.myui-input--md .myui-input__shell {
+  min-height: var(--myui-control-md);
+}
+
+.myui-input--md .myui-input__field {
+  font-size: var(--myui-text-md);
+}
+
+.myui-input--lg .myui-input__shell {
+  min-height: var(--myui-control-lg);
+  padding-inline: var(--myui-space-4);
+}
+
+.myui-input--lg .myui-input__field {
+  font-size: var(--myui-text-lg);
+}
+
+/* --- the native field ------------------------------------------------------- */
+.myui-input__field {
+  flex: 1 1 auto;
+  min-width: 0;
+  align-self: stretch;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-family: inherit;
+  font-weight: var(--myui-weight-medium);
+  line-height: var(--myui-leading-snug);
+  letter-spacing: inherit;
+  appearance: none;
+
+  &:focus {
+    outline: none;
+  }
+
+  &::placeholder {
+    color: var(--myui-color-text-faint);
+    font-weight: var(--myui-weight-regular);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+/* --- variant: box (default) ------------------------------------------------- */
+.myui-input--box .myui-input__shell {
+  box-shadow: var(--myui-shadow-glow-sm);
+}
+
+/* The slab presses into the page when you start typing — the same move the
+ * button makes on click, applied to focus. */
+.myui-input--box.myui-input--focused .myui-input__shell {
+  box-shadow: none;
+  transform: translate(var(--myui-border-width), var(--myui-border-width));
+}
+
+/* --- variant: line ---------------------------------------------------------- */
+.myui-input--line .myui-input__shell {
+  border: 0;
+  border-bottom: var(--myui-border-width) solid var(--myui-color-line);
+  background-color: transparent;
+  box-shadow: none;
+  padding-inline: 0;
+}
+
+.myui-input--line .myui-input__shell:focus-within {
+  outline: none;
+  border-bottom-color: var(--myui-color-accent);
+}
+
+/* --- affixes ---------------------------------------------------------------- */
+.myui-input__affix {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  color: var(--myui-color-text-faint);
+  font-size: var(--myui-text-sm);
+  line-height: 1;
+}
+
+/* --- clear button ----------------------------------------------------------- */
+.myui-input__clear {
+  @include myui-control-reset;
+  @include myui-focus-ring(0);
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--myui-space-4);
+  height: var(--myui-space-4);
+  color: var(--myui-color-text-faint);
+  transition: color var(--myui-duration-fast) var(--myui-ease-snap);
+
+  &:hover {
+    color: var(--myui-color-text);
+  }
+}
+
+/* --- meta row: error + counter ---------------------------------------------- */
+.myui-input__meta {
+  display: flex;
+  align-items: baseline;
+  gap: var(--myui-space-2);
+}
+
+.myui-input__error {
+  flex: 1 1 auto;
+  font-size: var(--myui-text-xs);
+  font-weight: var(--myui-weight-bold);
+  line-height: var(--myui-leading-snug);
+  color: var(--myui-color-danger);
+}
+
+.myui-input__count {
+  margin-left: auto;
+  font-family: var(--myui-font-mono);
+  font-size: var(--myui-text-xs);
+  line-height: var(--myui-leading-snug);
+  color: var(--myui-color-text-faint);
+}
+
+/* --- states ----------------------------------------------------------------- */
+.myui-input--invalid .myui-input__shell {
+  border-color: var(--myui-color-danger);
+}
+
+.myui-input--invalid .myui-input__shell:focus-within {
+  outline-color: var(--myui-color-danger);
+}
+
+.myui-input--invalid.myui-input--line .myui-input__shell:focus-within {
+  border-bottom-color: var(--myui-color-danger);
+}
+
+.myui-input--disabled .myui-input__shell {
+  background-color: var(--myui-color-surface-deep);
+  box-shadow: none;
+  color: var(--myui-color-text-faint);
+}
+
+.myui-input--disabled.myui-input--focused .myui-input__shell {
+  transform: none;
+}
+
+.myui-input--disabled.myui-input--line .myui-input__shell {
+  background-color: transparent;
+  border-bottom-color: var(--myui-color-line-soft);
+}
+
+.myui-input--readonly .myui-input__shell {
+  background-color: var(--myui-color-bg);
+  box-shadow: none;
+}
+
+.myui-input--readonly.myui-input--line .myui-input__shell {
+  background-color: transparent;
+}
+
+/* --- motion ----------------------------------------------------------------- */
+@include myui-motion-safe {
+  .myui-input__shell,
+  .myui-input__clear {
+    transition: none;
+  }
+
+  .myui-input--box.myui-input--focused .myui-input__shell {
+    transform: none;
+  }
+}

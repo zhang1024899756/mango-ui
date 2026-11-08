@@ -1,0 +1,9 @@
+import './styles/{{name}}.scss'
+import {{pascalCase name}} from './{{pascalCase name}}.vue'
+import { withInstall } from '../../utils/with-install'
+
+export const Myui{{pascalCase name}} = withInstall({{pascalCase name}}, 'Myui{{pascalCase name}}')
+
+export type { {{pascalCase name}}Props } from './types'
+
+export default Myui{{pascalCase name}}

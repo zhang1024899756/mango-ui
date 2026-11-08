@@ -1,0 +1,89 @@
+@use '../../../styles/mixins.scss' as *;
+
+/* =============================================================================
+ * Number — poster figures, not dashboard statistics.
+ * Classes: .myui-number [--{sm|md|lg|xl}] [--tone-{ink|accent|success|danger}]
+ * ========================================================================== */
+
+.myui-number {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--myui-space-1);
+  font-family: var(--myui-font-display);
+  font-weight: var(--myui-weight-black);
+  line-height: var(--myui-leading-tight);
+  letter-spacing: var(--myui-tracking-tight);
+  white-space: nowrap;
+  /* Tabular figures: every digit takes the same space, so a count-up never
+     makes the line breathe. */
+  font-variant-numeric: tabular-nums;
+}
+
+.myui-number__digits {
+  font-variant-numeric: tabular-nums;
+}
+
+.myui-number__affix {
+  flex: none;
+  /* Token-sized, not em-scaled: 0.52em produced 12.5px / 16.6px values that no
+   * step of the type scale contains. */
+  font-size: var(--myui-text-sm);
+  font-weight: var(--myui-weight-bold);
+  letter-spacing: var(--myui-tracking-normal);
+  color: var(--myui-color-text-faint);
+}
+
+/* --- size ------------------------------------------------------------------- */
+.myui-number--sm {
+  font-size: var(--myui-text-lg);
+}
+
+.myui-number--md {
+  font-size: var(--myui-text-xl);
+}
+
+.myui-number--lg {
+  font-size: var(--myui-text-2xl);
+}
+
+.myui-number--xl .myui-number__affix {
+  font-size: var(--myui-text-md);
+}
+
+.myui-number--xl {
+  font-size: var(--myui-text-3xl);
+}
+
+/* --- tone ------------------------------------------------------------------- */
+.myui-number--tone-ink {
+  color: var(--myui-color-text);
+}
+
+.myui-number--tone-accent {
+  color: var(--myui-color-accent-text);
+}
+
+.myui-number--tone-success {
+  color: var(--myui-color-success);
+}
+
+.myui-number--tone-danger {
+  color: var(--myui-color-danger);
+}
+
+/* --- trend ------------------------------------------------------------------ */
+.myui-number__trend {
+  flex: none;
+  align-self: center;
+  width: 0.4em;
+  height: 0.4em;
+  color: var(--myui-color-text-faint);
+}
+
+.myui-number[data-trend='up'] .myui-number__trend {
+  color: var(--myui-color-success);
+}
+
+.myui-number[data-trend='down'] .myui-number__trend {
+  color: var(--myui-color-danger);
+}

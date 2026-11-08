@@ -1,0 +1,29 @@
+@use '../../../styles/mixins.scss' as *;
+
+/* =============================================================================
+ * {{pascalCase name}} — one line on what it is for.
+ * Rules: tokens only (no literal colours / spacing / radii), hard borders,
+ * zero radius, hard offset shadows, motion neutralised under reduced motion.
+ * ========================================================================== */
+
+.myui-{{name}} {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--myui-space-2);
+  padding: var(--myui-space-2) var(--myui-space-3);
+  border: var(--myui-border-width) solid var(--myui-color-line);
+  border-radius: var(--myui-radius-none);
+  background-color: var(--myui-color-surface);
+  font-family: var(--myui-font-body);
+  font-size: var(--myui-text-sm);
+  line-height: var(--myui-leading-snug);
+  color: var(--myui-color-text);
+
+  @include myui-focus-ring;
+}
+
+@include myui-motion-safe {
+  .myui-{{name}} {
+    transition: none;
+  }
+}

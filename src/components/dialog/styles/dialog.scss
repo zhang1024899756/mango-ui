@@ -1,0 +1,134 @@
+@use '../../../styles/mixins.scss' as *;
+
+/* =============================================================================
+ * Dialog — a poster taped over the wall: flat ink scrim, hard border, hard
+ * offset shadow, no glass, no blur.
+ * ========================================================================== */
+
+.myui-dialog {
+  position: fixed;
+  inset: 0;
+  z-index: var(--myui-z-dialog);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--myui-space-5);
+}
+
+.myui-dialog__scrim {
+  position: absolute;
+  inset: 0;
+  background-color: var(--myui-color-scrim);
+  background-image: radial-gradient(var(--myui-color-line-soft) 1px, transparent 1px);
+  background-size: 4px 4px;
+}
+
+.myui-dialog__panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  max-height: calc(100vh - var(--myui-space-7));
+  background-color: var(--myui-color-surface);
+  border: var(--myui-border-width) solid var(--myui-color-line);
+  border-radius: var(--myui-radius-none);
+  box-shadow: var(--myui-shadow-glow-lg);
+  outline: none;
+}
+
+/* --- header ---------------------------------------------------------------- */
+.myui-dialog__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--myui-space-4);
+  padding: var(--myui-space-5) var(--myui-space-5) var(--myui-space-4);
+  border-bottom: var(--myui-border-width) solid var(--myui-color-line);
+}
+
+.myui-dialog__title {
+  font-family: var(--myui-font-display);
+  font-size: var(--myui-text-xl);
+  font-weight: var(--myui-weight-black);
+  line-height: var(--myui-leading-snug);
+  letter-spacing: var(--myui-tracking-tight);
+  color: var(--myui-color-text);
+}
+
+.myui-dialog__close {
+  @include myui-control-reset;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 32px;
+  height: 32px;
+  margin-left: auto;
+  border: var(--myui-border-width) solid transparent;
+  border-radius: var(--myui-radius-none);
+  color: var(--myui-color-text-soft);
+  transition:
+    color var(--myui-duration-fast) var(--myui-ease-snap),
+    background-color var(--myui-duration-fast) var(--myui-ease-snap),
+    border-color var(--myui-duration-fast) var(--myui-ease-snap);
+
+  @include myui-focus-ring-inset;
+
+  &:hover {
+    background-color: var(--myui-color-surface-deep);
+    border-color: var(--myui-color-line);
+    color: var(--myui-color-text);
+  }
+}
+
+/* --- body ------------------------------------------------------------------ */
+.myui-dialog__body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: var(--myui-space-5);
+  font-size: var(--myui-text-md);
+  line-height: var(--myui-leading-relaxed);
+  color: var(--myui-color-text-soft);
+}
+
+/* --- footer ---------------------------------------------------------------- */
+.myui-dialog__footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--myui-space-3);
+  padding: var(--myui-space-4) var(--myui-space-5);
+  border-top: var(--myui-border-width) solid var(--myui-color-line);
+  background-color: var(--myui-color-bg);
+}
+
+/* --- transition ------------------------------------------------------------ */
+.myui-dialog-enter-active,
+.myui-dialog-leave-active {
+  transition: opacity var(--myui-duration) var(--myui-ease-out);
+}
+
+.myui-dialog-enter-active .myui-dialog__panel,
+.myui-dialog-leave-active .myui-dialog__panel {
+  transition:
+    opacity var(--myui-duration) var(--myui-ease-out),
+    transform var(--myui-duration) var(--myui-ease-out);
+}
+
+.myui-dialog-enter-from,
+.myui-dialog-leave-to {
+  opacity: 0;
+}
+
+.myui-dialog-enter-from .myui-dialog__panel,
+.myui-dialog-leave-to .myui-dialog__panel {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+@include myui-motion-safe {
+  .myui-dialog-enter-from .myui-dialog__panel,
+  .myui-dialog-leave-to .myui-dialog__panel {
+    transform: none;
+  }
+}

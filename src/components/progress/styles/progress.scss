@@ -1,0 +1,179 @@
+@use '../../../styles/mixins.scss' as *;
+
+/* =============================================================================
+ * Progress — a measured strip of ink. Hard edges, no gloss, no glow.
+ * ========================================================================== */
+
+.myui-progress {
+  --myui-progress-tone: var(--myui-color-accent);
+  display: flex;
+  align-items: center;
+  gap: var(--myui-space-3);
+  font-family: var(--myui-font-body);
+}
+
+.myui-progress--line {
+  width: 100%;
+}
+
+.myui-progress--circle {
+  display: inline-flex;
+  width: auto;
+}
+
+/* --- line ------------------------------------------------------------------ */
+.myui-progress__track {
+  position: relative;
+  flex: 1 1 auto;
+  width: 100%;
+  overflow: hidden;
+  border: var(--myui-border-width) solid var(--myui-color-line);
+  border-radius: var(--myui-radius-none);
+  background-color: var(--myui-color-surface-deep);
+}
+
+.myui-progress--sm .myui-progress__track {
+  height: 10px;
+}
+
+.myui-progress--md .myui-progress__track {
+  height: 14px;
+}
+
+.myui-progress--lg .myui-progress__track {
+  height: 20px;
+}
+
+.myui-progress__fill {
+  height: 100%;
+  background-color: var(--myui-progress-tone);
+  transition: width var(--myui-duration) var(--myui-ease-out);
+}
+
+.myui-progress__sweep {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 35%;
+  background-color: var(--myui-progress-tone);
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(0, 0, 0, 0.16) 0,
+    rgba(0, 0, 0, 0.16) 6px,
+    transparent 6px,
+    transparent 12px
+  );
+  animation: myui-progress-sweep 1.4s var(--myui-ease-snap) infinite;
+}
+
+@keyframes myui-progress-sweep {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(320%);
+  }
+}
+
+.myui-progress__text {
+  flex: none;
+  min-width: 3.2em;
+  text-align: right;
+  font-family: var(--myui-font-mono);
+  font-size: var(--myui-text-sm);
+  font-weight: var(--myui-weight-bold);
+  font-variant-numeric: tabular-nums;
+  color: var(--myui-color-text);
+}
+
+/* --- circle ---------------------------------------------------------------- */
+.myui-progress__ring {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.myui-progress--sm .myui-progress__ring {
+  width: 72px;
+  height: 72px;
+}
+
+.myui-progress--md .myui-progress__ring {
+  width: 96px;
+  height: 96px;
+}
+
+.myui-progress--lg .myui-progress__ring {
+  width: 124px;
+  height: 124px;
+}
+
+.myui-progress__ring svg {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+
+.myui-progress__ring-track,
+.myui-progress__ring-fill {
+  fill: none;
+  stroke-width: 8;
+}
+
+.myui-progress__ring-track {
+  stroke: var(--myui-color-surface-deep);
+}
+
+.myui-progress__ring-fill {
+  stroke: var(--myui-progress-tone);
+  stroke-linecap: butt;
+  transition: stroke-dashoffset var(--myui-duration) var(--myui-ease-out);
+}
+
+.myui-progress__ring-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--myui-font-display);
+  font-size: var(--myui-text-lg);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--myui-tracking-tight);
+  color: var(--myui-color-text);
+}
+
+/* --- tones ------------------------------------------------------------------ */
+.myui-progress--tone-ink {
+  --myui-progress-tone: var(--myui-color-text);
+}
+
+.myui-progress--tone-success {
+  --myui-progress-tone: var(--myui-color-success);
+}
+
+.myui-progress--tone-warning {
+  --myui-progress-tone: var(--myui-color-warning);
+}
+
+.myui-progress--tone-danger {
+  --myui-progress-tone: var(--myui-color-danger);
+}
+
+/* --- indeterminate ---------------------------------------------------------- */
+.myui-progress--indeterminate .myui-progress__text {
+  color: var(--myui-color-text-soft);
+}
+
+@include myui-motion-safe {
+  .myui-progress__sweep {
+    animation: none;
+    width: 100%;
+    opacity: 0.5;
+  }
+
+  .myui-progress__fill,
+  .myui-progress__ring-fill {
+    transition: none;
+  }
+}

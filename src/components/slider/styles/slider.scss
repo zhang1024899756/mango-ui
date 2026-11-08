@@ -1,0 +1,270 @@
+@use '../../../styles/mixins.scss' as *;
+
+/* =============================================================================
+ * Slider — a hard rule you drag along.
+ * Classes: .myui-slider [+ --vertical --tone-{accent|ink} --disabled
+ *                           --dragging --with-marks]
+ * Structure: .myui-slider > .myui-slider__rail
+ *              > .myui-slider__line > .myui-slider__fill
+ *              > .myui-slider__thumb (one per handle)
+ *              > .myui-slider__marks
+ * ========================================================================== */
+
+.myui-slider {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding-inline: var(--myui-space-3);
+  font-family: var(--myui-font-body);
+  color: var(--myui-color-text);
+  /* The pointer drag owns the gesture; never let the page scroll underneath it. */
+  touch-action: none;
+  user-select: none;
+}
+
+/* The rail is the measuring element for pointer maths: its width (or height,
+ * when vertical) maps 1:1 onto the value range. */
+.myui-slider__rail {
+  position: relative;
+  display: block;
+  height: var(--myui-control-md);
+  cursor: pointer;
+}
+
+/* --- track ------------------------------------------------------------------ */
+.myui-slider__line {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  left: 0;
+  height: var(--myui-space-2);
+  transform: translateY(-50%);
+  overflow: hidden;
+  border: var(--myui-border-width) solid var(--myui-color-line);
+  border-radius: var(--myui-radius-none);
+  background-color: var(--myui-color-surface);
+}
+
+.myui-slider__fill {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background-color: var(--myui-color-accent);
+  transition:
+    left var(--myui-duration-fast) var(--myui-ease-snap),
+    width var(--myui-duration-fast) var(--myui-ease-snap);
+}
+
+.myui-slider--tone-ink .myui-slider__fill {
+  background-color: var(--myui-color-text);
+}
+
+.myui-slider--dragging .myui-slider__fill {
+  /* While a finger is down the thumb is the animation; the fill snaps. */
+  transition: none;
+}
+
+/* --- thumb ------------------------------------------------------------------ */
+.myui-slider__thumb {
+  @include myui-control-reset;
+  @include myui-focus-ring;
+  position: absolute;
+  top: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--myui-space-5);
+  height: var(--myui-space-5);
+  transform: translate(-50%, -50%);
+  border: var(--myui-border-width) solid var(--myui-color-line);
+  border-radius: var(--myui-radius-pill);
+  background-color: var(--myui-color-surface);
+  box-shadow: var(--myui-shadow-glow-sm);
+  transition:
+    transform var(--myui-duration-fast) var(--myui-ease-snap),
+    box-shadow var(--myui-duration-fast) var(--myui-ease-snap),
+    opacity var(--myui-duration-fast) var(--myui-ease-snap);
+}
+
+.myui-slider__thumb:hover,
+.myui-slider__thumb.is-active {
+  transform: translate(-50%, -50%) scale(1.08);
+}
+
+.myui-slider__thumb.is-active {
+  box-shadow: none;
+}
+
+/* --- tooltip ---------------------------------------------------------------- */
+.myui-slider__tooltip {
+  position: absolute;
+  bottom: calc(100% + var(--myui-space-2));
+  left: 50%;
+  transform: translateX(-50%);
+  padding: var(--myui-space-1) var(--myui-space-2);
+  border: var(--myui-border-width) solid var(--myui-color-line);
+  border-radius: var(--myui-radius-none);
+  background-color: var(--myui-color-text);
+  color: var(--myui-color-bg);
+  font-family: var(--myui-font-mono);
+  font-size: var(--myui-text-xs);
+  line-height: var(--myui-leading-snug);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--myui-duration-fast) var(--myui-ease-snap);
+}
+
+.myui-slider__thumb:hover .myui-slider__tooltip,
+.myui-slider__thumb:focus-visible .myui-slider__tooltip,
+.myui-slider__thumb.is-active .myui-slider__tooltip {
+  opacity: 1;
+}
+
+/* --- marks ------------------------------------------------------------------ */
+.myui-slider__marks {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.myui-slider__mark {
+  position: absolute;
+  top: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--myui-space-1);
+  margin-top: var(--myui-space-3);
+  transform: translateX(-50%);
+}
+
+.myui-slider__mark-dot {
+  display: block;
+  width: var(--myui-border-width);
+  height: var(--myui-space-1);
+  background-color: var(--myui-color-line);
+}
+
+.myui-slider__mark-label {
+  font-size: var(--myui-text-xs);
+  line-height: var(--myui-leading-snug);
+  color: var(--myui-color-text-faint);
+  white-space: nowrap;
+}
+
+/* room for the marks under the rail */
+.myui-slider--with-marks {
+  padding-bottom: var(--myui-space-5);
+}
+
+/* --- vertical --------------------------------------------------------------- */
+.myui-slider--vertical {
+  display: inline-flex;
+  width: auto;
+  height: calc(var(--myui-space-8) * 3);
+  padding-block: var(--myui-space-3);
+  padding-inline: 0;
+}
+
+.myui-slider--vertical .myui-slider__rail {
+  width: var(--myui-control-md);
+  height: 100%;
+}
+
+.myui-slider--vertical .myui-slider__line {
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  right: auto;
+  width: var(--myui-space-2);
+  height: auto;
+  transform: translateX(-50%);
+}
+
+.myui-slider--vertical .myui-slider__fill {
+  top: auto;
+  bottom: auto;
+  left: 0;
+  right: 0;
+  transition:
+    bottom var(--myui-duration-fast) var(--myui-ease-snap),
+    height var(--myui-duration-fast) var(--myui-ease-snap);
+}
+
+.myui-slider--vertical.myui-slider--dragging .myui-slider__fill {
+  transition: none;
+}
+
+.myui-slider--vertical .myui-slider__thumb {
+  top: auto;
+  left: 50%;
+  transform: translate(-50%, 50%);
+}
+
+.myui-slider--vertical .myui-slider__thumb:hover,
+.myui-slider--vertical .myui-slider__thumb.is-active {
+  transform: translate(-50%, 50%) scale(1.08);
+}
+
+.myui-slider--vertical .myui-slider__tooltip {
+  top: 50%;
+  bottom: auto;
+  left: calc(100% + var(--myui-space-2));
+  transform: translateY(-50%);
+}
+
+.myui-slider--vertical .myui-slider__mark {
+  top: auto;
+  left: calc(50% + var(--myui-space-3));
+  flex-direction: row;
+  margin-top: 0;
+  transform: translateY(50%);
+}
+
+.myui-slider--vertical.myui-slider--with-marks {
+  padding-right: var(--myui-space-8);
+}
+
+/* --- disabled --------------------------------------------------------------- */
+.myui-slider--disabled .myui-slider__rail {
+  cursor: not-allowed;
+}
+
+.myui-slider--disabled .myui-slider__fill {
+  background-color: var(--myui-color-text-faint);
+}
+
+.myui-slider--disabled .myui-slider__thumb {
+  border-color: var(--myui-color-line-soft);
+  background-color: var(--myui-color-surface-deep);
+  box-shadow: none;
+}
+
+.myui-slider--disabled .myui-slider__mark-label {
+  color: var(--myui-color-line-soft);
+}
+
+/* A disabled slider has nothing to announce on hover. */
+.myui-slider--disabled .myui-slider__thumb:hover .myui-slider__tooltip {
+  opacity: 0;
+}
+
+/* --- motion ----------------------------------------------------------------- */
+@include myui-motion-safe {
+  .myui-slider__fill,
+  .myui-slider__thumb,
+  .myui-slider__tooltip {
+    transition: none;
+  }
+
+  .myui-slider__thumb:hover,
+  .myui-slider__thumb.is-active {
+    transform: translate(-50%, -50%);
+  }
+
+  .myui-slider--vertical .myui-slider__thumb:hover,
+  .myui-slider--vertical .myui-slider__thumb.is-active {
+    transform: translate(-50%, 50%);
+  }
+}

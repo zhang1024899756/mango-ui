@@ -1,68 +1,102 @@
 {
-  "private": true,
-  "workspaces": [
-    "./packages/*"
-  ],
   "name": "mango-ui",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "jest",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook",
-    "build": "rollup -c",
-    "build:prod": "cross-env NODE_ENV=production rollup -c",
-    "build:dev": "cross-env NODE_ENV=development rollup -c",
-    "lerna": "lerna publish",
-    "clean": "lerna clean",
-    "del": "rimraf dist",
-    "plop": "plop"
-  },
+  "version": "2.0.0",
+  "description": "Mango UI — a cyberpunk, digital-time-travel flavoured Vue 3 component library. Neon effects that wrap, futuristic elements that glow.",
+  "type": "module",
+  "license": "MIT",
   "author": "zhang1024899756",
-  "license": "ISC",
-  "devDependencies": {
-    "@babel/core": "^7.13.10",
-    "@babel/preset-env": "^7.13.10",
-    "@rollup/plugin-json": "^4.1.0",
-    "@rollup/plugin-node-resolve": "^11.2.0",
-    "@storybook/addon-actions": "^6.1.21",
-    "@storybook/addon-essentials": "^6.1.21",
-    "@storybook/addon-links": "^6.1.21",
-    "@storybook/vue": "^6.1.21",
-    "@vue/test-utils": "^1.1.3",
-    "autoprefixer": "^10.2.5",
-    "babel-jest": "^26.6.3",
-    "babel-loader": "^8.2.2",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
-    "css-loader": "^5.1.3",
-    "cssnano": "^4.1.10",
-    "jest": "^26.6.3",
-    "lerna": "^4.0.0",
-    "node-sass": "^5.0.0",
-    "plop": "^2.7.4",
-    "rimraf": "^3.0.2",
-    "rollup": "^2.41.4",
-    "rollup-plugin-babel": "^4.4.0",
-    "rollup-plugin-commonjs": "^10.1.0",
-    "rollup-plugin-postcss": "^4.0.0",
-    "rollup-plugin-terser": "^7.0.2",
-    "rollup-plugin-vue": "5.1.9",
-    "sass-loader": "7.0.3",
-    "style-loader": "^2.0.0",
-    "vue-jest": "^3.0.7",
-    "vue-loader": "^15.9.6",
-    "vue-template-compiler": "^2.6.12"
+  "homepage": "https://github.com/zhang1024899756/mango-ui",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zhang1024899756/mango-ui.git"
   },
-  "dependencies": {
-    "vue": "^2.6.12"
+  "bugs": {
+    "url": "https://github.com/zhang1024899756/mango-ui/issues"
+  },
+  "keywords": [
+    "vue",
+    "vue3",
+    "component-library",
+    "design-system",
+    "ui-kit",
+    "typescript",
+    "cyberpunk",
+    "effects",
+    "vue",
+    "vue3",
+    "component-library",
+    "design-system",
+    "ui-kit",
+    "typescript",
+    "effects"
+  ],
+  "main": "./dist/mango-ui.cjs",
+  "module": "./dist/mango-ui.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "import": "./dist/mango-ui.js",
+      "require": "./dist/mango-ui.cjs"
+    },
+    "./style.css": "./dist/mango-ui.css",
+    "./dist/style.css": "./dist/mango-ui.css",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "sideEffects": [
+    "**/*.css",
+    "**/*.scss"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.0"
+  },
+  "scripts": {
+    "dev": "storybook dev -p 6006 --no-open",
+    "storybook": "storybook dev -p 6006 --no-open",
+    "build:storybook": "storybook build -o storybook-static",
+    "build:lib": "vite build",
+    "build:types": "vue-tsc -p tsconfig.d.ts.json --emitDeclarationOnly",
+    "build": "pnpm build:lib && pnpm build:types",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "type-check": "vue-tsc -p tsconfig.json --noEmit",
+    "plop": "plop --plopfile plopfile.cjs",
+    "clean": "rimraf dist storybook-static docs/.vitepress/dist docs/.vitepress/cache"
+  },
+  "devDependencies": {
+    "@storybook/addon-a11y": "^10.6.6",
+    "@storybook/addon-docs": "^10.6.6",
+    "@storybook/addon-links": "^10.6.6",
+    "@storybook/vue3-vite": "^10.6.6",
+    "@types/node": "^24.0.0",
+    "@vitejs/plugin-vue": "^6.0.10",
+    "@vue/test-utils": "^2.5.1",
+    "jsdom": "^31.0.0",
+    "markdown-it-container": "4.0.0",
+    "plop": "^4.0.5",
+    "rimraf": "^6.0.1",
+    "sass": "^1.108.1",
+    "storybook": "^10.6.6",
+    "typescript": "~5.9.3",
+    "vite": "^7.3.7",
+    "vitepress": "^1.6.4",
+    "vitest": "^5.1.0",
+    "vue": "^3.5.45",
+    "vue-tsc": "^3.3.14"
   },
   "browserslist": [
     "defaults",
-    "not ie < 8",
     "last 2 versions",
-    "> 1%",
-    "iOS 7",
-    "last 3 iOS versions"
+    "not dead"
   ]
 }

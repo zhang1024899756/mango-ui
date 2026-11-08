@@ -1,0 +1,111 @@
+@use '../../../styles/mixins.scss' as *;
+
+/* =============================================================================
+ * Flotage — 漂浮. The wrapper that never quite settles.
+ * Classes: .myui-flotage [+ --axis-{y|x|rotate} --hover, is-disabled]
+ *
+ * Transform only: a float must not reflow the page it sits in. The three axes
+ * share one distance variable, so `amplitude` moves y, x and the tilt together.
+ *
+ * Caveat worth knowing: an animated transform makes the wrapper a containing
+ * block for `position: fixed` descendants. Wrapping a portal host inside a
+ * Flotage is the one layout it can disturb.
+ * ========================================================================== */
+
+.myui-flotage {
+  /* Inline-block keeps a text node in the line box; block tags are restored below. */
+  display: inline-block;
+
+  --myui-flotage-amplitude: 8;
+  --myui-flotage-duration: 4s;
+  --myui-flotage-delay: 0s;
+
+  /* px on the travel axes, deg on the rotate axis. */
+  --myui-flotage-travel: calc(var(--myui-flotage-amplitude) * 1px);
+  --myui-flotage-tilt: calc(var(--myui-flotage-amplitude) * 1deg);
+}
+
+/* A wrapper around a card must still be a card: restore block flow for the
+ * block-level tags, at flat specificity so a consumer's own display wins. */
+.myui-flotage:where(div, section, article, aside, header, footer, main, nav, figure, figcaption, p, ul, ol, li, blockquote, h1, h2, h3, h4, h5, h6, form, details, td, th) {
+  display: block;
+}
+
+/* --- the three axes -------------------------------------------------------- */
+.myui-flotage--axis-y:not(.is-disabled) {
+  will-change: transform;
+  animation: myui-flotage-y var(--myui-flotage-duration) ease-in-out
+    var(--myui-flotage-delay) infinite;
+}
+
+.myui-flotage--axis-x:not(.is-disabled) {
+  will-change: transform;
+  animation: myui-flotage-x var(--myui-flotage-duration) ease-in-out
+    var(--myui-flotage-delay) infinite;
+}
+
+.myui-flotage--axis-rotate:not(.is-disabled) {
+  will-change: transform;
+  animation: myui-flotage-rotate var(--myui-flotage-duration) ease-in-out
+    var(--myui-flotage-delay) infinite;
+}
+
+@keyframes myui-flotage-y {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(0, calc(var(--myui-flotage-travel) * -1), 0);
+  }
+}
+
+@keyframes myui-flotage-x {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(var(--myui-flotage-travel), 0, 0);
+  }
+}
+
+@keyframes myui-flotage-rotate {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+
+  50% {
+    transform: rotate(calc(var(--myui-flotage-tilt) * -1));
+  }
+}
+
+/* --- trigger --------------------------------------------------------------- */
+/* Hover mode holds still until the pointer arrives — and until keyboard focus
+ * lands inside, so the effect is never pointer-only. */
+.myui-flotage--hover:not(.is-disabled) {
+  animation-play-state: paused;
+}
+
+.myui-flotage--hover:not(.is-disabled):hover,
+.myui-flotage--hover:not(.is-disabled):focus-within {
+  animation-play-state: running;
+}
+
+/* --- inert ----------------------------------------------------------------- */
+.myui-flotage.is-disabled {
+  will-change: auto;
+  animation: none;
+}
+
+/* --- reduced motion: pin the content, keep it visible ---------------------- */
+@include myui-motion-safe {
+  .myui-flotage {
+    animation: none !important;
+    transform: none !important;
+    will-change: auto !important;
+  }
+}

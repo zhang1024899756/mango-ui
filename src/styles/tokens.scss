@@ -1,0 +1,205 @@
+/* =============================================================================
+ * Mango UI — design tokens
+ * -----------------------------------------------------------------------------
+ * Direction: CYBERPUNK / DIGITAL TIME-TRAVEL / FUTURE TECH (赛博朋克 · 数字穿越)
+ *   deep-space surfaces, neon cyan as the one action colour, magenta as the
+ *   signal colour, 1px luminous hairlines, glow instead of drop shadow,
+ *   monospace micro-labels, grid + scanline texture.
+ *
+ * Cyberpunk is easy to get wrong in two ways: a violet-blue gradient soup, or
+ * a neon pinball machine. The rules that keep this system usable:
+ *   1. The background is almost black and almost neutral — the neon only reads
+ *      because the base is quiet.
+ *   2. ONE action colour (cyan). Magenta is a *signal* (alert, new, hot), never
+ *      a second button colour.
+ *   3. Glow is elevation here, but it is tight (8–40px) and low-alpha; a glow on
+ *      everything means nothing glows.
+ *   4. Text is ice-white at three steps. Neon text only for large or bold.
+ *
+ * Every value is a CSS custom property — that is the public theming API.
+ * Default is the night/neon theme; [data-myui-theme="light"] is the daylight
+ * lab variant.
+ * ========================================================================== */
+
+:root,
+[data-myui-theme='dark'] {
+  color-scheme: dark;
+
+  /* --- surfaces: deep space, five steps ---------------------------------- */
+  --myui-color-bg: #05070d;
+  --myui-color-surface: #0a0f18;
+  --myui-color-surface-raised: #101724;
+  --myui-color-surface-deep: #02040a;
+  --myui-color-glass: rgba(16, 23, 36, 0.72);
+
+  /* --- text: ice ramp ---------------------------------------------------- */
+  --myui-color-text: #dbe9f4;
+  --myui-color-text-soft: #93a7bb;
+  --myui-color-text-faint: #6f8499;
+
+  /* --- structure: hairlines, not ink strokes ----------------------------- */
+  --myui-color-line: #1b2a3d;
+  --myui-color-line-soft: rgba(120, 200, 255, 0.14);
+  --myui-color-line-strong: rgba(120, 200, 255, 0.38);
+  --myui-color-grid: rgba(120, 200, 255, 0.055);
+
+  /* --- accent: the one action colour (neon cyan) ------------------------- */
+  --myui-color-accent: #19e0ff;
+  --myui-color-accent-hover: #55ecff;
+  --myui-color-accent-active: #00b8d4;
+  --myui-color-accent-ink: #01131a;
+  --myui-color-accent-text: #6cf0ff;
+  --myui-color-accent-wash: rgba(25, 224, 255, 0.12);
+
+  /* --- signal: hot magenta. Alerts, "new", the other side of the portal. -- */
+  --myui-color-signal: #ff2e88;
+  --myui-color-signal-text: #ff7ab6;
+  --myui-color-signal-wash: rgba(255, 46, 136, 0.14);
+
+  /* --- semantic ---------------------------------------------------------- */
+  --myui-color-success: #35e0a1;
+  --myui-color-success-wash: rgba(53, 224, 161, 0.13);
+  --myui-color-warning: #ffc24b;
+  --myui-color-warning-wash: rgba(255, 194, 75, 0.13);
+  --myui-color-danger: #ff4d6d;
+  --myui-color-danger-wash: rgba(255, 77, 109, 0.13);
+  --myui-color-info: #5aa9ff;
+  --myui-color-info-wash: rgba(90, 169, 255, 0.13);
+
+  /* --- scrim: flat deep-space, plus the grid it sits on ------------------ */
+  --myui-color-scrim: rgba(2, 4, 10, 0.82);
+
+  /* --- type ---------------------------------------------------------------
+   * Display is Chakra Petch — geometric, cut, technical. Body stays Inter so
+   * long Chinese and English copy is still comfortable. Micro-labels go mono.
+   * --------------------------------------------------------------------- */
+  --myui-font-display: 'Chakra Petch', 'Orbitron', 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', sans-serif;
+  --myui-font-body: 'Inter', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei',
+    system-ui, -apple-system, sans-serif;
+  --myui-font-mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, 'Liberation Mono',
+    monospace;
+
+  --myui-text-xs: 12px;
+  --myui-text-sm: 13px;
+  --myui-text-md: 15px;
+  --myui-text-lg: 19px;
+  --myui-text-xl: 24px;
+  --myui-text-2xl: 32px;
+  --myui-text-3xl: 44px;
+
+  --myui-leading-tight: 1.05;
+  --myui-leading-snug: 1.25;
+  --myui-leading-normal: 1.5;
+  --myui-leading-relaxed: 1.65;
+
+  --myui-weight-regular: 400;
+  --myui-weight-medium: 500;
+  --myui-weight-bold: 700;
+  --myui-weight-black: 800;
+
+  /* Wide tracking is the HUD voice; tight tracking is the display voice. */
+  --myui-tracking-tight: -0.01em;
+  --myui-tracking-normal: 0;
+  --myui-tracking-wide: 0.16em;
+
+  /* --- space: 8 steps on a 4px grid -------------------------------------- */
+  --myui-space-1: 4px;
+  --myui-space-2: 8px;
+  --myui-space-3: 12px;
+  --myui-space-4: 16px;
+  --myui-space-5: 24px;
+  --myui-space-6: 32px;
+  --myui-space-7: 48px;
+  --myui-space-8: 64px;
+
+  /* --- shape: cut corners only, plus pills ------------------------------- */
+  --myui-radius-none: 0px;
+  --myui-radius-pill: 999px;
+
+  /* 1px hairlines read as circuitry; 2px reads as poster. */
+  --myui-border-width: 1px;
+  --myui-border-hair: 1px solid var(--myui-color-line-soft);
+  --myui-border-bold: var(--myui-border-width) solid var(--myui-color-line-strong);
+
+  /* --- elevation: glow, tight and low-alpha ------------------------------ */
+  --myui-shadow-glow-sm: 0 0 8px rgba(25, 224, 255, 0.22);
+  --myui-shadow-glow: 0 0 18px rgba(25, 224, 255, 0.26);
+  --myui-shadow-glow-lg: 0 0 40px rgba(25, 224, 255, 0.3);
+  --myui-shadow-signal: 0 0 20px rgba(255, 46, 136, 0.28);
+  /* Inset rim used on panels — the "screen edge" of the HUD. */
+  --myui-shadow-inset: inset 0 0 0 1px var(--myui-color-line-soft);
+
+  /* --- control sizing ----------------------------------------------------- */
+  --myui-control-sm: 32px;
+  --myui-control-md: 40px;
+  --myui-control-lg: 48px;
+
+  /* --- motion: quick, mechanical, never bouncy --------------------------- */
+  --myui-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --myui-ease-snap: cubic-bezier(0.2, 0.9, 0.25, 1);
+  --myui-duration-fast: 120ms;
+  --myui-duration: 200ms;
+  --myui-duration-slow: 420ms;
+
+  /* --- focus -------------------------------------------------------------- */
+  --myui-focus-width: 2px;
+  --myui-focus-offset: 2px;
+
+  /* --- layering ----------------------------------------------------------- */
+  --myui-z-sticky: 10;
+  --myui-z-dropdown: 1000;
+  --myui-z-overlay: 1100;
+  --myui-z-dialog: 1200;
+}
+
+/* -----------------------------------------------------------------------------
+ * Daylight lab: the same system on light surfaces, for editorial/print contexts.
+ * Accent darkens so that accent-as-text still clears AA on paper.
+ * -------------------------------------------------------------------------- */
+[data-myui-theme='light'] {
+  color-scheme: light;
+
+  --myui-color-bg: #eef3f8;
+  --myui-color-surface: #ffffff;
+  --myui-color-surface-raised: #f7fafd;
+  --myui-color-surface-deep: #e2e9f2;
+  --myui-color-glass: rgba(255, 255, 255, 0.72);
+
+  --myui-color-text: #0a1420;
+  --myui-color-text-soft: #43566b;
+  --myui-color-text-faint: #5d7186;
+
+  --myui-color-line: #c3d1e0;
+  --myui-color-line-soft: rgba(10, 20, 32, 0.14);
+  --myui-color-line-strong: rgba(10, 20, 32, 0.42);
+  --myui-color-grid: rgba(10, 20, 32, 0.05);
+
+  --myui-color-accent: #00739c;
+  --myui-color-accent-hover: #0089b8;
+  --myui-color-accent-active: #005e80;
+  --myui-color-accent-ink: #ffffff;
+  --myui-color-accent-text: #00628a;
+  --myui-color-accent-wash: rgba(0, 115, 156, 0.1);
+
+  --myui-color-signal: #c9135f;
+  --myui-color-signal-text: #a80f4f;
+  --myui-color-signal-wash: rgba(201, 19, 95, 0.1);
+
+  --myui-color-success: #0b7d5a;
+  --myui-color-success-wash: rgba(11, 125, 90, 0.1);
+  --myui-color-warning: #8a5a00;
+  --myui-color-warning-wash: rgba(138, 90, 0, 0.12);
+  --myui-color-danger: #c81e3c;
+  --myui-color-danger-wash: rgba(200, 30, 60, 0.1);
+  --myui-color-info: #14539c;
+  --myui-color-info-wash: rgba(20, 83, 156, 0.1);
+
+  --myui-color-scrim: rgba(10, 20, 32, 0.55);
+
+  --myui-shadow-glow-sm: 0 0 0 1px rgba(0, 115, 156, 0.18);
+  --myui-shadow-glow: 0 6px 20px rgba(10, 20, 32, 0.1);
+  --myui-shadow-glow-lg: 0 16px 44px rgba(10, 20, 32, 0.16);
+  --myui-shadow-signal: 0 6px 20px rgba(201, 19, 95, 0.18);
+  --myui-shadow-inset: inset 0 0 0 1px var(--myui-color-line-soft);
+}
