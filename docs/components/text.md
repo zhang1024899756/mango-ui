@@ -120,7 +120,7 @@ description: 排印原语——同一段字在展示体、HUD 微标签、正文
 <MyuiText as="h2" variant="display" size="xl">DROP 07 · 街区夜市</MyuiText>
 <MyuiText as="p" variant="body" style="max-width:52ch">用 as 决定标签——读屏软件和搜索引擎看到的结构不会因为视觉改版而丢。</MyuiText>
 <MyuiText as="label" variant="eyebrow" tone="accent">邮箱</MyuiText>
-<MyuiText as="code" variant="mono" tone="soft">npm i mango-ui</MyuiText>
+<MyuiText as="code" variant="mono" tone="soft">npm i @zhang1024899756/mango-ui</MyuiText>
 </div>
 :::
 
@@ -128,7 +128,7 @@ description: 排印原语——同一段字在展示体、HUD 微标签、正文
 <MyuiText as="h2" variant="display" size="xl">DROP 07 · 街区夜市</MyuiText>
 <MyuiText as="p" variant="body">用 as 决定标签…</MyuiText>
 <MyuiText as="label" variant="eyebrow" tone="accent">邮箱</MyuiText>
-<MyuiText as="code" variant="mono" tone="soft">npm i mango-ui</MyuiText>
+<MyuiText as="code" variant="mono" tone="soft">npm i @zhang1024899756/mango-ui</MyuiText>
 ```
 
 ## 实战 · 中英混排

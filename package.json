@@ -1,11 +1,14 @@
 {
-  "name": "mango-ui",
+  "name": "@zhang1024899756/mango-ui",
   "version": "2.2.0",
   "description": "Mango UI — a cyberpunk, digital-time-travel flavoured Vue 3 component library. Neon effects that wrap, futuristic elements that glow.",
   "type": "module",
   "license": "MIT",
-  "author": "zhang1024899756",
-  "homepage": "https://github.com/zhang1024899756/mango-ui",
+  "author": {
+    "name": "zhang1024899756",
+    "url": "https://github.com/zhang1024899756"
+  },
+  "homepage": "https://zhang1024899756.github.io/mango-ui/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/zhang1024899756/mango-ui.git"
@@ -48,6 +51,9 @@
   "engines": {
     "node": ">=20"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "peerDependencies": {
     "vue": "^3.5.0"
   },
@@ -56,7 +62,7 @@
     "storybook": "storybook dev -p 6006 --no-open",
     "build:storybook": "storybook build -o storybook-static",
     "build:lib": "vite build",
-    "build:types": "vue-tsc -p tsconfig.d.ts.json --emitDeclarationOnly",
+    "build:types": "vue-tsc -p tsconfig.d.ts.json --emitDeclarationOnly && node scripts/fix-dts-specifiers.mjs",
     "build": "pnpm build:lib && pnpm build:types",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",

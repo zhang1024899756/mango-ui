@@ -2,14 +2,14 @@
 
 **一套为赛博朋克门户而生的 Vue 3 组件库。**
 
-**[📖 在线文档](https://zhang1024899756.github.io/mango-ui/)** · **[GitHub 仓库](https://github.com/zhang1024899756/mango-ui)** · **[更新日志](https://github.com/zhang1024899756/mango-ui/releases)**
+**[📖 在线文档](https://zhang1024899756.github.io/mango-ui/)** · **[npm](https://www.npmjs.com/package/@zhang1024899756/mango-ui)** · **[GitHub 仓库](https://github.com/zhang1024899756/mango-ui)** · **[更新日志](https://github.com/zhang1024899756/mango-ui/releases)**
 
 深空近黑打底、1px 霓虹发丝线、只有一个电光青作为行动色，品红只做信号。
 为数字穿越题材的门户站、数字艺术与未来科技产品而生，
 以及一切不想长得像后台管理系统的前端。
 
 ```bash
-pnpm add mango-ui
+pnpm add @zhang1024899756/mango-ui
 ```
 
 ```vue
@@ -110,13 +110,15 @@ CSS 故障字特效组件。v2 是一次彻底重写：
 ## 安装与使用
 
 ```bash
-pnpm add mango-ui
+pnpm add @zhang1024899756/mango-ui
 ```
+
+> npm 上 `mango-ui` 这个包名已被他人占用（2018 年的旧包），所以正式包名是作用域包 `@zhang1024899756/mango-ui`（公开包，`npm publish` 已设 `access: public`）。
 
 ```ts
 import { createApp } from 'vue'
-import MangoUI from 'mango-ui'
-import 'mango-ui/style.css'
+import MangoUI from '@zhang1024899756/mango-ui'
+import '@zhang1024899756/mango-ui/style.css'
 import App from './App.vue'
 
 createApp(App).use(MangoUI).mount('#app')
@@ -125,13 +127,13 @@ createApp(App).use(MangoUI).mount('#app')
 按需引入（每个组件都有独立入口，可摇树）：
 
 ```ts
-import { MyuiButton, MyuiTag } from 'mango-ui'
+import { MyuiButton, MyuiTag } from '@zhang1024899756/mango-ui'
 ```
 
 类型随包发布：
 
 ```ts
-import type { ButtonProps, ButtonVariant } from 'mango-ui'
+import type { ButtonProps, ButtonVariant } from '@zhang1024899756/mango-ui'
 ```
 
 唯一的 peer 依赖是 `vue@^3.5.0`。没有 lodash、没有 CSS-in-JS、没有图标字体。
@@ -234,7 +236,7 @@ plop-template/           组件脚手架模板
 
 ## 从 v1 迁移
 
-1. **组件包路径没了**：`packages/magic` → 直接从 `mango-ui` 引入 `MyuiNeon`。
+1. **组件包路径没了**：`packages/magic` → 直接从 `@zhang1024899756/mango-ui` 引入 `MyuiNeon`。
 2. **`magic` 的 API 变了**：原来是 `content` 字符串 prop，现在是包裹型组件，
    仍然支持 `text` prop，但推荐用默认插槽包住任意内容。
 3. **类名变了**：`.text-magic` → `.myui-neon`。

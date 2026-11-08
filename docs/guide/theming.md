@@ -283,7 +283,7 @@ Mango UI 只对外承诺第 ① 层和第 ② 层。
 
 ```ts
 export default defineNuxtConfig({
-  css: ['mango-ui/style.css'],
+  css: ['@zhang1024899756/mango-ui/style.css'],
 })
 ```
 
