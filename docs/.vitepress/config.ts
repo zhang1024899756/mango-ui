@@ -73,7 +73,6 @@ export default defineConfig({
       {
         text: 'v2.0.0',
         items: [
-          { text: '在线组件库', link: 'https://zhang1024899756.github.io/mango-ui/' },
           {
             text: '更新日志',
             link: 'https://github.com/zhang1024899756/mango-ui/releases',

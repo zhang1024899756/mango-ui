@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Mango UI — 赛博朋克 · 数字穿越的 Vue 3 组件库
+title: 赛博朋克 · 数字穿越的 Vue 3 组件库
 ---
 
 <div class="poster">
