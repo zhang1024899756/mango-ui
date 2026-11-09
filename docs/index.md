@@ -6,10 +6,22 @@ title: 赛博朋克 · 数字穿越的 Vue 3 组件库
 <div class="poster">
   <div class="poster__kicker">MANGO UI / V2 — CYBERPUNK EDITION</div>
 
-  <h1 class="poster__title">
+  <!--
+    包的是 h1 本体（as="h1"），不是 h1 里再套一层 span：组件默认 inline-block，
+    套在内部会把两行收进一个行内块，h1 的行盒和位置都会变；包在外层时 h1 仍是块级、
+    __content 也还原成块级，行盒 / 字号 / 外边距一个字没动（1440px 与 390px 实测矩形完全一致）。
+    motion-preference="always" 与下面三张特效卡一致：这一页的效果本身就是内容。
+  -->
+  <MyuiGlitchRipple
+    as="h1"
+    class="poster__title"
+    intensity="normal"
+    speed="normal"
+    motion-preference="always"
+  >
     赛博芒果<br />
     穿越<em>未来</em>
-  </h1>
+  </MyuiGlitchRipple>
 
   <p class="poster__lead">
     两套装备：能<strong>包裹任何东西</strong>的特效组件——霓虹灯管、失重漂浮、光带扫过；
