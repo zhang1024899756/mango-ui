@@ -260,3 +260,29 @@ suite only for the final check.
 `package.json`, `vite.config.ts`, `vitest.config.ts`, `tsconfig*.json`,
 `.storybook/**`, `README.md`, `CONTRIBUTING.md`, and any directory outside your
 assigned component scope.
+
+---
+
+## 10. Publishing (maintainers)
+
+Releases are manual and follow a fixed order: **bump `version` first, then build, then publish**.
+
+```bash
+npm version <x.y.z> --no-git-tag-version   # 1. version first (package.json is the single source)
+pnpm build                                 # 2. dist must come from THIS source + THIS version
+npm publish                                # 3. 2FA is approved in the browser
+```
+
+Do not swap those three lines:
+
+- publishing before building uploads a stale `dist/` (it is git-ignored and only exists after a build), or an empty package;
+- changing the version after building ships a package that does not match what the build was made from;
+- npm refuses any version that already exists (`E403`) — a version number can never be reused, even after un-publishing.
+
+The full checklist (pre-flight gates, the 2FA hand-off via the npm-2fa-auth plugin,
+post-publish verification, tagging, syncing the docs-site version, failure and
+rollback rules, and the release log) lives in [PUBLISHING.md](PUBLISHING.md).
+
+Publishing edits `package.json`, which section 9 reserves, so it is not part of a
+component contribution — the maintainer runs it.
+
