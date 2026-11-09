@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" role="img" aria-label="Mango UI">
+  <rect x="4" y="4" width="120" height="120" rx="28" fill="#05070d" />
+  <svg x="14" y="10" width="100" height="108" viewBox="16 12 94 112" preserveAspectRatio="xMidYMid meet">
+    <g transform="rotate(-12 64 68)" fill="#19e0ff"><path d="M56 16C70 15 82 28 89 47C96 66 102 86 91 100C85 109 72 118 60 117C57 121 52 120 50 115C38 108 26 95 22 78C18 60 26 40 38 26C42 20 49 16 56 16Z" /></g>
+  </svg>
+</svg>

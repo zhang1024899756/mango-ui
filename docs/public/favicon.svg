@@ -1,8 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Mango UI">
-  <rect width="64" height="64" fill="#05070d" />
-  <rect x="3.5" y="3.5" width="57" height="57" fill="none" stroke="#19e0ff" stroke-opacity="0.45" />
-  <path
-    d="M14 47V17h7l11 14 11-14h7v30h-7V30L32 43 21 30v17z"
-    fill="#19e0ff"
-  />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="Mango UI">
+  <rect width="32" height="32" rx="7" fill="#05070d" />
+  <svg x="3" y="3" width="26" height="26" viewBox="16 12 94 112" preserveAspectRatio="xMidYMid meet">
+    <g transform="rotate(-12 64 68)" fill="#19e0ff"><path d="M56 16C70 15 82 28 89 47C96 66 102 86 91 100C85 109 72 118 60 117C57 121 52 120 50 115C38 108 26 95 22 78C18 60 26 40 38 26C42 20 49 16 56 16Z" /></g>
+  </svg>
 </svg>

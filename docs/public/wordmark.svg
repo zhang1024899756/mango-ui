@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 128" width="360" height="128" role="img" aria-label="Mango UI">
+  <!-- MANGO UI：手绘几何赛博字形 -->
+  <g fill="#19e0ff">
+        <path d="M0 44V0h7.5l7.5 21 7.5-21H30v44h-6V15l-6 17h-6L6 15v29z" transform="translate(39 30)" fill-rule="nonzero" />
+    <path d="M0 44L9 0h12l9 44h-6.5l-2-11h-13l-2 11zM10.5 27h9L15 12z" transform="translate(79 30)" fill-rule="evenodd" />
+    <path d="M0 44V0h6.5l17 28V0H30v44h-6.5L6.5 16v28z" transform="translate(119 30)" fill-rule="nonzero" />
+    <path d="M0 0h30v12h-6V6H6v32h18v-8h-10v-6h16v20H0z" transform="translate(159 30)" fill-rule="nonzero" />
+    <path d="M0 0h30v44H0zM6 6h18v32H6z" transform="translate(199 30)" fill-rule="evenodd" />
+    <path d="M0 0h6v38h18V0h6v44H0z" transform="translate(251 30)" fill-rule="nonzero" />
+    <path d="M12 0h6v44h-6z" transform="translate(291 30)" fill-rule="nonzero" />
+  </g>
+  <text x="39" y="104" font-family="ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace"
+        font-size="12.5" font-weight="500" letter-spacing="6.4" fill="#19e0ff" fill-opacity="0.62">CYBERPUNK UI</text>
+</svg>

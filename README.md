@@ -1,12 +1,20 @@
-# Mango UI
+<div align="center">
 
-**一套为赛博朋克门户而生的 Vue 3 组件库。**
+<img src="docs/public/wordmark.svg" width="360" alt="Mango UI" />
 
-**[📖 在线文档](https://zhang1024899756.github.io/mango-ui/)** · **[npm](https://www.npmjs.com/package/@arvinzxy/mango-ui)** · **[GitHub 仓库](https://github.com/zhang1024899756/mango-ui)** · **[更新日志](https://github.com/zhang1024899756/mango-ui/releases)**
+<p><strong>赛博朋克 · 数字穿越的 Vue 3 组件库</strong></p>
 
-深空近黑打底、1px 霓虹发丝线、只有一个电光青作为行动色，品红只做信号。
-为数字穿越题材的门户站、数字艺术与未来科技产品而生，
-以及一切不想长得像后台管理系统的前端。
+<p>深空近黑打底、1px 霓虹发丝线、只有一个电光青作为行动色，品红只做信号。<br />
+为数字穿越题材的门户站、数字艺术与未来科技产品而生 —— 以及一切不想长得像后台管理系统的前端。</p>
+
+[![文档](https://img.shields.io/badge/文档-0B1220?style=flat-square&logo=vitepress&logoColor=19E0FF)](https://zhang1024899756.github.io/mango-ui/)
+[![npm](https://img.shields.io/npm/v/@arvinzxy/mango-ui?label=npm&logo=npm&logoColor=white&style=flat-square&color=0B1220)](https://www.npmjs.com/package/@arvinzxy/mango-ui)
+[![Vue 3.5](https://img.shields.io/badge/Vue-3.5-41B883?logo=vue.js&logoColor=white&style=flat-square)](https://vuejs.org)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?logo=typescript&logoColor=white&style=flat-square)](https://www.typescriptlang.org)
+[![license](https://img.shields.io/badge/license-MIT-0B1220?logo=opensourceinitiative&logoColor=white&style=flat-square)](./LICENSE)
+[![CI](https://img.shields.io/github/actions/workflow/status/zhang1024899756/mango-ui/ci.yml?branch=main&label=CI&logo=githubactions&logoColor=white&style=flat-square)](https://github.com/zhang1024899756/mango-ui/actions/workflows/ci.yml)
+
+</div>
 
 ```bash
 pnpm add @arvinzxy/mango-ui
