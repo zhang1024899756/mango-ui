@@ -67,9 +67,30 @@
  * drops instead of travelling smoothly.
  *
  *   tremble  the content shivers 0.5–1.2px, irregularly, in ~30% of its cycle
- *   flicker  two or three hard opacity dips per cycle, never past ~0.55, so the
- *            text stays readable and the cadence stays under the three-flashes-
- *            per-second guideline
+ *   flicker  irregular hard opacity dips, never past ~0.55, so the text stays
+ *            readable and the cadence stays under the three-flashes-per-second
+ *            guideline
+ *
+ * THE FLICKER MUST NOT BE COUNTABLE
+ *   The first version was three dips at fixed percentages of a 2.6s cycle —
+ *   156ms, 910ms, 1820ms, again — and that is a metronome, not a failing signal:
+ *   after two cycles the eye knows when the next drop lands and stops believing
+ *   it. The track below spreads sixteen dips over ~19.2s, varying in depth
+ *   (0.56–0.87) and in length (70–150ms), spaced 720–1640ms apart, so nothing in
+ *   it lines up and there is no beat to fall into. Nineteen seconds is also long
+ *   enough that the track's own loop is not something a viewer sits through
+ *   consciously.
+ *   Two constraints are preserved by construction — adding a dip means
+ *   re-checking both. (The track is generated from a seeded table rather than
+ *   hand-typed, and that generator asserts both numbers before it writes a byte;
+ *   see the note above the keyframes.)
+ *     - the dip never goes below 0.55, so the text stays readable at its worst;
+ *     - the closest two dips are 720ms apart → at most 1.4 flashes per second at
+ *       the default speed, 2/s at `--fast`. Inside the three-per-second guideline.
+ *   The stylesheet only supplies the shape of the randomness. Each instance also
+ *   starts at a different point in the track and runs it at its own speed (see
+ *   the flicker vars below and `flickerPhase` in the .vue), so two wrappers on
+ *   one page never flash together and one wrapper never settles into a rhythm.
  *
  * THE CONSTRAINT BETWEEN THE TWO HALVES OF THE EFFECT
  *   The ripple (feDisplacementMap) tears *different parts of the box by different
@@ -87,7 +108,13 @@
 .myui-glitch-ripple {
   --myui-gr-shiver: 0.9px;
   --myui-gr-tremble-duration: 1000ms;
-  --myui-gr-flicker-duration: 2600ms;
+  --myui-gr-flicker-duration: 19200ms;
+  /* Per-instance, written by the component in onMounted (never during SSR, or
+   * hydration would disagree with the server). `stretch` is always ≥ 1: running
+   * the track faster is the one direction that could push the flash rate past
+   * the accessibility limit below. */
+  --myui-gr-flicker-delay: 0ms;
+  --myui-gr-flicker-stretch: 1;
 }
 
 .myui-glitch-ripple--subtle {
@@ -100,12 +127,12 @@
 
 .myui-glitch-ripple--slow {
   --myui-gr-tremble-duration: 1400ms;
-  --myui-gr-flicker-duration: 3400ms;
+  --myui-gr-flicker-duration: 24000ms;
 }
 
 .myui-glitch-ripple--fast {
   --myui-gr-tremble-duration: 760ms;
-  --myui-gr-flicker-duration: 1900ms;
+  --myui-gr-flicker-duration: 13600ms;
 }
 
 /* `is-animating` is set by the component from the same conditions the script
@@ -114,7 +141,9 @@
   will-change: transform, opacity;
   animation:
     myui-gr-tremble var(--myui-gr-tremble-duration) steps(1, end) infinite,
-    myui-gr-flicker var(--myui-gr-flicker-duration) steps(1, end) infinite;
+    myui-gr-flicker
+      calc(var(--myui-gr-flicker-duration) * var(--myui-gr-flicker-stretch))
+      steps(1, end) var(--myui-gr-flicker-delay) infinite;
 }
 
 @keyframes myui-gr-tremble {
@@ -144,31 +173,104 @@
   }
 }
 
+/* INTENTIONALLY IRREGULAR — do not "tidy" this into an even spacing.
+ *
+ * The table is generated, not typed: `node scripts/gen-glitch-flicker.mjs`
+ * (`--dry-run` to only print it) draws 16 dips from a fixed seed and refuses to
+ * write unless every gap is at least 700ms (the flash-rate floor), no three gaps
+ * are within 80ms of each other (a pulse), no four or more alternate short/long
+ * (a beat), the deepest dip is ≥ 0.55, and no two consecutive depths match.
+ * Change FIRST_SEED there and re-run to re-roll it; do not edit the percentages
+ * by hand or the next person cannot tell whether the checks still hold.
+ *
+ * Timing is `steps(1, end)`, so a dip holds from its own keyframe until the next
+ * one and the value never eases — an eased fade looks like a dimmer, a stepped
+ * one looks like a failing feed. Every second keyframe is a full-opacity reset,
+ * which is what ends the previous dip. */
 @keyframes myui-gr-flicker {
   0%,
-  9%,
-  33%,
-  40%,
-  68%,
-  72%,
+  6.79%,
+  15.39%,
+  21.96%,
+  28.66%,
+  32.57%,
+  37.61%,
+  41.95%,
+  47.93%,
+  54.69%,
+  62.76%,
+  71%,
+  75.79%,
+  80.25%,
+  85.56%,
+  89.12%,
+  93.68%,
   100% {
     opacity: 1;
   }
 
-  6% {
+  6.09% {
+    opacity: 0.86;
+  }
+
+  14.64% {
+    opacity: 0.75;
+  }
+
+  21.41% {
+    opacity: 0.63;
+  }
+
+  28.18% {
+    opacity: 0.56;
+  }
+
+  31.93% {
+    opacity: 0.76;
+  }
+
+  36.93% {
+    opacity: 0.87;
+  }
+
+  41.2% {
+    opacity: 0.81;
+  }
+
+  47.24% {
     opacity: 0.72;
   }
 
-  35% {
-    opacity: 0.55;
+  54.11% {
+    opacity: 0.62;
   }
 
-  38% {
-    opacity: 0.9;
+  62.24% {
+    opacity: 0.79;
   }
 
-  70% {
-    opacity: 0.66;
+  70.31% {
+    opacity: 0.84;
+  }
+
+  75.42% {
+    opacity: 0.7;
+  }
+
+  79.69% {
+    opacity: 0.6;
+  }
+
+  84.79% {
+    opacity: 0.62;
+  }
+
+  88.59% {
+    opacity: 0.68;
+  }
+
+  93.02% {
+    opacity: 0.82;
   }
 }
 
@@ -200,7 +302,7 @@
   .myui-glitch-ripple--force-motion .myui-glitch-ripple__content {
     animation-duration:
       var(--myui-gr-tremble-duration),
-      var(--myui-gr-flicker-duration) !important;
+      calc(var(--myui-gr-flicker-duration) * var(--myui-gr-flicker-stretch)) !important;
     animation-iteration-count: infinite !important;
   }
 }
