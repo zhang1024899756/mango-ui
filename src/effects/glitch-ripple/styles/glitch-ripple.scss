@@ -180,4 +180,27 @@
     animation: none !important;
     transform: none !important;
   }
+
+  /* The other half of the opt-in, and the half that used to be missing.
+   *
+   * `motionPreference="always"` only defeated the rule above. The library's own
+   * reset (`:where(*) { animation-duration: 0.01ms !important;
+   * animation-iteration-count: 1 !important }`, and VitePress ships the same
+   * thing) is what a reduced-motion visitor actually gets, and `!important`
+   * beats every normal declaration — so the tremble and the flicker ran for one
+   * 0.01ms frame and snapped straight back to their resting values. Measured on
+   * the docs hero title before this block existed: 24 samples over 2.7s, filter
+   * `scale` moving 4.5→15.4 (the script-driven ripple) while computed `opacity`
+   * stayed exactly 1 and `transform` stayed exactly `none` (the two CSS layers,
+   * flattened).
+   *
+   * Both declarations have to be restated, not just the one: at 0.01ms the
+   * animation is over before its first frame, and at a single iteration it never
+   * comes back. Flotage carries the same escape; keep the two in step. */
+  .myui-glitch-ripple--force-motion .myui-glitch-ripple__content {
+    animation-duration:
+      var(--myui-gr-tremble-duration),
+      var(--myui-gr-flicker-duration) !important;
+    animation-iteration-count: infinite !important;
+  }
 }
