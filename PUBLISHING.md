@@ -31,6 +31,9 @@ pnpm build
 npm pack --dry-run          # 看一眼要上传什么
 
 # 3) 发布（2FA 见 §4）
+#    在 DSH 会话里用工具（推荐，一次调用完成发布 + 浏览器授权）：
+#      npm_auth_publish({ dir: ".", access: "public", tag: "latest" })
+#    或者手动（需要有真实 TTY，npm 才会自己拉起浏览器）：
 npm publish
 
 # 4) 验证（§5）→ 提交 + 打 tag + 推（§6）
@@ -109,21 +112,29 @@ git tag v2.3.0 && git push origin main --follow-tags
 
 npm 自 2026 年起**不再接受验证器 App 的 6 位 TOTP**；账号 `tfa.mode = auth-and-writes` 时，发布必须完成一次浏览器授权。本机已装 **npm-2fa-auth** 插件，流程如下。
 
-### 4.1 在 DSH 会话里发布（本机实际走的路径）
+### 4.1 在 DSH 会话里发布（推荐：一次调用）
 
-1. 直接执行 `npm publish`。DSH 的 shell 不是 TTY，npm 不会自动拉起浏览器，会返回 `EOTP`，错误体里带一对授权链接（`authUrl` 与 `doneUrl`）；
-2. 用插件 **`npm_auth_open_url`** 把 `authUrl` 交给**系统默认浏览器**，在浏览器里点 Approve / Authorize；
-3. 让 npm 进程保持存活（它要轮询 `doneUrl`）。拿到一次性口令后它会自动重试上传，返回 `202 Accepted`（包进入处理队列）；
-4. `202` 不等于可安装 —— 一定要做 §5 的验证。
+调用 **`npm_auth_publish`**，`dir` 指向包目录：
 
-> 如果 npm 进程已经退出，重新 `npm publish` 再授权即可；发布失败不会写入 registry，可安全重试。
+```
+npm_auth_publish({ dir: "C:/…/mango-ui", access: "public", tag: "latest" })
+```
+
+它一次做完三件事：执行 `npm publish`；捕获 npm 打印的授权链接并**自动用系统默认浏览器打开**；原地等待同一个 npm 进程轮询完成，返回结构化结果（`ok` / `published` / `package` / `authUrlOpened` / `timedOut` / 脱敏尾部输出）。
+
+为什么一次就够：npm 只在 `stdin` 与 `stdout` 都报告 `isTTY` 时才走交互式 web-2FA 分支。DSH 起的管道子进程永远不是 TTY，于是只会打印「这是链接」然后 `EOTP` 退出、**不轮询**。插件用一段极短的启动垫片先置上这两个标志再加载 npm CLI，npm 因此进入「打印链接 → 轮询 `/-/v1/done` → 拿到口令 → 自动重试 PUT」的正确路径。`--browser=false` 则避免 npm 自己去调浏览器并阻塞等待回车。
+
+> 旧路径（手动 `npm publish` + 从日志里找 `auth/cli` 链接再 `npm_auth_open_url`）仍然可用，但要 Agent 多轮解析日志，且进程退出后授权就白做了——不再推荐。
+
+> `202` 不等于可安装 —— 一定要做 §5 的验证。
 
 ### 4.2 其他可用路径
 
 | 场景 | 工具 / 做法 | 说明 |
 | --- | --- | --- |
+| 发布（推荐） | `npm_auth_publish` | 一次调用完成 `npm publish` + 浏览器授权 + 等待结果 |
 | 先确认登录态 | `npm_auth_status` / `npm_auth_verify` | 只读：用户名、账号 2FA 模式、registry 可达性 |
-| 走 `npm login --auth-type=web` | `npm_auth_login_web` | npm 自己拉起浏览器，完成后写 `~/.npmrc` |
+| 刷新登录态 | `npm_auth_login_web` | 打开登录链接、写 `~/.npmrc`；**不解决发布 2FA**，发布仍用 `npm_auth_publish` |
 | 无人值守（本地或 CI） | `npm_auth_capture_token` | 在浏览器建 **bypass-2FA 的 granular access token**（write 权限 + 只选本包 scope），由浏览器直接 POST 写盘，不进对话 |
 | 真实终端（PowerShell / Windows Terminal） | 直接 `npm publish` | TTY 下 npm 会自己打开浏览器授权页 |
 
@@ -199,6 +210,7 @@ npm deprecate @arvinzxy/mango-ui@2.2.1 "已废弃：请升级到 2.2.2"
 
 | 版本 | 日期 | 结果 |
 | --- | --- | --- |
+| **2.2.1** | 2026-11-09 | 首次用 `npm_auth_publish` 单次调用发布（构建 + 204 测试通过）；浏览器 2FA 授权一次通过，`elapsedMs` 145 s（含人工确认）；tarball 56 文件 / 513.5 kB；`npm view` 确认 `latest` = 2.2.1 |
 | **2.2.0** | 2026-11-09 | 首次成功发布到 npm；浏览器 2FA 授权一次通过；tarball 56 文件 / 129.7 kB；本地 `npm pack` 的 shasum（`3a8979e8…88c2`）与 registry 一致；公开包，`latest` = 2.2.0 |
 | 2.1.0 | 2026-11-08 | Neon / Text 上线（只上 GitHub Pages，未发 npm） |
 | 2.0.0 | 2026-11-08 | Vue 3 赛博朋克重写（只上 GitHub Pages） |
@@ -221,7 +233,7 @@ npm deprecate @arvinzxy/mango-ui@2.2.1 "已废弃：请升级到 2.2.2"
 
 **发布中**
 
-- [ ] `npm publish`（2FA 按 §4 在浏览器里授权）
+- [ ] `npm_auth_publish`（一次调用：发布 + 浏览器授权 + 等结果；2FA 见 §4）
 - [ ] `npm view @arvinzxy/mango-ui version` 与 `dist-tags.latest` 已是新版本
 
 **发布后**
