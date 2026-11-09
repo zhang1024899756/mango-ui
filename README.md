@@ -28,26 +28,6 @@ const joined = ref(false)
 
 ---
 
-## v2：完全重写
-
-这个仓库原本是 Vue 2 时代的多包 monorepo（Lerna + Rollup），里面只有一个
-CSS 故障字特效组件。v2 是一次彻底重写：
-
-| | v1 | v2（当前） |
-| --- | --- | --- |
-| 框架 | Vue 2.6 | **Vue 3.5**（`<script setup>`） |
-| 语言 | JavaScript | **TypeScript**（严格模式，导出 `.d.ts`） |
-| 构建 | Lerna + Rollup（每包一份配置） | **Vite lib 模式** + `vue-tsc` |
-| 形态 | `packages/*` 多包 | 单包，按组件分目录、可摇树 |
-| 样式 | 组件内写死颜色与尺寸 | **SCSS → CSS 变量**，`.myui-` 前缀，`:where()` 重置 |
-| 视觉方向 | 一个 CSS 故障字 | **赛博朋克 · 数字穿越 · 未来科技** |
-| 开发验收 | Storybook 6 | **Storybook 10** |
-| 官网 | 无 | **[VitePress 1.x 在线文档](https://zhang1024899756.github.io/mango-ui/)** |
-| 组件数 | 1 | **15**（3 特效 + 12 元素） |
-| 测试 | 1 个 `toBeDefined()` | Vitest，逐组件行为测试 |
-
----
-
 ## 两种武器
 
 ### 特效组件：可以包裹任何东西
@@ -113,7 +93,7 @@ CSS 故障字特效组件。v2 是一次彻底重写：
 pnpm add @arvinzxy/mango-ui
 ```
 
-> npm 上 `mango-ui` 这个包名已被他人占用（2018 年的旧包），所以正式包名是作用域包 `@arvinzxy/mango-ui`（公开包，`npm publish` 已设 `access: public`）。
+> npm 上 `mango-ui` 这个包名已被他人占用（2018 年的旧包），所以正式包名是作用域包 `@arvinzxy/mango-ui`。
 
 ```ts
 import { createApp } from 'vue'
@@ -231,23 +211,6 @@ plop-template/           组件脚手架模板
 ```
 
 新增组件请先读 [CONTRIBUTING.md](https://github.com/zhang1024899756/mango-ui/blob/main/CONTRIBUTING.md)。
-
----
-
-## 从 v1 迁移
-
-1. **组件包路径没了**：`packages/magic` → 直接从 `@arvinzxy/mango-ui` 引入 `MyuiNeon`。
-2. **`magic` 的 API 变了**：原来是 `content` 字符串 prop，现在是包裹型组件，
-   仍然支持 `text` prop，但推荐用默认插槽包住任意内容。
-3. **类名变了**：`.text-magic` → `.myui-neon`。
-4. **v2.1 起 `Magic` 更名为 `Neon`**，并按"霓虹灯管"重做：`glitch`（RGB 分离）
-   模式移除，改为 `glow`（默认，常亮+呼吸）/ `flicker` / `scan`；`MyuiMagic` →
-   `MyuiNeon`，`.myui-magic*` → `.myui-neon*`。同时新增元素组件 `Text`。
-5. **v2.2 起新增两种形体**：斜切 `skew` 与渐变 `tone="spectrum"`，覆盖 Button / Tag / Link /
-   Number / Progress / Switch / Slider；同时新增特效组件 `GlitchRipple`，并扩充霓虹色阶与
-   渐变令牌（`--myui-color-neon-*`、`--myui-gradient-*`）。两者都是可选形体，默认不变。
-6. **Vue 2 的 `Vue.use()` 插件协议**换成了标准的 Vue 3 `app.use()`；视觉方向也从单个 CSS 故障字扩展为整套赛博朋克设计系统。
-7. **Jest + `@vue/test-utils@1`** 换成了 Vitest + `@vue/test-utils@2`。
 
 ---
 
