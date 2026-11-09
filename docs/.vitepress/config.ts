@@ -71,7 +71,7 @@ export default defineConfig({
       { text: '元素组件', link: '/components/button', activeMatch: '/components/' },
       { text: '特效组件', link: '/components/neon', activeMatch: '/components/(neon|flotage|glitch-ripple)' },
       {
-        text: 'v2.2.0',
+        text: 'v2.2.1',
         items: [
           {
             text: '更新日志',

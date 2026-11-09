@@ -25,7 +25,7 @@ import { MyuiFlotage } from './effects/flotage'
 import { MyuiGlitchRipple } from './effects/glitch-ripple'
 import { MyuiNeon } from './effects/neon'
 
-export const version = '2.2.0'
+export const version = '2.2.1'
 
 const components: Plugin[] = [
   // effects — wrap anything, add attitude
