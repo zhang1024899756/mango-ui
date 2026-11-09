@@ -196,7 +196,7 @@ export const Semantics: Story = {
           用 <code>as</code> 决定标签：标题仍是 h2，正文仍是 p，读屏软件和搜索引擎看到的结构不会因为视觉改版而丢。
         </myui-text>
         <myui-text as="label" for="demo-mail" variant="eyebrow" tone="accent">邮箱</myui-text>
-        <myui-text as="code" variant="mono" tone="soft">npm i @zhang1024899756/mango-ui</myui-text>
+        <myui-text as="code" variant="mono" tone="soft">npm i @arvinzxy/mango-ui</myui-text>
       </div>
     `,
   }),

@@ -5,19 +5,19 @@
 ## 安装
 
 ```bash
-pnpm add @zhang1024899756/mango-ui
+pnpm add @arvinzxy/mango-ui
 ```
 
 ::: tip 为什么是作用域包
-npm 上 `mango-ui` 早在 2018 年就被别人注册了，无法同名发布；本库因此以 `@zhang1024899756/mango-ui` 发布，是公开包，不需要额外的 registry 配置。
+npm 上 `mango-ui` 早在 2018 年就被别人注册了，无法同名发布；本库因此以 `@arvinzxy/mango-ui` 发布，是公开包，不需要额外的 registry 配置。
 :::
 
 ## 全量引入
 
 ```ts
 import { createApp } from 'vue'
-import MangoUI from '@zhang1024899756/mango-ui'
-import '@zhang1024899756/mango-ui/style.css'
+import MangoUI from '@arvinzxy/mango-ui'
+import '@arvinzxy/mango-ui/style.css'
 import App from './App.vue'
 
 createApp(App).use(MangoUI).mount('#app')
@@ -31,7 +31,7 @@ createApp(App).use(MangoUI).mount('#app')
 
 ```vue
 <script setup lang="ts">
-import { MyuiButton, MyuiTag } from '@zhang1024899756/mango-ui'
+import { MyuiButton, MyuiTag } from '@arvinzxy/mango-ui'
 </script>
 
 <template>
@@ -41,7 +41,7 @@ import { MyuiButton, MyuiTag } from '@zhang1024899756/mango-ui'
 ```
 
 ::: tip 样式只有一份
-`@zhang1024899756/mango-ui/style.css` 里包含设计令牌、可选的基础重置，以及全部组件样式。
+`@arvinzxy/mango-ui/style.css` 里包含设计令牌、可选的基础重置，以及全部组件样式。
 按需引入 JS 不会让样式消失——样式是整体加载的，这是刻意的：
 CSS 变量主题需要一个统一的令牌来源。
 :::
@@ -85,7 +85,7 @@ document.documentElement.dataset.myuiTheme = prefersDark ? 'dark' : 'light'
 类型随包发布，`exports.types` 指向 `dist/types/index.d.ts`：
 
 ```ts
-import type { ButtonProps, ButtonVariant } from '@zhang1024899756/mango-ui'
+import type { ButtonProps, ButtonVariant } from '@arvinzxy/mango-ui'
 ```
 
 `props` 的联合类型全部导出，写封装组件时可以直接复用。
